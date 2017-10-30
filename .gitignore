@@ -1,3 +1,5 @@
 src/main/webapp/node_modules
 nb-configuration.xml
 target/
+/XYZDrivers/nbproject/private/
+/XYZDrivers/build/
