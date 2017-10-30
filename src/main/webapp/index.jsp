@@ -1,4 +1,7 @@
 <html>
+<head>
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+</head>
 <body>
     <h2>Jersey RESTful Web Application!</h2>
     <p><a href="webapi/myresource">Jersey resource</a>
