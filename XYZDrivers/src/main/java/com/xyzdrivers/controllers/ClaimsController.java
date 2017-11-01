@@ -30,8 +30,6 @@ public class ClaimsController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        com.xyzdrivers.models.TestModel t = new com.xyzdrivers.models.TestModel();
-        
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
@@ -42,7 +40,6 @@ public class ClaimsController extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ClaimsController at " + request.getContextPath() + "</h1>");
-            out.println("<h2>" + t.ConfirmTest() + "</h2>");
             out.println("</body>");
             out.println("</html>");
             
