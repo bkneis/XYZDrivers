@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.xyzdrivers.controllers;
 
 import com.xyzdrivers.models.Claim;
@@ -15,31 +10,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
- * @author arthur
+ * @file ClaimsController.java
+ * @author Nathan
+ * @created 30/10/17
+ * @modified 02/11/17
+ * @notes -
  */
 public class ClaimsController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-          
-        try 
-        {
+
+        try {
             LocalDate date = LocalDate.now();
-            
+
             String reason = request.getParameter("reason");
             String amount = request.getParameter("amount");
-                        
+
             Claim c = new Claim("null", date, reason, "NEW", Integer.parseInt(amount));
             InsertClaim ic = new InsertClaim();
-            
-            ic.InsertClaim(c);            
+
+            ic.InsertClaim(c);
+        } catch (Exception ex) {
+            System.err.println(ex);
         }
-        catch(Exception ex)
-        {
-            System.err.println(ex);      
-        }
-           
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
