@@ -1,3 +1,11 @@
+/**
+ * @file ClaimsController.java
+ * @author Nathan
+ * @created 30/10/17
+ * @modified 02/11/17
+ * @notes -
+ */
+
 package com.xyzdrivers.controllers;
 
 import com.xyzdrivers.models.Claim;
@@ -9,13 +17,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * @file ClaimsController.java
- * @author Nathan
- * @created 30/10/17
- * @modified 02/11/17
- * @notes -
- */
 public class ClaimsController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

@@ -1,7 +1,3 @@
-package com.xyzdrivers.models;
-
-import java.time.LocalDate;
-
 /**
  * @file Claim.java
  * @author Nathan
@@ -9,6 +5,11 @@ import java.time.LocalDate;
  * @modified 02/11/17
  * @notes -
  */
+
+package com.xyzdrivers.models;
+
+import java.time.LocalDate;
+
 public class Claim {
 
     private String member_id;
