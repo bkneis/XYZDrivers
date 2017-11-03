@@ -2,15 +2,17 @@
  * @file ClaimsController.java
  * @author Nathan
  * @created 30/10/17
- * @modified 02/11/17
+ * @modified 03/11/17
  * @notes -
  */
 
 package com.xyzdrivers.controllers;
 
 import com.xyzdrivers.models.Claim;
-import com.xyzdrivers.models.InsertClaim;
+import com.xyzdrivers.services.InsertClaimService;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.time.LocalDate;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,12 +26,15 @@ public class ClaimsController extends HttpServlet {
 
         try {
             LocalDate date = LocalDate.now();
+            
+            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/xyzdrivers");
 
             String reason = request.getParameter("reason");
             String amount = request.getParameter("amount");
 
             Claim c = new Claim("null", date, reason, "NEW", Integer.parseInt(amount));
-            InsertClaim ic = new InsertClaim();
+                       
+            InsertClaimService ic = new InsertClaimService(con);
 
             ic.InsertClaim(c);
         } catch (Exception ex) {

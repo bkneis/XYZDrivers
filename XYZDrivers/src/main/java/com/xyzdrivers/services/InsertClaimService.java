@@ -1,29 +1,32 @@
 /**
- * @file InsertClaim.java
+ * @file InsertClaimSService.java
  * @author Nathan
  * @created 02/11/17
- * @modified 02/11/17
+ * @modified 03/11/17
  * @notes -
  */
 
-package com.xyzdrivers.models;
+package com.xyzdrivers.services;
 
+import com.xyzdrivers.models.Claim;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class InsertClaim {
+public class InsertClaimService {
 
-    Connection con;
+    private Connection con;
+    
+    public InsertClaimService(Connection con) {
+        this.con = con;
+    }
 
     public void InsertClaim(Claim c) {
 
         try {
 
             Class.forName("org.apache.derby.jdbc.ClientDriver");
-            con = DriverManager.getConnection("jdbc:derby://localhost:1527/xyzdrivers");
 
             String insertSQL = "INSERT INTO Claims (MEM_ID, DATE, RATIONALE, STATUS, AMOUNT) VALUES (?, ?, ?, ?, ?)";
 
