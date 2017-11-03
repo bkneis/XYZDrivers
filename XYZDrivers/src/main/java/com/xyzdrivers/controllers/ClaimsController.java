@@ -5,7 +5,6 @@
  * @modified 03/11/17
  * @notes -
  */
-
 package com.xyzdrivers.controllers;
 
 import com.xyzdrivers.models.Claim;
@@ -13,6 +12,7 @@ import com.xyzdrivers.services.InsertClaimService;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,28 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ClaimsController extends HttpServlet {
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        try {
-            LocalDate date = LocalDate.now();
-            
-            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/xyzdrivers");
-
-            String reason = request.getParameter("reason");
-            String amount = request.getParameter("amount");
-
-            Claim c = new Claim("null", date, reason, "NEW", Integer.parseInt(amount));
-                       
-            InsertClaimService ic = new InsertClaimService(con);
-
-            ic.InsertClaim(c);
-        } catch (Exception ex) {
-            System.err.println(ex);
-        }
-
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -55,7 +33,7 @@ public class ClaimsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+       // processRequest(request, response);
     }
 
     /**
@@ -69,7 +47,22 @@ public class ClaimsController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        try {
+            LocalDate date = LocalDate.now();
+
+            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/TestDatabase_DEV", "lenfred", "fruitgums1");
+            String reason = request.getParameter("reason");
+            String amount = request.getParameter("amount");
+
+            Claim c = new Claim("null", date, reason, "NEW", Integer.parseInt(amount));
+
+            InsertClaimService ic = new InsertClaimService(con);
+
+            ic.InsertClaim(c);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
     }
 
     /**
