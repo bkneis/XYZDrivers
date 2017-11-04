@@ -2,7 +2,7 @@
  * @file ClaimsController.java
  * @author Nathan
  * @created 30/10/17
- * @modified 03/11/17
+ * @modified 04/11/17
  * @notes -
  */
 package com.xyzdrivers.controllers;
@@ -14,8 +14,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
