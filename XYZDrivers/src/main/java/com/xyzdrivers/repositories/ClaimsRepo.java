@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.xyzdrivers.repositories;
 
 import com.xyzdrivers.models.Claim;
@@ -15,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * DAO for claims model
  * @author arthur
  */
 public class ClaimsRepo {
@@ -26,6 +21,10 @@ public class ClaimsRepo {
         this.sql = sql;
     }
     
+    /**
+     * Method to retrieve all of the claims in the database
+     * @return List<Claim> claims
+     */
     public List<Claim> getAll() {
         List<Object[]> results;
         List<Claim> claims = new ArrayList<>();
