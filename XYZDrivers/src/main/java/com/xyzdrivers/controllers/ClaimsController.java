@@ -14,13 +14,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ClaimsController extends HttpServlet {
 
+public class ClaimsController extends HttpServlet {
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -33,7 +36,7 @@ public class ClaimsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       // processRequest(request, response);
+        // processRequest(request, response);
     }
 
     /**
@@ -60,8 +63,8 @@ public class ClaimsController extends HttpServlet {
             InsertClaimService ic = new InsertClaimService(con);
 
             ic.InsertClaim(c);
-        } catch (SQLException ex) {
-            System.out.println(ex);
+        } catch (SQLException | IllegalAccessException ex) {
+            throw new RuntimeException(ex);
         }
     }
 

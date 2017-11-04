@@ -22,18 +22,17 @@ public class InsertClaimService {
         this.con = con;
     }
 
-    public void InsertClaim(Claim c) {
-
-        try {
+    public void InsertClaim(Claim c) throws IllegalAccessException, SQLException {
+       
             if (c == null) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("The object c is null.");
             }
 
             for (Field field : c.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
                 Object value = field.get(c);
                 if (value == null) {
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException("One of the declared fields in object c is null.");
                 }
             }
 
@@ -50,9 +49,5 @@ public class InsertClaimService {
                 p.executeUpdate();
 
                 con.close();
-            }
-            catch (IllegalAccessException | IllegalArgumentException | SQLException e) {
-            System.out.println("Error: " + e);
-        }
         }
     }
