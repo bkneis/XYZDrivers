@@ -197,7 +197,7 @@ public class SQLService
         for (int row = 0; results.next(); row++)
         {   
             column = new Object[columnCount];
-            for (int col = 1; col < columnCount; col++)
+            for (int col = 1; col <= columnCount; col++)
                 column[col-1] = results.getObject(col);
             
             data.add(column);
