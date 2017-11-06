@@ -37,8 +37,8 @@ public class AdminController extends HttpServlet {
         SQLService sql = new SQLService(DriverManager.getConnection("jdbc:derby://localhost:1527/xyzdrivers", "root", "root"));
         
         List<Object[]> members = MembersService.getMembers(sql);
-        ClaimsRepo claimsRepo = new ClaimsRepo(sql);
-        List<Claim> claims = claimsRepo.getAll();
+        ClaimsRepo claimsRepo = new ClaimsRepo();
+        List<Claim> claims = claimsRepo.get();
         request.setAttribute("members", members);
         request.setAttribute("claims", claims);
         request.getRequestDispatcher("admin.jsp").forward(request, response);
