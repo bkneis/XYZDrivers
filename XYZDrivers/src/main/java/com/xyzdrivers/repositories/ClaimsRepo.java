@@ -1,7 +1,6 @@
 package com.xyzdrivers.repositories;
 
 import com.xyzdrivers.models.Claim;
-import com.xyzdrivers.services.SQLService;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,28 +10,30 @@ import java.util.logging.Logger;
 
 /**
  * DAO for claims model
+ * 
  * @author arthur
  */
-public class ClaimsRepo {
-    
-    private SQLService sql;
-    
-    public ClaimsRepo(SQLService sql) {
-        this.sql = sql;
+public class ClaimsRepo extends Repo<Claim> {
+
+    @Override
+    Claim get(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     /**
-     * Method to retrieve all of the claims in the database
-     * @return List<Claim> claims
+     * Retrieve all claims
+     * 
+     * @return ArrayList<Claim> All claims
      */
-    public List<Claim> getAll() {
+    @Override
+    public List<Claim> get() {
         List<Object[]> results;
         List<Claim> claims = new ArrayList<>();
         try {
             results = this.sql.retrieve("claims");
             for (Object[] result : results) {
-                // TODO change LocalDate
-                Claim cl = new Claim(result[1].toString(), LocalDate.now(), result[3].toString(), result[4].toString(), Float.parseFloat(result[5].toString()));
+                LocalDate date = LocalDate.parse(result[2].toString());
+                Claim cl = new Claim(result[1].toString(), date, result[3].toString(), result[4].toString(), Float.parseFloat(result[5].toString()));
                 claims.add(cl);
             }
         } catch (SQLException ex) {
@@ -40,5 +41,21 @@ public class ClaimsRepo {
         }
         return claims;
     }
+
+    @Override
+    public List<Claim> getWhere(String[] conditions) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Claim update(Claim model) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void delete(Claim model) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
 }
