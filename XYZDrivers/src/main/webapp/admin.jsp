@@ -26,7 +26,6 @@
               </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
-        
         <div class="page row">
             <div class="col-md-6">
                 <div class="panel panel-default">
@@ -51,11 +50,40 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">All Members</h3>
+                        <h3 class="panel-title">Outstanding Balances</h3>
                     </div>
                     <div class="panel-body">
-                        Panel content
+                        <ul>
+                        <c:forEach items="${outstandingBalances}" var="outstandingBalance">
+                            <li>
+                            - name: <c:out value="${outstandingBalance.name}"/>
+                            - balance: <c:out value="${outstandingBalance.balance}"/>
+                            </li>
+                        </c:forEach>
+                        </ul>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="page row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">All Members</h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                    <c:forEach items="${members}" var="member">
+                        <li>
+                            <c:out value="${member.id}"/>
+                        - name: <c:out value="${member.name}"/>
+                        - address: <c:out value="${member.address}"/>
+                        - dob: <c:out value="${member.dob}"/>
+                        - dor: <c:out value="${member.dor}"/>
+                        - status: <c:out value="${member.status}"/>
+                        - balance: <c:out value="${member.balance}"/>
+                        </li>
+                    </c:forEach>
+                    </ul>
                 </div>
             </div>
         </div>
