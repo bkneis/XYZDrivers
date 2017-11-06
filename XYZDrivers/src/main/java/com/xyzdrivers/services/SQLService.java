@@ -89,6 +89,20 @@ public class SQLService
         return statement.executeUpdate();
     }
     
+//public methods
+    /**
+     * Closes all connections to DB. Use on exit.
+     * 
+     * @throws SQLException 
+     */
+    public void close()
+            throws SQLException
+    {
+        results.close();
+        statement.close();
+        DB.close();
+    }
+    
     /**
      * Gets the name of every table in <code>DB</code>.
      *  
@@ -96,7 +110,8 @@ public class SQLService
      * 
      * @throws SQLException 
      */
-    private List<String> getAllTableNames() throws SQLException
+    public List<String> getAllTableNames()
+            throws SQLException
     {
         List<String> tableNames = new ArrayList();
         
@@ -118,7 +133,8 @@ public class SQLService
      * 
      * @throws SQLException 
      */
-    private List<String> getAllColumnNames(String tableName) throws SQLException
+    public List<String> getAllColumnNames(String tableName)
+            throws SQLException
     {
         List<String> columnNames = new ArrayList();
         
@@ -129,19 +145,6 @@ public class SQLService
             columnNames.add(resultsMetaData.getColumnName(i));
         
         return columnNames;
-    }
-        
-//public methods
-    /**
-     * Closes all connections to DB. Use on exit.
-     * 
-     * @throws SQLException 
-     */
-    public void close() throws SQLException
-    {
-        results.close();
-        statement.close();
-        DB.close();
     }
     
     //<editor-fold defaultstate="collapsed" desc="exists() functions...">
@@ -183,7 +186,7 @@ public class SQLService
     }
     
     /**
-     * Checks if <code>query</code> exists in <code>table->column</code>.
+     * Checks if <code>item</code> exists in <code>table->column</code>.
      * 
      * @param table The name of the table containing the item
      * @param column The name of the column containing the item to retrieve from table
@@ -203,7 +206,7 @@ public class SQLService
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="retrieve() functions...">
+    //<editor-fold defaultstate="collapsed" desc="retrieve() functions...">    
     /**
      * "SELECT * FROM <code>table</code>"
      * 
@@ -236,6 +239,7 @@ public class SQLService
             
             data.add(column);
         }
+        
         //return results
         return data;
     }
@@ -269,26 +273,26 @@ public class SQLService
     }
     
     /**
-     * "SELECT <code>column</code> FROM <code>table</code> WHERE <code>primaryKeyColumn</code> = <code>primaryKey</code>"s
+     * "SELECT <code>column</code> FROM <code>table</code> WHERE <code>keyColumn</code> = <code>keyValue</code>"
      * 
      * @param table the table containing the item be to retrieved
      * @param column the column containing the item to be retrieved from table ("*" for all).
-     * @param primaryKeyColumn the name of the PRIMARY KEY column
-     * @param primaryKey the PRIMARY KEY of the item to be retrieved
+     * @param keyColumn the name of the keyColumn
+     * @param keyValue the keyValue of the item(s) to be retrieved
      * 
      * @return Each Object[] is a rows data containing <code>column</code>, each List item is a row.
      * 
      * @throws IllegalArgumentException if <code>(query results).next()</code> returns false.
      * @throws SQLException 
      */
-    public List<Object[]> retrieve(String table, String column, String primaryKeyColumn, Object... primaryKey)
+    public List<Object[]> retrieve(String table, String column, String keyColumn, Object keyValue)
             throws SQLException, IllegalArgumentException
     {
         List<Object[]> data;
         Object[] rowColumn;
         
         //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE \""+primaryKeyColumn+"\" = ?", primaryKey);
+        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE \""+keyColumn+"\" = ?", keyValue);
         resultsMetaData = results.getMetaData();
         //add results to data
         int columnCount = resultsMetaData.getColumnCount();
@@ -308,22 +312,21 @@ public class SQLService
     
     //<editor-fold defaultstate="collapsed" desc="update() functions...">
     /**
-     * Update an item from <code>table->column</code>, where the PRIMARY KEY
-     * is <code>primaryKey</code>.
+     * "UPDATE <code>table</code> SET <code>column</code> = <code>updateValue</code> WHERE <code>keyColumn</code> = <code>keyValue</code>"
      * 
      * @param table the table containing the item be to retrieved
-     * @param column the column containing the item to be retrieved from table
-     * @param primaryKeyColumn the name of the PRIMARY KEY column
-     * @param primaryKey the PRIMARY KEY of the item to be retrieved
-     * @param value the value to update the found item with
+     * @param column the column containing the item to be updated
+     * @param value the value to update 
+     * @param keyColumn the name of the keyColumn
+     * @param keyValue the keyColumn value of the item(s) to be updated
      * 
      * @throws SQLException 
      */
-    public void update(String table, String column, String primaryKeyColumn, Object primaryKey, Object value)
+    public void update(String table, String column, Object value, String keyColumn, Object keyValue)
             throws SQLException
     {
         //execute statement
-        executeUpdateStatement("UPDATE "+table+" SET "+column+" = ? WHERE "+primaryKeyColumn+" = ?", value, primaryKey);
+        executeUpdateStatement("UPDATE "+table+" SET "+column+" = ? WHERE "+keyColumn+" = ?", value, keyValue);
     }
     //</editor-fold>
 
@@ -338,7 +341,8 @@ public class SQLService
      * 
      * @throws SQLException 
      */
-    public void insert(String table, Object[] values) throws SQLException
+    public void insert(String table, Object[] values)
+            throws SQLException
     {
         //prepare statement query "INSERT INTO table VALUES (?, ...)"
         String insertQuery = "INSERT INTO "+table+" VALUES (";
@@ -353,7 +357,7 @@ public class SQLService
         executeUpdateStatement(insertQuery, values);
     }
     /**
-     * Insert a set of <code>values</code> into <code>table</code>.
+     * "INSERT INTO <code>table</code> VALUES (<code>values...</code>)"
      * The array of values are inserted in the order they are found (index 0 to 
      * index values.length).
      * 
@@ -362,30 +366,33 @@ public class SQLService
      * 
      * @throws SQLException 
      */
-    public void insert(String table, Object[][] values) throws SQLException
+    public void insert(String table, List<Object[]> values)
+            throws SQLException
     {
-        for (int j = 0; j < values.length; j++)
+        for (int j = 0; j < values.size(); j++)
         {
             //prepare statement query "INSERT INTO table VALUES (?, ...)"
             String insertQuery = "INSERT INTO "+table+" VALUES (";
-            for (int i = 0; i < values[j].length; i++)
+            for (int i = 0; i < values.get(j).length; i++)
             {
-                if (i == values[j].length-1)
+                if (i == values.get(j).length-1)
                     insertQuery += ("?)");
                 else
                     insertQuery += ("?, ");
             }
             //execute statement
-            executeUpdateStatement(insertQuery, values[j]);
+            executeUpdateStatement(insertQuery, values.get(j));
         }
     }
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="remove() functions...">
     /**
-     * Remove a row of data from <code>table</code> where <code>query</code> is
-     * true. <code>query</code> must be valid SQL syntax, the <code>query</code>
+     * "DELETE FROM <code>table</code> WHERE <code>query</code>"
+     * <code>query</code> must be valid SQL syntax, the <code>query</code>
      * String is appended to the end of "DELETE FROM "+table+" WHERE ".
+     * 
+     * NOTE: query should be updated to match standards in retrieve (if we have time)
      * 
      * @param table the table you want to remove the row from
      * @param query a string containing an SQL removal condition, appended to 

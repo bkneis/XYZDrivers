@@ -59,7 +59,6 @@ public class MembersRepo extends Repo<Member> {
         List<Object[]> results;
         List<Member> members = new ArrayList();
             
-       
         try {
             // get data
             results = this.sql.retrieve("MEMBERS", "*", keyColumn, keyValue);
