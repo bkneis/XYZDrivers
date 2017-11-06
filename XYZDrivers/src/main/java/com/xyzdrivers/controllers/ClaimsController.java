@@ -56,7 +56,7 @@ public class ClaimsController extends HttpServlet {
             String reason = request.getParameter("reason");
             String amount = request.getParameter("amount");
 
-            Claim c = new Claim("null", date, reason, "NEW", Integer.parseInt(amount));
+            Claim c = new Claim("null", date, reason, "NEW", Float.parseFloat(amount));
 
             InsertClaimService ic = new InsertClaimService(con);
 

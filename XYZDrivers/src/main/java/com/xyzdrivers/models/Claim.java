@@ -10,15 +10,15 @@ package com.xyzdrivers.models;
 
 import java.time.LocalDate;
 
-public class Claim {
+public class Claim extends Model {
 
     private String member_id;
     private LocalDate date;
     private String reason;
     private String status;
-    private int amount;
+    private float amount;
 
-    public Claim(String member_id, LocalDate date, String reason, String status, int amount) {
+    public Claim(String member_id, LocalDate date, String reason, String status, float amount) {
         this.member_id = member_id;
         this.date = date;
         this.reason = reason;
@@ -42,7 +42,7 @@ public class Claim {
         return this.status;
     }
 
-    public int getAmount() {
+    public float getAmount() {
         return this.amount;
     }
 
