@@ -288,7 +288,7 @@ public class SQLService
         Object[] rowColumn;
         
         //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE "+primaryKeyColumn+" = ?", primaryKey);
+        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE \""+primaryKeyColumn+"\" = ?", primaryKey);
         resultsMetaData = results.getMetaData();
         //add results to data
         int columnCount = resultsMetaData.getColumnCount();
