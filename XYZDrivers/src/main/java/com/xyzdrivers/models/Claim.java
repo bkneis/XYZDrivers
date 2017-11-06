@@ -10,7 +10,7 @@ package com.xyzdrivers.models;
 
 import java.time.LocalDate;
 
-public class Claim {
+public class Claim extends Model {
 
     private String member_id;
     private LocalDate date;
