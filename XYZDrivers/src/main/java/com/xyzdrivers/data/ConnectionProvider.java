@@ -6,50 +6,26 @@
 package com.xyzdrivers.data;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
 
 /**
  *
- * @author Antony Wyatt
- * Provides a database connection.
+ * @author Toneo
+ * Represents an object that can provide a database connection.
  */
-@RequestScoped
-public class ConnectionProvider {
-    
-    private Connection connection;
+public interface ConnectionProvider {
     
     /**
-     * Provides a database connection to the caller.
-     * @return A new connection, unless a connection has already been provided and is still open.
+     * Provides a connection on demand.
+     * @return A valid connection.
      * @throws SQLException
      */
-    public Connection getConnection() throws SQLException {
-        
-        if (connection == null || connection.isClosed())
-        {            
-            // todo BEFORE merge - replace connection strings with environment vars
-            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TestDatabase_DEV", "lenfred", "fruitgums1");
-        }
-        
-        return connection;
-        
-    }
+    Connection getConnection() throws SQLException;
     
     /**
      * Closes the provided connection if it is still in use.
      * @throws java.sql.SQLException
      */
-    public void close() throws SQLException {
-        
-        if (connection != null && !connection.isClosed())
-        {
-            connection.close();
-        }
-        
-    }
+    void close() throws SQLException;
     
 }

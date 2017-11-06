@@ -10,7 +10,6 @@
  */
 package com.xyzdrivers.services;
 
-import com.xyzdrivers.data.ConnectionProvider;
 import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -18,6 +17,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import com.xyzdrivers.data.ConnectionProvider;
 
 @RequestScoped
 public class SQLService

@@ -7,7 +7,6 @@
  */
 package com.xyzdrivers.services;
 
-import com.xyzdrivers.data.ConnectionProvider;
 import com.xyzdrivers.models.Claim;
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -16,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import com.xyzdrivers.data.ConnectionProvider;
 
 @RequestScoped
 public class InsertClaimService {

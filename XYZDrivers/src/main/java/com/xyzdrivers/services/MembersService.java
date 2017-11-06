@@ -5,9 +5,15 @@ package com.xyzdrivers.services;
 
 import java.sql.*;
 import java.util.*;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
+@RequestScoped
 public class MembersService
 {
+    @Inject
+    private SQLService sqlService;
+    
 //public methods
     /**
      * Fetches every row from Members table.
@@ -17,8 +23,7 @@ public class MembersService
      * @return List<Object[]> members. Each Object[] is a row of data.
      * @throws java.sql.SQLException
      */
-    //static is tmp until this file has more code.
-    public static List<Object[]> getMembers(SQLService sqlService)
+    public List<Object[]> getMembers()
             throws SQLException
     {
         List<Object[]> members = null;
