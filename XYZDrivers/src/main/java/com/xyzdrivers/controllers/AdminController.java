@@ -4,9 +4,10 @@
 package com.xyzdrivers.controllers;
 
 import com.xyzdrivers.models.Claim;
+import com.xyzdrivers.models.Member;
 import com.xyzdrivers.repositories.ClaimsRepo;
 import com.xyzdrivers.services.SQLService;
-import com.xyzdrivers.services.MembersService;
+import com.xyzdrivers.repositories.MembersRepo;
 
 import java.io.*;
 import java.sql.*;
@@ -36,15 +37,15 @@ public class AdminController extends HttpServlet {
         Class.forName("com.mysql.jdbc.Driver");
         Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/xyzdrivers", "root", "root");
         //create service & repo instances
-        MembersService serviceMembers = new MembersService(conn);
+        MembersRepo membersRepo = new MembersRepo();
         ClaimsRepo claimsRepo = new ClaimsRepo();
         //get DB data
-        List<Object[]> members = serviceMembers.getMembers();
-        List<Object[]> membersOutstandingBalance = serviceMembers.getOutstandingBalances();
+        List<Member> members = membersRepo.get();
+        //List<Member> outstandingBalance = membersService.getOutstandingBalances();
         List<Claim> claims = claimsRepo.get();
         //set attributes
         request.setAttribute("members", members);
-        request.setAttribute("outstandingBalance", outstandingBalance);
+        //request.setAttribute("outstandingBalance", outstandingBalance);
         request.setAttribute("claims", claims);
         //fwd .jsp page
         request.getRequestDispatcher("admin.jsp").forward(request, response);
