@@ -49,7 +49,7 @@ public class Member extends Model
     public String getStatus() {
         return status;
     }
-    public float getBalance() {
+    public double getBalance() {
         return balance;
     }
 }

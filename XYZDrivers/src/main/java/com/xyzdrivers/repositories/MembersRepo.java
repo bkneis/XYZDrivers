@@ -24,7 +24,7 @@ public class MembersRepo extends Repo<Member> {
     public List<Member> get()
     {
         List<Object[]> results;
-        List<Member> claims = new ArrayList<>();
+        List<Member> members = new ArrayList();
         
         try {
             //get data
@@ -39,17 +39,47 @@ public class MembersRepo extends Repo<Member> {
                                             LocalDate.parse(memberData[4].toString()),  //dor
                                             memberData[5].toString(),                   //status
                                             (double)memberData[6]);                     //balance
+                members.add(member);
             }
         } catch (SQLException ex) {
             //@TODO ?
         }
         
-        return claims;
+        return members;
     }
 
     @Override
     List<Member> getWhere(String[] conditions) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Member> getWhere(String keyColumn, Object keyValue) 
+    {
+        List<Object[]> results;
+        List<Member> members = new ArrayList();
+            
+       
+        try {
+            // get data
+            results = this.sql.retrieve("MEMBERS", "*", keyColumn, keyValue);
+            //parse members data
+            for (Object[] memberData : results)
+            {
+                Member member = new Member (memberData[0].toString(),                   //id
+                                            memberData[1].toString(),                   //name
+                                            memberData[2].toString(),                   //address
+                                            LocalDate.parse(memberData[3].toString()),  //dob
+                                            LocalDate.parse(memberData[4].toString()),  //dor
+                                            memberData[5].toString(),                   //status
+                                            (double)memberData[6]);                     //balance
+                members.add(member);
+            }
+        } catch (SQLException | IllegalArgumentException ex) {
+            //@TODO
+        }
+        
+        return members;
     }
 
     @Override

@@ -6,7 +6,6 @@ package com.xyzdrivers.controllers;
 import com.xyzdrivers.models.Claim;
 import com.xyzdrivers.models.Member;
 import com.xyzdrivers.repositories.ClaimsRepo;
-import com.xyzdrivers.services.SQLService;
 import com.xyzdrivers.repositories.MembersRepo;
 
 import java.io.*;
@@ -41,11 +40,11 @@ public class AdminController extends HttpServlet {
         ClaimsRepo claimsRepo = new ClaimsRepo();
         //get DB data
         List<Member> members = membersRepo.get();
-        //List<Member> outstandingBalance = membersService.getOutstandingBalances();
+        List<Member> outstandingBalance = membersRepo.getWhere("status", "OUTSTANDING");
         List<Claim> claims = claimsRepo.get();
         //set attributes
         request.setAttribute("members", members);
-        //request.setAttribute("outstandingBalance", outstandingBalance);
+        request.setAttribute("outstandingBalance", outstandingBalance);
         request.setAttribute("claims", claims);
         //fwd .jsp page
         request.getRequestDispatcher("admin.jsp").forward(request, response);
