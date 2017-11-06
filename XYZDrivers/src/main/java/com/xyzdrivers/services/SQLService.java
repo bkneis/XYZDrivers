@@ -113,7 +113,7 @@ public class SQLService
     {
         results.close();
         statement.close();
-        
+        connectionProvider.close();
     }
     
 //public methods
