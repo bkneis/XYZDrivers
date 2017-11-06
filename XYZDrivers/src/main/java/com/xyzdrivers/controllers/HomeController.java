@@ -28,11 +28,16 @@ public class HomeController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         // Get the request parameters
         String userType = request.getParameter("userType");
-        System.out.println(userType);
         String actionType = request.getParameter("actionType");
-        System.out.println(actionType);
+
+        // If neither are set, default to login
+        if (userType == null || actionType == null) {
+            request.setAttribute("userType", "user");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
         
         // Set the user type for the view
         request.setAttribute("userType", userType);
@@ -81,7 +86,7 @@ public class HomeController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Controller to direct the user to correct page based on an action";
     }// </editor-fold>
 
 }
