@@ -20,7 +20,6 @@ import javax.enterprise.context.RequestScoped;
 public class ConfiguredConnectionProvider implements ConnectionProvider {
         
     private Connection connection;
-    private boolean configured = false;
     private String url, username, password;
     
     /**
@@ -33,7 +32,7 @@ public class ConfiguredConnectionProvider implements ConnectionProvider {
         
         if (connection == null || connection.isClosed())
         {           
-            if (!configured) {
+            if (!isConfigured()) {
                 readConfiguration();
             }
             
@@ -101,9 +100,13 @@ public class ConfiguredConnectionProvider implements ConnectionProvider {
         
         this.url = url;
         this.username = username;
-        this.password = password;
+        this.password = password; 
         
-        configured = true;   
+    }
+    
+    private boolean isConfigured() {
+        
+        return (url != null) && (username != null) && (password != null);
         
     }
     
