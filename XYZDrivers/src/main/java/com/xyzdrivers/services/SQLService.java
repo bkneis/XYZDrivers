@@ -2,11 +2,10 @@
  * @file    jdbcDriver.java
  * @author  alexander collins
  * @created 02/11/2017
- * @updated 03/11/2017, alexander collins
+ * @updated - 06/11/2017, alexander collins
+ *          - 03/11/2017, alexander collins
  * @notes   - The private functions could probably be made public.
- *          - Not tested
- * @issues  line 71. getPrimaryKeyName() doesn't work, any function using it won't work either.
- *          needs testing.
+ *          - Not fully tested
  */
 package com.xyzdrivers.services;
 
@@ -24,8 +23,8 @@ public class SQLService
     private ResultSet results;
 //constructors
     /**
-     * Constructor for jdbcDriver.
-     * <code>dbConnection</code> is tested by retrieving <code>DatabaseMetaData</code> from the <code>Connection</code>.
+     * Constructor for jdbcDriver. <code>dbConnection</code> is tested by 
+     * retrieving <code>DatabaseMetaData</code> from the <code>Connection</code>.
      * 
      * @param dbConnection A <code>Connection</code> to the DB being accessed.
      * 
@@ -42,6 +41,18 @@ public class SQLService
     }
     
 //private methods
+    /**
+     * Creates a preparedStatement using <code>sql</code> and <code>parameters</code>,
+     * then runs <code>.executeQuery</code> on that statement.
+     * 
+     * @param sql An SQL query statement.
+     * @param parameters Any parameters to be passed to the SQL query statement
+     * 
+     * @return the resulting <code>ResultSet</code> of running <code>.executeQuery</code>
+     * of <code>statement</code>.
+     * 
+     * @throws SQLException 
+     */
     private ResultSet executeQueryStatement(String sql, Object... parameters)
             throws SQLException
     {
@@ -54,6 +65,18 @@ public class SQLService
         return statement.executeQuery();
     }
     
+    /**
+     * Creates a preparedStatement using <code>sql</code> and <code>parameters</code>,
+     * then runs <code>.executeUpdate</code> on that statement.
+     * 
+     * @param sql An SQL query statement.
+     * @param parameters Any parameters to be passed to the SQL query statement
+     * 
+     * @return the resulting <code>int</code> of running <code>.executeUpdate</code>
+     * of <code>statement</code>.
+     * 
+     * @throws SQLException 
+     */
     private int executeUpdateStatement(String sql, Object... parameters)
             throws SQLException
     {
@@ -67,18 +90,12 @@ public class SQLService
     }
     
     /**
-     * @ISSUE NOT WORKING
+     * Gets the name of every table in <code>DB</code>.
+     *  
+     * @return A List of Strings where each String is a tables name found in DB.
+     * 
+     * @throws SQLException 
      */
-    private String getPrimaryKeyName(String table) throws SQLException
-    {
-        results = DBMetaData.getPrimaryKeys("", "", table);
-        
-        if (!results.next())
-            throw new IllegalArgumentException("Could not find PRIMARY KEY in "+table+". Please specify the primaryKeyColumn.");
-        
-        return results.getString("PK_NAME");
-    }
-    
     private List<String> getAllTableNames() throws SQLException
     {
         List<String> tableNames = new ArrayList();
@@ -92,6 +109,15 @@ public class SQLService
         return tableNames;
     }
     
+    /**
+     * Gets the name of every column in DB->tableName.
+     *  
+     * @param tableName The name of the Table in DB to retrieve column names from.
+     * 
+     * @return A List of Strings where each String is a column name found in DB->tableName.
+     * 
+     * @throws SQLException 
+     */
     private List<String> getAllColumnNames(String tableName) throws SQLException
     {
         List<String> columnNames = new ArrayList();
@@ -104,15 +130,20 @@ public class SQLService
         
         return columnNames;
     }
-    
-    private void close() throws SQLException
+        
+//public methods
+    /**
+     * Closes all connections to DB. Use on exit.
+     * 
+     * @throws SQLException 
+     */
+    public void close() throws SQLException
     {
         results.close();
         statement.close();
         DB.close();
     }
     
-//public methods
     //<editor-fold defaultstate="collapsed" desc="exists() functions...">
     /**
      * Checks if <code>table</code> exists.
@@ -174,9 +205,12 @@ public class SQLService
 
     //<editor-fold defaultstate="collapsed" desc="retrieve() functions...">
     /**
+     * "SELECT * FROM <code>table</code>"
      * 
-     * @param table
-     * @return
+     * @param table The table to retrieve from DB
+     * 
+     * @return Each Object[] is a rows data containing <code>column</code>, each List item is a row.
+     * 
      * @throws SQLException 
      */
     public List<Object[]> retrieve(String table)
@@ -207,7 +241,7 @@ public class SQLService
     }
     
     /**
-     * Retrieve a <code>Collection</code> of all items in <code>table->column</code>
+     * "SELECT <code>column</code> FROM <code>table</code>"
      * 
      * @param table the table containing the item be to retrieved
      * @param column the column containing the item to be retrieved from table
@@ -235,77 +269,44 @@ public class SQLService
     }
     
     /**
-     * Retrieve an item from <code>table->column</code>, where the PRIMARY KEY
-     * is <code>primaryKey</code>.
+     * "SELECT <code>column</code> FROM <code>table</code> WHERE <code>primaryKeyColumn</code> = <code>primaryKey</code>"s
      * 
      * @param table the table containing the item be to retrieved
-     * @param column the column containing the item to be retrieved from table
-     * @param primaryKey the PRIMARY KEY of the item to be retrieved
-     * 
-     * @return an Object containing the item found
-     * 
-     * @throws IllegalArgumentException if <code>(query results).next()</code> returns false.
-     * @throws SQLException 
-     */
-    public Object retrieve(String table, String column, Object primaryKey)
-            throws SQLException, IllegalArgumentException
-    {
-        //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE "+getPrimaryKeyName(table)+" = ?", primaryKey);
-        
-        //return results
-        if (results.next())
-            return results.getObject(column);
-        else
-            throw new IllegalArgumentException();
-    }
-    
-    /**
-     * Retrieve an item from <code>table->column</code>, where the PRIMARY KEY
-     * is <code>primaryKey</code>.
-     * 
-     * @param table the table containing the item be to retrieved
-     * @param column the column containing the item to be retrieved from table
+     * @param column the column containing the item to be retrieved from table ("*" for all).
      * @param primaryKeyColumn the name of the PRIMARY KEY column
      * @param primaryKey the PRIMARY KEY of the item to be retrieved
      * 
-     * @return an Object containing the item found
+     * @return Each Object[] is a rows data containing <code>column</code>, each List item is a row.
      * 
      * @throws IllegalArgumentException if <code>(query results).next()</code> returns false.
      * @throws SQLException 
      */
-    public Object retrieve(String table, String column, String primaryKeyColumn, Object primaryKey)
+    public List<Object[]> retrieve(String table, String column, String primaryKeyColumn, Object... primaryKey)
             throws SQLException, IllegalArgumentException
     {
+        List<Object[]> data;
+        Object[] rowColumn;
+        
         //execute statement
         results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE "+primaryKeyColumn+" = ?", primaryKey);
-        
+        resultsMetaData = results.getMetaData();
+        //add results to data
+        int columnCount = resultsMetaData.getColumnCount();
+        data = new ArrayList<>();
+        for (int row = 0; results.next(); row++)
+        {   
+            rowColumn = new Object[columnCount];
+            for (int col = 1; col <= columnCount; col++)
+                rowColumn[col-1] = results.getObject(col);
+            
+            data.add(rowColumn);
+        }
         //return results
-        if (results.next())
-            return results.getObject(column);
-        else
-            throw new IllegalArgumentException();
+        return data;
     } 
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="update() functions...">
-    /**
-     * Update an item from <code>table->column</code>, where the PRIMARY KEY
-     * is <code>primaryKey</code>.
-     * 
-     * @param table the table containing the item be to retrieved
-     * @param column the column containing the item to be retrieved from table
-     * @param primaryKey the PRIMARY KEY of the item to be retrieved
-     * @param value the value to update the found item with
-     * 
-     * @throws SQLException 
-     */
-    public void update(String table, String column, Object primaryKey, Object value)
-            throws SQLException
-    {
-        //execute statement
-        executeUpdateStatement("UPDATE "+table+" SET "+column+" = ? WHERE "+getPrimaryKeyName(table)+" = ?", value, primaryKey);
-    }
     /**
      * Update an item from <code>table->column</code>, where the PRIMARY KEY
      * is <code>primaryKey</code>.
