@@ -7,20 +7,21 @@
  */
 package com.xyzdrivers.services;
 
+import com.xyzdrivers.data.ConnectionProvider;
 import com.xyzdrivers.models.Claim;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
+@RequestScoped
 public class InsertClaimService {
 
-    private Connection con;
-
-    public InsertClaimService(Connection con) {
-        this.con = con;
-    }
+    @Inject
+    private ConnectionProvider connectionProvider;
 
     public void InsertClaim(Claim c) throws IllegalAccessException, SQLException {
        
@@ -36,18 +37,20 @@ public class InsertClaimService {
                 }
             }
 
-                String insertSQL = "INSERT INTO Claims (MEM_ID, DATE, RATIONALE, STATUS, AMOUNT) VALUES (?, ?, ?, ?, ?)";
+            String insertSQL = "INSERT INTO Claims (MEM_ID, DATE, RATIONALE, STATUS, AMOUNT) VALUES (?, ?, ?, ?, ?)";
 
-                PreparedStatement p = con.prepareStatement(insertSQL);
+            Connection connection = connectionProvider.getConnection();
+            PreparedStatement p = connection.prepareStatement(insertSQL);
 
-                p.setString(1, c.getMemberID());
-                p.setDate(2, Date.valueOf(c.getDate()));
-                p.setString(3, c.getReason());
-                p.setString(4, c.getStatus());
-                p.setInt(5, c.getAmount());
+            p.setString(1, c.getMemberID());
+            p.setDate(2, Date.valueOf(c.getDate()));
+            p.setString(3, c.getReason());
+            p.setString(4, c.getStatus());
+            p.setInt(5, c.getAmount());
 
-                p.executeUpdate();
+            p.executeUpdate();
 
-                con.close();
+            connection.close();
+            
         }
     }
