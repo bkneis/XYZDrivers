@@ -44,6 +44,7 @@ public class AdminController extends HttpServlet {
         List<Claim> claims = claimsRepo.get();
         //set attributes
         request.setAttribute("members", members);
+        request.setAttribute("outstandingBalance", outstandingBalance);
         request.setAttribute("claims", claims);
         //fwd .jsp page
         request.getRequestDispatcher("admin.jsp").forward(request, response);
