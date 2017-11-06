@@ -1,6 +1,9 @@
-src/main/webapp/node_modules
 nb-configuration.xml
 target/
 /XYZDrivers/nbproject/private/
+<<<<<<< HEAD
 /XYZDrivers/build/
 /XYZDrivers/XYZDrivers/src/main/resources/connection.properties
+=======
+node_modules/
+>>>>>>> develop

@@ -15,7 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import com.xyzdrivers.data.ConnectionProvider;
+import com.xyzdrivers.connection.ConnectionProvider;
 
 @RequestScoped
 public class InsertClaimService {
@@ -36,17 +36,17 @@ public class InsertClaimService {
                     throw new IllegalArgumentException("One of the declared fields in object c is null.");
                 }
             }
-
+            
             String insertSQL = "INSERT INTO Claims (MEM_ID, DATE, RATIONALE, STATUS, AMOUNT) VALUES (?, ?, ?, ?, ?)";
 
             Connection connection = connectionProvider.getConnection();
             PreparedStatement p = connection.prepareStatement(insertSQL);
-
+            
             p.setString(1, c.getMemberID());
             p.setDate(2, Date.valueOf(c.getDate()));
             p.setString(3, c.getReason());
             p.setString(4, c.getStatus());
-            p.setInt(5, c.getAmount());
+            p.setFloat(5, c.getAmount());
 
             p.executeUpdate();
 

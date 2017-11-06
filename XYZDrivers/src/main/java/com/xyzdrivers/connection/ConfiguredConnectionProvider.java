@@ -1,4 +1,4 @@
-package com.xyzdrivers.data;
+package com.xyzdrivers.connection;
 
 import java.io.IOException;
 import java.io.InputStream;

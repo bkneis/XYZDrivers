@@ -10,8 +10,6 @@ package com.xyzdrivers.controllers;
 import com.xyzdrivers.models.Claim;
 import com.xyzdrivers.services.InsertClaimService;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import javax.inject.Inject;
@@ -59,8 +57,8 @@ public class ClaimsController extends HttpServlet {
             String reason = request.getParameter("reason");
             String amount = request.getParameter("amount");
             
-            Claim claim = new Claim("null", date, reason, "NEW", Integer.parseInt(amount));
-            
+            Claim claim = new Claim("null", date, reason, "NEW", Float.parseFloat(amount));
+
             insertClaimService.InsertClaim(claim);
         } catch (SQLException | IllegalAccessException ex) {
             throw new RuntimeException(ex);

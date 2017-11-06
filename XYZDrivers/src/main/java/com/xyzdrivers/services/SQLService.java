@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import com.xyzdrivers.data.ConnectionProvider;
+import com.xyzdrivers.connection.ConnectionProvider;
 
 @RequestScoped
 public class SQLService
@@ -201,7 +201,7 @@ public class SQLService
         for (int row = 0; results.next(); row++)
         {   
             column = new Object[columnCount];
-            for (int col = 1; col < columnCount; col++)
+            for (int col = 1; col <= columnCount; col++)
                 column[col-1] = results.getObject(col);
             
             data.add(column);
