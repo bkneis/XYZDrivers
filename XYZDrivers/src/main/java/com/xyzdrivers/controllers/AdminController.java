@@ -32,15 +32,20 @@ public class AdminController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, ClassNotFoundException
     {
-        /* create Connection to DB */
+        //create Connection to DB
         Class.forName("com.mysql.jdbc.Driver");
-        SQLService sql = new SQLService(DriverManager.getConnection("jdbc:derby://localhost:1527/xyzdrivers", "root", "root"));
-        
-        List<Object[]> members = MembersService.getMembers(sql);
+        Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/xyzdrivers", "root", "root");
+        //create service & repo instances
+        MembersService serviceMembers = new MembersService(conn);
         ClaimsRepo claimsRepo = new ClaimsRepo();
+        //get DB data
+        List<Object[]> members = serviceMembers.getMembers();
+        List<Object[]> membersOutstandingBalance = serviceMembers.getOutstandingBalances();
         List<Claim> claims = claimsRepo.get();
+        //set attributes
         request.setAttribute("members", members);
         request.setAttribute("claims", claims);
+        //fwd .jsp page
         request.getRequestDispatcher("admin.jsp").forward(request, response);
     }
 
