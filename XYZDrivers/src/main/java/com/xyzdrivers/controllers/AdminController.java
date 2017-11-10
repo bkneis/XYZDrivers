@@ -5,7 +5,6 @@ package com.xyzdrivers.controllers;
 
 import com.xyzdrivers.models.Claim;
 import com.xyzdrivers.repositories.ClaimsRepo;
-import com.xyzdrivers.services.SQLService;
 import com.xyzdrivers.services.MembersService;
 
 import java.io.*;
@@ -13,11 +12,15 @@ import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
 public class AdminController extends HttpServlet {
 
+    @Inject
+    private MembersService membersService;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -30,13 +33,9 @@ public class AdminController extends HttpServlet {
      * @throws java.lang.ClassNotFoundException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, ClassNotFoundException
+            throws ServletException, IOException, SQLException
     {
-        /* create Connection to DB */
-        Class.forName("com.mysql.jdbc.Driver");
-        SQLService sql = new SQLService(DriverManager.getConnection("jdbc:derby://localhost:1527/xyzdrivers", "root", "root"));
-        
-        List<Object[]> members = MembersService.getMembers(sql);
+        List<Object[]> members = membersService.getMembers();
         ClaimsRepo claimsRepo = new ClaimsRepo();
         List<Claim> claims = claimsRepo.get();
         request.setAttribute("members", members);
@@ -59,8 +58,6 @@ public class AdminController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
             Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
