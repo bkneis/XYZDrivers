@@ -28,7 +28,7 @@ public class MembersRepo extends Repo<Member> {
         
         try {
             //get data
-            results = this.sql.retrieve("MEMBERS");
+            results = this.sqlService.retrieve("MEMBERS");
             //parse members data
             for (Object[] memberData : results)
             {
@@ -61,7 +61,7 @@ public class MembersRepo extends Repo<Member> {
             
         try {
             // get data
-            results = this.sql.retrieve("MEMBERS", "*", keyColumn, keyValue);
+            results = this.sqlService.retrieve("MEMBERS", "*", keyColumn, keyValue);
             //parse members data
             for (Object[] memberData : results)
             {

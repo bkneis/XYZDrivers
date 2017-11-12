@@ -19,9 +19,6 @@ import javax.servlet.http.*;
 
 public class AdminController extends HttpServlet {
 
-    @Inject
-    private MembersService membersService;
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
