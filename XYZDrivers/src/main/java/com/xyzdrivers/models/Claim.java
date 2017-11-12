@@ -9,6 +9,8 @@
 package com.xyzdrivers.models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Claim extends Model {
 
@@ -17,6 +19,11 @@ public class Claim extends Model {
     private String reason;
     private String status;
     private float amount;
+    
+    private List<String> allowedStatuses;
+    
+    public static String TABLE_NAME = "claims";
+    public static String PRIMARY_KEY = "id";
 
     public Claim(String member_id, LocalDate date, String reason, String status, float amount) {
         this.member_id = member_id;
@@ -24,6 +31,9 @@ public class Claim extends Model {
         this.reason = reason;
         this.status = status;
         this.amount = amount;
+        this.allowedStatuses = new ArrayList<>();
+        allowedStatuses.add("SUSPENDED");
+        allowedStatuses.add("OK");
     }
 
     public String getMemberID() {
@@ -44,6 +54,14 @@ public class Claim extends Model {
 
     public float getAmount() {
         return this.amount;
+    }
+    
+    public boolean setStatus(String status) {
+        if (allowedStatuses.contains(status)) {
+            this.status = status;
+            return true;
+        }
+        return false;
     }
 
 }

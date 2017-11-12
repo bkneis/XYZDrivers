@@ -1,6 +1,8 @@
 package com.xyzdrivers.models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,6 +18,8 @@ public class Membership extends Model {
     private String status;
     private float balance;
     
+    private List<String> allowedStatuses;
+    
     public static String TABLE_NAME = "members";
     public static String PRIMARY_KEY = "id";
     
@@ -26,6 +30,9 @@ public class Membership extends Model {
         this.dor = dor;
         this.status = status;
         this.balance = balance;
+        this.allowedStatuses = new ArrayList<>();
+        allowedStatuses.add("SUSPENDED");
+        allowedStatuses.add("OK");
     }
 
     public int getId() {
@@ -54,6 +61,14 @@ public class Membership extends Model {
 
     public float getBalance() {
         return balance;
+    }
+    
+    public boolean setStatus(String status) {
+        if (allowedStatuses.contains(status)) {
+            this.status = status;
+            return true;
+        }
+        return false;
     }
     
 }
