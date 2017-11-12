@@ -19,6 +19,13 @@
     <servlet>
         <servlet-name>PaymentController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.PaymentController</servlet-class>
+
+        <servlet-name>HomeController</servlet-name>
+        <servlet-class>com.xyzdrivers.controllers.HomeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpgradeMemberController</servlet-name>
+        <servlet-class>com.xyzdrivers.controllers.UpgradeMemberController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AuthController</servlet-name>
@@ -34,7 +41,15 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AdminController</servlet-name>
-        <url-pattern>/api/admin</url-pattern>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomeController</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpgradeMemberController</servlet-name>
+        <url-pattern>/upgrademember</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>PaymentController</servlet-name>

@@ -6,7 +6,6 @@
 package com.xyzdrivers.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author arthur
  */
-public class AuthController extends HttpServlet {
-    
+public class HomeController extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -29,18 +28,25 @@ public class AuthController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AuthController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AuthController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        
+        // Get the request parameters
+        String userType = request.getParameter("userType");
+        String actionType = request.getParameter("actionType");
+
+        // If neither are set, default to login
+        if (userType == null || actionType == null) {
+            request.setAttribute("userType", "user");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
+        
+        // Set the user type for the view
+        request.setAttribute("userType", userType);
+        
+        // Determine which view to send
+        if (actionType.equals("login")) {
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         }
     }
 
@@ -70,7 +76,7 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // processRequest(request, response);
     }
 
     /**
@@ -80,7 +86,7 @@ public class AuthController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Controller to direct the user to correct page based on an action";
     }// </editor-fold>
 
 }
