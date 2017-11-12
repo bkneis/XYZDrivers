@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author arthur
  */
 public class AuthController extends HttpServlet {
-
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

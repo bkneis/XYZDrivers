@@ -4,40 +4,37 @@
  * @created 02/11/2017
  * @updated - 06/11/2017, alexander collins
  *          - 03/11/2017, alexander collins
- * @notes   - The private functions could probably be made public.
- *          - Not fully tested
+ * @notes   - Not fully tested
  */
 package com.xyzdrivers.services;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import com.xyzdrivers.connection.ConnectionProvider;
 
+@RequestScoped
 public class SQLService
 {
-//variables
-    private Connection DB;
+//variables    
     private DatabaseMetaData DBMetaData;
-    
     private PreparedStatement statement;
     private ResultSetMetaData resultsMetaData;
     private ResultSet results;
-//constructors
-    /**
-     * Constructor for jdbcDriver. <code>dbConnection</code> is tested by 
-     * retrieving <code>DatabaseMetaData</code> from the <code>Connection</code>.
-     * 
-     * @param dbConnection A <code>Connection</code> to the DB being accessed.
-     * 
-     * @throws SQLException
-     */
-    public SQLService(Connection dbConnection)
-            throws SQLException
+    @Inject
+    private ConnectionProvider connectionProvider;
+    @PostConstruct
+    private void postConstruct()
     {
-        //pass DB connection
-        DB = dbConnection;
-        
-        //get database metadata
-        DBMetaData = DB.getMetaData();
+        try {
+            DBMetaData = connectionProvider.getConnection().getMetaData();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 //private methods
@@ -56,8 +53,10 @@ public class SQLService
     private ResultSet executeQueryStatement(String sql, Object... parameters)
             throws SQLException
     {
+        Connection connection = connectionProvider.getConnection();
+        
         //prepare statement
-        statement = DB.prepareStatement(sql);
+        statement = connection.prepareStatement(sql);
         for (int i = 0; i < parameters.length; i++)
             statement.setObject(i + 1, parameters[i]);
         
@@ -80,8 +79,10 @@ public class SQLService
     private int executeUpdateStatement(String sql, Object... parameters)
             throws SQLException
     {
+        Connection connection = connectionProvider.getConnection();
+        
         //prepare statement
-        statement = DB.prepareStatement(sql);
+        statement = connection.prepareStatement(sql);
         for (int i = 0; i < parameters.length; i++)
             statement.setObject(i + 1, parameters[i]);
         
@@ -369,19 +370,18 @@ public class SQLService
     public void insert(String table, List<Object[]> values)
             throws SQLException
     {
-        for (int j = 0; j < values.size(); j++)
-        {
+        for (Object[] value : values) {
             //prepare statement query "INSERT INTO table VALUES (?, ...)"
             String insertQuery = "INSERT INTO "+table+" VALUES (";
-            for (int i = 0; i < values.get(j).length; i++)
-            {
-                if (i == values.get(j).length-1)
+            for (int i = 0; i < value.length; i++) {
+                if (i == value.length - 1) {
                     insertQuery += ("?)");
-                else
+                } else {
                     insertQuery += ("?, ");
+                }
             }
             //execute statement
-            executeUpdateStatement(insertQuery, values.get(j));
+            executeUpdateStatement(insertQuery, value);
         }
     }
     //</editor-fold>

@@ -10,10 +10,9 @@ package com.xyzdrivers.controllers;
 import com.xyzdrivers.models.Claim;
 import com.xyzdrivers.services.InsertClaimService;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class ClaimsController extends HttpServlet {
+    
+    @Inject
+    private InsertClaimService insertClaimService;
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -51,16 +53,13 @@ public class ClaimsController extends HttpServlet {
 
         try {
             LocalDate date = LocalDate.now();
-
-            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/TestDatabase_DEV", "lenfred", "fruitgums1");
+            
             String reason = request.getParameter("reason");
             String amount = request.getParameter("amount");
+            
+            Claim claim = new Claim("null", date, reason, "NEW", Float.parseFloat(amount));
 
-            Claim c = new Claim("null", date, reason, "NEW", Float.parseFloat(amount));
-
-            InsertClaimService ic = new InsertClaimService(con);
-
-            ic.InsertClaim(c);
+            insertClaimService.InsertClaim(claim);
         } catch (SQLException | IllegalAccessException ex) {
             throw new RuntimeException(ex);
         }

@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 
 /**
  *
@@ -19,18 +20,8 @@ import java.util.logging.Logger;
  */
 public abstract class Repo<Model> {
     
-    protected SQLService sql;
-    
-    public Repo() {
-        // Update this when connection provider is added from toneos PR
-        try {
-            this.sql = new SQLService(DriverManager.getConnection("jdbc:derby://localhost:1527/xyzdrivers", "root", "root"));
-        }
-        catch (SQLException ex) {
-            Logger.getLogger(Repo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }
+    @Inject
+    protected SQLService sqlService;
     
     abstract Model get(int id);
     
