@@ -18,7 +18,11 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 public class AdminController extends HttpServlet {
-
+    @Inject
+    private MembersRepo membersRepo;
+    @Inject
+    private ClaimsRepo  claimsRepo;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -33,9 +37,6 @@ public class AdminController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException
     {
-        //create service & repo instances
-        MembersRepo membersRepo = new MembersRepo();
-        ClaimsRepo claimsRepo = new ClaimsRepo();
         //get DB data
         List<Member> members = membersRepo.get();
         List<Member> outstandingBalance = membersRepo.getWhere("status", "OUTSTANDING");
