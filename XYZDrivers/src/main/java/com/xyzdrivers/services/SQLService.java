@@ -101,7 +101,6 @@ public class SQLService
     {
         results.close();
         statement.close();
-        DB.close();
     }
     
     /**
@@ -139,7 +138,7 @@ public class SQLService
     {
         List<String> columnNames = new ArrayList();
         
-        results = executeQueryStatement("SELECT * FROM "+tableName+" FETCH FIRST 1 ROWS ONLY");
+        results = executeQueryStatement("SELECT * FROM " + tableName + " FETCH FIRST 1 ROWS ONLY");
         
         resultsMetaData = results.getMetaData();
         for (int i = 1; i < resultsMetaData.getColumnCount(); i++)
@@ -162,7 +161,7 @@ public class SQLService
             throws SQLException
     {
         //execute statement
-        results = executeQueryStatement("SELECT * FROM "+table);
+        results = executeQueryStatement("SELECT * FROM " + table);
         //return results
         return results.next();
     }
@@ -181,7 +180,7 @@ public class SQLService
             throws SQLException
     {
         //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE "+column+" = ?");
+        results = executeQueryStatement("SELECT " + column + " FROM " + table + " WHERE " + column + " = ?");
         //return results
         return results.next();
     }
@@ -201,7 +200,7 @@ public class SQLService
             throws SQLException
     {
         //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE "+column+" = ?", item);
+        results = executeQueryStatement("SELECT " + column + " FROM " + table + " WHERE " + column + " = ?", item);
         //return results
         return results.next();
     }
@@ -227,7 +226,7 @@ public class SQLService
         if (!exists(table))
             throw new IllegalArgumentException();
         //execute SQL statement
-        results = executeQueryStatement("SELECT * FROM "+table);
+        results = executeQueryStatement("SELECT * FROM " + table);
         resultsMetaData = results.getMetaData();
         //add results to data
         int columnCount = resultsMetaData.getColumnCount();
@@ -264,7 +263,7 @@ public class SQLService
         if (!exists(table, column))
             throw new IllegalArgumentException();
         //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table);
+        results = executeQueryStatement("SELECT " + column + " FROM " + table);
         //add results to data
         data = new ArrayList();
         for (int i = 0; results.next(); i++)
@@ -293,7 +292,7 @@ public class SQLService
         Object[] rowColumn;
         
         //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE \""+keyColumn+"\" = ?", keyValue);
+        results = executeQueryStatement("SELECT " + column + " FROM " + table + " WHERE \"" + keyColumn + "\" = ?", keyValue);
         resultsMetaData = results.getMetaData();
         //add results to data
         int columnCount = resultsMetaData.getColumnCount();
@@ -327,7 +326,7 @@ public class SQLService
             throws SQLException
     {
         //execute statement
-        executeUpdateStatement("UPDATE "+table+" SET "+column+" = ? WHERE "+keyColumn+" = ?", value, keyValue);
+        executeUpdateStatement("UPDATE " + table + " SET " + column + " = ? WHERE " + keyColumn + " = ?", value, keyValue);
     }
     //</editor-fold>
 
@@ -346,7 +345,7 @@ public class SQLService
             throws SQLException
     {
         //prepare statement query "INSERT INTO table VALUES (?, ...)"
-        String insertQuery = "INSERT INTO "+table+" VALUES (";
+        String insertQuery = "INSERT INTO " + table + " VALUES (";
         for (int i = 0; i < values.length; i++)
         {
             if (i == values.length-1)
@@ -372,7 +371,7 @@ public class SQLService
     {
         for (Object[] value : values) {
             //prepare statement query "INSERT INTO table VALUES (?, ...)"
-            String insertQuery = "INSERT INTO "+table+" VALUES (";
+            String insertQuery = "INSERT INTO " + table + " VALUES (";
             for (int i = 0; i < value.length; i++) {
                 if (i == value.length - 1) {
                     insertQuery += ("?)");
@@ -402,7 +401,7 @@ public class SQLService
      */
     public void remove(String table, String query) throws SQLException
     {
-        executeUpdateStatement("DELETE FROM "+table+" WHERE "+query);
+        executeUpdateStatement("DELETE FROM " + table + " WHERE " + query);
     }
     //</editor-fold>
 }
