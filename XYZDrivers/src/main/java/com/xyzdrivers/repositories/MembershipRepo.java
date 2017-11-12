@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class MembershipRepo extends Repo<Membership> {
 
     @Override
-    Membership get(int id) {
+    Membership get(Integer id) {
         Membership member = null;
         try {
             Object result = this.sql.retrieve(Membership.TABLE_NAME, Membership.PRIMARY_KEY, id);

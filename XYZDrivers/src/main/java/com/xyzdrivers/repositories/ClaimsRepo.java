@@ -16,8 +16,18 @@ import java.util.logging.Logger;
 public class ClaimsRepo extends Repo<Claim> {
 
     @Override
-    Claim get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    Claim get(Integer id) {
+        Claim claim = null;
+        try {
+            Object result = this.sql.retrieve(Claim.TABLE_NAME, Claim.PRIMARY_KEY, id);
+            // TODO fix sqlService for retrieve of one object
+            LocalDate date = LocalDate.parse(result[2].toString());
+            Claim cl = new Claim(result[1].toString(), date, result[3].toString(), result[4].toString(), Float.parseFloat(result[5].toString()));
+        } catch (SQLException | IllegalArgumentException ex) {
+            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return claim;
     }
 
     /**

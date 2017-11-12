@@ -32,7 +32,7 @@ public abstract class Repo<Model> {
         
     }
     
-    abstract Model get(int id);
+    abstract Model get(Integer id);
     
     abstract List<Model> get();
     
