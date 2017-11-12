@@ -54,7 +54,7 @@ public class SQLService
         return statement.executeQuery();
     }
     
-    private int executeUpdateStatement(String sql, Object... parameters)
+    public int executeUpdateStatement(String sql, Object... parameters)
             throws SQLException
     {
         //prepare statement
@@ -261,7 +261,7 @@ public class SQLService
     }
     
     /**
-     * Retrieve an item from <code>table->column</code>, where the PRIMARY KEY
+     * Retrieve an item from <code>table</code>, where the PRIMARY KEY
      * is <code>primaryKey</code>.
      * 
      * @param table the table containing the item be to retrieved
@@ -278,7 +278,7 @@ public class SQLService
             throws SQLException, IllegalArgumentException
     {
         //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE "+primaryKeyColumn+" = ?", primaryKey);
+        results = executeQueryStatement("SELECT * FROM " + table + " WHERE " + primaryKeyColumn + " = ?", primaryKey);
         
         //return results
         if (results.next())

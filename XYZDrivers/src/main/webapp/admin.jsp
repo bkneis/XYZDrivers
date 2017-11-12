@@ -17,46 +17,46 @@
 
               <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                  <li><a href="#">Home</a></li>
+                  <li><a href="/XYZDrivers">Home</a></li>
                 </ul>
   
                 <ul class="nav navbar-nav navbar-right">
-                  <li><a href="#">Logout</a></li>
+                  <li><a href="logout">Logout</a></li>
                 </ul>
               </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
         
         <div class="page row">
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <h2>Claims</h2>
+                <c:forEach items="${claims}" var="claim">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">All Claims</h3>
+                        <h3 class="panel-title">
+                            <c:out value="${claim.memberID}" /> - <c:out value="${claim.date}" />
+                        </h3>
                     </div>
                     <div class="panel-body">
-                        <ul>
-                        <c:forEach items="${claims}" var="claim">
-                            <li>
-                                <c:out value="${claim.date}" />
-                                - Member: <c:out value="${claim.memberID}" />
-                                - Reason: <c:out value="${claim.reason}" />
-                                - Status <c:out value="${claim.status}" />
-                                - Amount <c:out value="${claim.amount}" />
-                            </li>
-                        </c:forEach>
-                        </ul>
+                        <p><strong>Reason: </strong> <c:out value="${claim.reason}" /></p>
+                        <p><strong>Status </strong> <c:out value="${claim.status}" /></p>
+                        <p><strong>Amount: </strong> <c:out value="${claim.amount}" /></p>
                     </div>
                 </div>
+                </c:forEach>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <h2>Members</h2>
+                <c:forEach items="${members}" var="member">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">All Members</h3>
+                        <h3 class="panel-title"><c:out value="${member[0]}" /></h3>
                     </div>
                     <div class="panel-body">
-                        Panel content
+                        <a href="suspend?member=<c:out value="${member[0]}" />">Suspend</a> / <a href="resume?member=<c:out value="${member[0]}" />">Resume</a>
                     </div>
                 </div>
+                </c:forEach>
             </div>
         </div>
     </body>
