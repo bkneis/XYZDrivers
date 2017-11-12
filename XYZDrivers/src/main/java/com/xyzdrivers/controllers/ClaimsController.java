@@ -57,7 +57,7 @@ public class ClaimsController extends HttpServlet {
             String reason = request.getParameter("reason");
             String amount = request.getParameter("amount");
             
-            Claim claim = new Claim("null", date, reason, "NEW", Float.parseFloat(amount));
+            Claim claim = new Claim("null", date, reason, "SUBMITTED", Float.parseFloat(amount));
 
             insertClaimService.InsertClaim(claim);
         } catch (SQLException | IllegalAccessException ex) {
