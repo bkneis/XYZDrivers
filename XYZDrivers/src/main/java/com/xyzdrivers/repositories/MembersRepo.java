@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.RequestScoped;
 
+@RequestScoped
 public class MembersRepo extends Repo<Member> {
 
     @Override
@@ -42,7 +44,7 @@ public class MembersRepo extends Repo<Member> {
                 members.add(member);
             }
         } catch (SQLException ex) {
-            //@TODO ?
+            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return members;
@@ -75,7 +77,7 @@ public class MembersRepo extends Repo<Member> {
                 members.add(member);
             }
         } catch (SQLException | IllegalArgumentException ex) {
-            //@TODO
+            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return members;

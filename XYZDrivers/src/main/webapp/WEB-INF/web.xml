@@ -19,7 +19,8 @@
     <servlet>
         <servlet-name>PaymentController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.PaymentController</servlet-class>
-
+    </servlet>
+    <servlet>
         <servlet-name>HomeController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.HomeController</servlet-class>
     </servlet>
@@ -37,7 +38,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MembershipController</servlet-name>
-        <url-pattern>/api/member</url-pattern>
+        <url-pattern>/member</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AdminController</servlet-name>
