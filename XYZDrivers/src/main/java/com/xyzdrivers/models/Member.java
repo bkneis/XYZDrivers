@@ -56,6 +56,10 @@ public class Member extends Model
         return balance;
     }
     
+    public boolean isProvisional() {
+        return this.status.equals("APPLIED");
+    }
+    
     public boolean setStatus(String status) {
         if (allowedStatuses.contains(status)) {
             this.status = status;

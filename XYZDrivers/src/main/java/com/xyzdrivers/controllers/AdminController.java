@@ -5,8 +5,10 @@ package com.xyzdrivers.controllers;
 
 import com.xyzdrivers.models.Claim;
 import com.xyzdrivers.models.Member;
+import com.xyzdrivers.models.MembershipPayment;
 import com.xyzdrivers.repositories.ClaimsRepo;
 import com.xyzdrivers.repositories.MembersRepo;
+import com.xyzdrivers.repositories.PaymentRepo;
 
 import java.io.*;
 import java.sql.*;
@@ -21,8 +23,12 @@ public class AdminController extends HttpServlet {
     
     @Inject
     private MembersRepo membersRepo;
+    
     @Inject
     private ClaimsRepo  claimsRepo;
+    
+    @Inject
+    private PaymentRepo paymentRepo;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,12 +45,29 @@ public class AdminController extends HttpServlet {
     {
         //get DB data
         List<Member> members = membersRepo.get();
+        List<Member> provisionalMembers = new ArrayList<>();
+        List<Member> normalMembers = new ArrayList<>();
+        for (Member member: members) {
+            if (member.isProvisional()) {
+                provisionalMembers.add(member);
+            } else {
+                normalMembers.add(member);
+            }
+        }
+        
         List<Member> outstandingBalance = membersRepo.getWhere("status", "OUTSTANDING");
         List<Claim> claims = claimsRepo.get();
+        List<MembershipPayment> payments = paymentRepo.get();
+        float totalTurnover = 0;
+        for (MembershipPayment payment: payments) {
+            totalTurnover += payment.getPaymentAmount();
+        }
         //set attributes
-        request.setAttribute("members", members);
+        request.setAttribute("members", normalMembers);
+        request.setAttribute("provisionalMembers", provisionalMembers);
         request.setAttribute("outstandingBalance", outstandingBalance);
         request.setAttribute("claims", claims);
+        request.setAttribute("totalTurnover", totalTurnover);
         //fwd .jsp page
         request.getRequestDispatcher("admin.jsp").forward(request, response);
     }
