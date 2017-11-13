@@ -24,8 +24,10 @@
         <servlet-name>ClaimStatusController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.ClaimStatusController</servlet-class>
     </servlet>
+    <servlet>
         <servlet-name>PaymentController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.PaymentController</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>HomeController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.HomeController</servlet-class>
@@ -52,11 +54,13 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MembershipStatusController</servlet-name>
-        <url-pattern>/membership/status</url-pattern>
+        <url-pattern>/membership-status</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ClaimStatusController</servlet-name>
-        <url-pattern>/claim/status</url-pattern>
+        <url-pattern>/claim-status</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>HomeController</servlet-name>
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
