@@ -79,7 +79,7 @@ public class ClaimsRepo extends Repo<Claim> {
                 claims.add(claim);
             }
         } catch (SQLException | IllegalArgumentException ex) {
-            //@TODO
+            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return claims;
