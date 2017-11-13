@@ -16,9 +16,9 @@ public class Claim extends Model {
     private LocalDate date;
     private String reason;
     private String status;
-    private float amount;
+    private double amount;
 
-    public Claim(String member_id, LocalDate date, String reason, String status, float amount) {
+    public Claim(String member_id, LocalDate date, String reason, String status, double amount) {
         this.member_id = member_id;
         this.date = date;
         this.reason = reason;
@@ -42,7 +42,7 @@ public class Claim extends Model {
         return this.status;
     }
 
-    public float getAmount() {
+    public double getAmount() {
         return this.amount;
     }
 

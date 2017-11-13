@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 public class MembershipController extends HttpServlet {
     @Inject
     private MembersRepo membersRepo;
+    @Inject
+    private ClaimsRepo claimsRepo;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,8 +33,10 @@ public class MembershipController extends HttpServlet {
     {
         //get DB data
         Member memberInfo = membersRepo.getWhere("id", "me-aydin").get(0);
+        List<Claim> memberClaims = claimsRepo.getWhere("mem_id", "me-aydin");
         //set attributes
         request.setAttribute("member", memberInfo);
+        request.setAttribute("claims", memberClaims);
         //fwd .jsp page
         request.getRequestDispatcher("member.jsp").forward(request, response);
     }

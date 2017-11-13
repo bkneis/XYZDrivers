@@ -61,8 +61,28 @@ public class ClaimsRepo extends Repo<Claim> {
     }
 
     @Override
-    List<Claim> getWhere(String keyColumn, Object keyValue) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Claim> getWhere(String keyColumn, Object keyValue) {
+        List<Object[]> results;
+        List<Claim> claims = new ArrayList();
+            
+        try {
+            // get data
+            results = this.sqlService.retrieve("CLAIMS", "*", keyColumn, keyValue);
+            //parse members data
+            for (Object[] claimData : results)
+            {
+                Claim claim = new Claim(claimData[1].toString(),                    //mem_id
+                                        LocalDate.parse(claimData[2].toString()),   //date
+                                        claimData[3].toString(),                    //rational
+                                        claimData[4].toString(),                    //status
+                                        (double)claimData[5]);                       //amount
+                claims.add(claim);
+            }
+        } catch (SQLException | IllegalArgumentException ex) {
+            //@TODO
+        }
+        
+        return claims;
     }
     
     

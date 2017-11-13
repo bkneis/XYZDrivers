@@ -46,7 +46,7 @@ public class InsertClaimService {
             p.setDate(2, Date.valueOf(c.getDate()));
             p.setString(3, c.getReason());
             p.setString(4, c.getStatus());
-            p.setFloat(5, c.getAmount());
+            p.setDouble(5, c.getAmount());
 
             p.executeUpdate();
 
