@@ -27,7 +27,11 @@
             </div><!-- /.container-fluid -->
         </nav>
         <div class="page row">
-            <div class="col-md-4">
+            <div class="col-md-2">
+                <h2>Total Turnover</h2>
+                <h3><c:out value="${totalTurnover}" />
+            </div>
+            <div class="col-md-3">
                 <h2>Claims</h2>
                 <c:forEach items="${claims}" var="claim">
                 <div class="panel panel-default">
@@ -51,8 +55,7 @@
                     </div>
                 </div>
                 </c:forEach>
-            </div>
-            <div class="col-md-4">
+                
                 <h2>Outstanding Balances</h2>
                 <c:forEach items="${outstandingBalances}" var="outstandingBalance">
                 <div class="panel panel-default">
@@ -62,6 +65,32 @@
                     <div class="panel-body">
                         Balance : <c:out value="${outstandingBalance.balance}"/>
                         </ul>
+                    </div>
+                </div>
+                </c:forEach>
+            </div>
+            <div class="col-md-3">
+                <h2>Provisional Members</h2>
+                <c:forEach items="${provisionalMembers}" var="provisionalMember">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><c:out value="${provisionalMember.name}" /></h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>ID : <c:out value="${provisionalMember.id}"/></p>
+                        <p>Name : <c:out value="${provisionalMember.name}"/></p>
+                        <p>Address : <c:out value="${provisionalMember.address}"/></p>
+                        <p>Date of Birth : <c:out value="${provisionalMember.dob}"/></p>
+                        <p>Date of Record : <c:out value="${provisionalMember.dor}"/></p>
+                        <p>Status : <c:out value="${provisionalMember.status}"/></p>
+                        <p>
+                            <a href="/XYZDrivers/membership-status?status=APPROVED&amp;member_id=<c:out value="${member.id}" />">
+                                Approve
+                            </a> /
+                            <a href="/XYZDrivers/membership-status?status=REJECTED&amp;member_id=<c:out value="${member.id}" />">
+                                Reject
+                            </a>
+                        </p>
                     </div>
                 </div>
                 </c:forEach>
