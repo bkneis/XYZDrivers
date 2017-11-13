@@ -29,6 +29,8 @@ public abstract class Repo<Model> {
     
     abstract List<Model> getWhere(String[] conditions);
     
+    abstract List<Model> getWhere(String keyColumn, Object keyValue);
+    
     abstract Model update(Model model);
     
     abstract void delete(Model model);

@@ -4,8 +4,9 @@
 package com.xyzdrivers.controllers;
 
 import com.xyzdrivers.models.Claim;
+import com.xyzdrivers.models.Member;
 import com.xyzdrivers.repositories.ClaimsRepo;
-import com.xyzdrivers.services.MembersService;
+import com.xyzdrivers.repositories.MembersRepo;
 
 import java.io.*;
 import java.sql.*;
@@ -17,9 +18,10 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 public class AdminController extends HttpServlet {
-
     @Inject
-    private MembersService membersService;
+    private MembersRepo membersRepo;
+    @Inject
+    private ClaimsRepo  claimsRepo;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,11 +37,15 @@ public class AdminController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException
     {
-        List<Object[]> members = membersService.getMembers();
-        ClaimsRepo claimsRepo = new ClaimsRepo();
+        //get DB data
+        List<Member> members = membersRepo.get();
+        List<Member> outstandingBalance = membersRepo.getWhere("status", "OUTSTANDING");
         List<Claim> claims = claimsRepo.get();
+        //set attributes
         request.setAttribute("members", members);
+        request.setAttribute("outstandingBalance", outstandingBalance);
         request.setAttribute("claims", claims);
+        //fwd .jsp page
         request.getRequestDispatcher("admin.jsp").forward(request, response);
     }
 

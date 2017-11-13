@@ -59,6 +59,11 @@ public class ClaimsRepo extends Repo<Claim> {
     public void delete(Claim model) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    List<Claim> getWhere(String keyColumn, Object keyValue) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
 }

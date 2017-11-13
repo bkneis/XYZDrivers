@@ -2,11 +2,9 @@
  * @file    jdbcDriver.java
  * @author  alexander collins
  * @created 02/11/2017
- * @updated 03/11/2017, alexander collins
- * @notes   - The private functions could probably be made public.
- *          - Not tested
- * @issues  line 71. getPrimaryKeyName() doesn't work, any function using it won't work either.
- *          needs testing.
+ * @updated - 06/11/2017, alexander collins
+ *          - 03/11/2017, alexander collins
+ * @notes   - Not fully tested
  */
 package com.xyzdrivers.services;
 
@@ -27,10 +25,8 @@ public class SQLService
     private PreparedStatement statement;
     private ResultSetMetaData resultsMetaData;
     private ResultSet results;
-    
     @Inject
     private ConnectionProvider connectionProvider;
-    
     @PostConstruct
     private void postConstruct()
     {
@@ -42,6 +38,18 @@ public class SQLService
     }
     
 //private methods
+    /**
+     * Creates a preparedStatement using <code>sql</code> and <code>parameters</code>,
+     * then runs <code>.executeQuery</code> on that statement.
+     * 
+     * @param sql An SQL query statement.
+     * @param parameters Any parameters to be passed to the SQL query statement
+     * 
+     * @return the resulting <code>ResultSet</code> of running <code>.executeQuery</code>
+     * of <code>statement</code>.
+     * 
+     * @throws SQLException 
+     */
     private ResultSet executeQueryStatement(String sql, Object... parameters)
             throws SQLException
     {
@@ -56,6 +64,18 @@ public class SQLService
         return statement.executeQuery();
     }
     
+    /**
+     * Creates a preparedStatement using <code>sql</code> and <code>parameters</code>,
+     * then runs <code>.executeUpdate</code> on that statement.
+     * 
+     * @param sql An SQL query statement.
+     * @param parameters Any parameters to be passed to the SQL query statement
+     * 
+     * @return the resulting <code>int</code> of running <code>.executeUpdate</code>
+     * of <code>statement</code>.
+     * 
+     * @throws SQLException 
+     */
     private int executeUpdateStatement(String sql, Object... parameters)
             throws SQLException
     {
@@ -70,20 +90,28 @@ public class SQLService
         return statement.executeUpdate();
     }
     
+//public methods
     /**
-     * @ISSUE NOT WORKING
+     * Closes all connections to DB. Use on exit.
+     * 
+     * @throws SQLException 
      */
-    private String getPrimaryKeyName(String table) throws SQLException
+    public void close()
+            throws SQLException
     {
-        results = DBMetaData.getPrimaryKeys("", "", table);
-        
-        if (!results.next())
-            throw new IllegalArgumentException("Could not find PRIMARY KEY in "+table+". Please specify the primaryKeyColumn.");
-        
-        return results.getString("PK_NAME");
+        results.close();
+        statement.close();
     }
     
-    private List<String> getAllTableNames() throws SQLException
+    /**
+     * Gets the name of every table in <code>DB</code>.
+     *  
+     * @return A List of Strings where each String is a tables name found in DB.
+     * 
+     * @throws SQLException 
+     */
+    public List<String> getAllTableNames()
+            throws SQLException
     {
         List<String> tableNames = new ArrayList();
         
@@ -96,11 +124,21 @@ public class SQLService
         return tableNames;
     }
     
-    private List<String> getAllColumnNames(String tableName) throws SQLException
+    /**
+     * Gets the name of every column in DB->tableName.
+     *  
+     * @param tableName The name of the Table in DB to retrieve column names from.
+     * 
+     * @return A List of Strings where each String is a column name found in DB->tableName.
+     * 
+     * @throws SQLException 
+     */
+    public List<String> getAllColumnNames(String tableName)
+            throws SQLException
     {
         List<String> columnNames = new ArrayList();
         
-        results = executeQueryStatement("SELECT * FROM "+tableName+" FETCH FIRST 1 ROWS ONLY");
+        results = executeQueryStatement("SELECT * FROM " + tableName + " FETCH FIRST 1 ROWS ONLY");
         
         resultsMetaData = results.getMetaData();
         for (int i = 1; i < resultsMetaData.getColumnCount(); i++)
@@ -109,14 +147,6 @@ public class SQLService
         return columnNames;
     }
     
-    private void close() throws SQLException
-    {
-        results.close();
-        statement.close();
-        connectionProvider.close();
-    }
-    
-//public methods
     //<editor-fold defaultstate="collapsed" desc="exists() functions...">
     /**
      * Checks if <code>table</code> exists.
@@ -131,7 +161,7 @@ public class SQLService
             throws SQLException
     {
         //execute statement
-        results = executeQueryStatement("SELECT * FROM "+table);
+        results = executeQueryStatement("SELECT * FROM " + table);
         //return results
         return results.next();
     }
@@ -150,13 +180,13 @@ public class SQLService
             throws SQLException
     {
         //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE "+column+" = ?");
+        results = executeQueryStatement("SELECT " + column + " FROM " + table + " WHERE " + column + " = ?");
         //return results
         return results.next();
     }
     
     /**
-     * Checks if <code>query</code> exists in <code>table->column</code>.
+     * Checks if <code>item</code> exists in <code>table->column</code>.
      * 
      * @param table The name of the table containing the item
      * @param column The name of the column containing the item to retrieve from table
@@ -170,17 +200,20 @@ public class SQLService
             throws SQLException
     {
         //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE "+column+" = ?", item);
+        results = executeQueryStatement("SELECT " + column + " FROM " + table + " WHERE " + column + " = ?", item);
         //return results
         return results.next();
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="retrieve() functions...">
+    //<editor-fold defaultstate="collapsed" desc="retrieve() functions...">    
     /**
+     * "SELECT * FROM <code>table</code>"
      * 
-     * @param table
-     * @return
+     * @param table The table to retrieve from DB
+     * 
+     * @return Each Object[] is a rows data containing <code>column</code>, each List item is a row.
+     * 
      * @throws SQLException 
      */
     public List<Object[]> retrieve(String table)
@@ -193,7 +226,7 @@ public class SQLService
         if (!exists(table))
             throw new IllegalArgumentException();
         //execute SQL statement
-        results = executeQueryStatement("SELECT * FROM "+table);
+        results = executeQueryStatement("SELECT * FROM " + table);
         resultsMetaData = results.getMetaData();
         //add results to data
         int columnCount = resultsMetaData.getColumnCount();
@@ -206,12 +239,13 @@ public class SQLService
             
             data.add(column);
         }
+        
         //return results
         return data;
     }
     
     /**
-     * Retrieve a <code>Collection</code> of all items in <code>table->column</code>
+     * "SELECT <code>column</code> FROM <code>table</code>"
      * 
      * @param table the table containing the item be to retrieved
      * @param column the column containing the item to be retrieved from table
@@ -229,7 +263,7 @@ public class SQLService
         if (!exists(table, column))
             throw new IllegalArgumentException();
         //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table);
+        results = executeQueryStatement("SELECT " + column + " FROM " + table);
         //add results to data
         data = new ArrayList();
         for (int i = 0; results.next(); i++)
@@ -239,94 +273,60 @@ public class SQLService
     }
     
     /**
-     * Retrieve an item from <code>table->column</code>, where the PRIMARY KEY
-     * is <code>primaryKey</code>.
+     * "SELECT <code>column</code> FROM <code>table</code> WHERE <code>keyColumn</code> = <code>keyValue</code>"
      * 
      * @param table the table containing the item be to retrieved
-     * @param column the column containing the item to be retrieved from table
-     * @param primaryKey the PRIMARY KEY of the item to be retrieved
+     * @param column the column containing the item to be retrieved from table ("*" for all).
+     * @param keyColumn the name of the keyColumn
+     * @param keyValue the keyValue of the item(s) to be retrieved
      * 
-     * @return an Object containing the item found
+     * @return Each Object[] is a rows data containing <code>column</code>, each List item is a row.
      * 
      * @throws IllegalArgumentException if <code>(query results).next()</code> returns false.
      * @throws SQLException 
      */
-    public Object retrieve(String table, String column, Object primaryKey)
+    public List<Object[]> retrieve(String table, String column, String keyColumn, Object keyValue)
             throws SQLException, IllegalArgumentException
     {
-        //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE "+getPrimaryKeyName(table)+" = ?", primaryKey);
+        List<Object[]> data;
+        Object[] rowColumn;
         
-        //return results
-        if (results.next())
-            return results.getObject(column);
-        else
-            throw new IllegalArgumentException();
-    }
-    
-    /**
-     * Retrieve an item from <code>table->column</code>, where the PRIMARY KEY
-     * is <code>primaryKey</code>.
-     * 
-     * @param table the table containing the item be to retrieved
-     * @param column the column containing the item to be retrieved from table
-     * @param primaryKeyColumn the name of the PRIMARY KEY column
-     * @param primaryKey the PRIMARY KEY of the item to be retrieved
-     * 
-     * @return an Object containing the item found
-     * 
-     * @throws IllegalArgumentException if <code>(query results).next()</code> returns false.
-     * @throws SQLException 
-     */
-    public Object retrieve(String table, String column, String primaryKeyColumn, Object primaryKey)
-            throws SQLException, IllegalArgumentException
-    {
         //execute statement
-        results = executeQueryStatement("SELECT "+column+" FROM "+table+" WHERE "+primaryKeyColumn+" = ?", primaryKey);
-        
+        results = executeQueryStatement("SELECT " + column + " FROM " + table + " WHERE \"" + keyColumn + "\" = ?", keyValue);
+        resultsMetaData = results.getMetaData();
+        //add results to data
+        int columnCount = resultsMetaData.getColumnCount();
+        data = new ArrayList<>();
+        for (int row = 0; results.next(); row++)
+        {   
+            rowColumn = new Object[columnCount];
+            for (int col = 1; col <= columnCount; col++)
+                rowColumn[col-1] = results.getObject(col);
+            
+            data.add(rowColumn);
+        }
         //return results
-        if (results.next())
-            return results.getObject(column);
-        else
-            throw new IllegalArgumentException();
+        return data;
     } 
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="update() functions...">
     /**
-     * Update an item from <code>table->column</code>, where the PRIMARY KEY
-     * is <code>primaryKey</code>.
+     * "UPDATE <code>table</code> SET <code>column</code> = <code>updateValue</code> WHERE <code>keyColumn</code> = <code>keyValue</code>"
      * 
      * @param table the table containing the item be to retrieved
-     * @param column the column containing the item to be retrieved from table
-     * @param primaryKey the PRIMARY KEY of the item to be retrieved
-     * @param value the value to update the found item with
+     * @param column the column containing the item to be updated
+     * @param value the value to update 
+     * @param keyColumn the name of the keyColumn
+     * @param keyValue the keyColumn value of the item(s) to be updated
      * 
      * @throws SQLException 
      */
-    public void update(String table, String column, Object primaryKey, Object value)
+    public void update(String table, String column, Object value, String keyColumn, Object keyValue)
             throws SQLException
     {
         //execute statement
-        executeUpdateStatement("UPDATE "+table+" SET "+column+" = ? WHERE "+getPrimaryKeyName(table)+" = ?", value, primaryKey);
-    }
-    /**
-     * Update an item from <code>table->column</code>, where the PRIMARY KEY
-     * is <code>primaryKey</code>.
-     * 
-     * @param table the table containing the item be to retrieved
-     * @param column the column containing the item to be retrieved from table
-     * @param primaryKeyColumn the name of the PRIMARY KEY column
-     * @param primaryKey the PRIMARY KEY of the item to be retrieved
-     * @param value the value to update the found item with
-     * 
-     * @throws SQLException 
-     */
-    public void update(String table, String column, String primaryKeyColumn, Object primaryKey, Object value)
-            throws SQLException
-    {
-        //execute statement
-        executeUpdateStatement("UPDATE "+table+" SET "+column+" = ? WHERE "+primaryKeyColumn+" = ?", value, primaryKey);
+        executeUpdateStatement("UPDATE " + table + " SET " + column + " = ? WHERE " + keyColumn + " = ?", value, keyValue);
     }
     //</editor-fold>
 
@@ -341,10 +341,11 @@ public class SQLService
      * 
      * @throws SQLException 
      */
-    public void insert(String table, Object[] values) throws SQLException
+    public void insert(String table, Object[] values)
+            throws SQLException
     {
         //prepare statement query "INSERT INTO table VALUES (?, ...)"
-        String insertQuery = "INSERT INTO "+table+" VALUES (";
+        String insertQuery = "INSERT INTO " + table + " VALUES (";
         for (int i = 0; i < values.length; i++)
         {
             if (i == values.length-1)
@@ -356,7 +357,7 @@ public class SQLService
         executeUpdateStatement(insertQuery, values);
     }
     /**
-     * Insert a set of <code>values</code> into <code>table</code>.
+     * "INSERT INTO <code>table</code> VALUES (<code>values...</code>)"
      * The array of values are inserted in the order they are found (index 0 to 
      * index values.length).
      * 
@@ -365,11 +366,12 @@ public class SQLService
      * 
      * @throws SQLException 
      */
-    public void insert(String table, Object[][] values) throws SQLException
+    public void insert(String table, List<Object[]> values)
+            throws SQLException
     {
         for (Object[] value : values) {
             //prepare statement query "INSERT INTO table VALUES (?, ...)"
-            String insertQuery = "INSERT INTO "+table+" VALUES (";
+            String insertQuery = "INSERT INTO " + table + " VALUES (";
             for (int i = 0; i < value.length; i++) {
                 if (i == value.length - 1) {
                     insertQuery += ("?)");
@@ -385,9 +387,11 @@ public class SQLService
     
     //<editor-fold defaultstate="collapsed" desc="remove() functions...">
     /**
-     * Remove a row of data from <code>table</code> where <code>query</code> is
-     * true. <code>query</code> must be valid SQL syntax, the <code>query</code>
+     * "DELETE FROM <code>table</code> WHERE <code>query</code>"
+     * <code>query</code> must be valid SQL syntax, the <code>query</code>
      * String is appended to the end of "DELETE FROM "+table+" WHERE ".
+     * 
+     * NOTE: query should be updated to match standards in retrieve (if we have time)
      * 
      * @param table the table you want to remove the row from
      * @param query a string containing an SQL removal condition, appended to 
@@ -397,7 +401,7 @@ public class SQLService
      */
     public void remove(String table, String query) throws SQLException
     {
-        executeUpdateStatement("DELETE FROM "+table+" WHERE "+query);
+        executeUpdateStatement("DELETE FROM " + table + " WHERE " + query);
     }
     //</editor-fold>
 }
