@@ -1,5 +1,5 @@
 /**
- * @author alex
+ * @author alex, bryan
  */
 package com.xyzdrivers.controllers;
 
@@ -18,6 +18,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 public class AdminController extends HttpServlet {
+    
     @Inject
     private MembersRepo membersRepo;
     @Inject
@@ -32,7 +33,6 @@ public class AdminController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      * @throws java.sql.SQLException
-     * @throws java.lang.ClassNotFoundException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException

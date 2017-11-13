@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.xyzdrivers.controllers;
 
-import com.xyzdrivers.models.Membership;
-import com.xyzdrivers.repositories.MembershipRepo;
+import com.xyzdrivers.models.Member;
+import com.xyzdrivers.repositories.MembersRepo;
 import com.xyzdrivers.services.ResponseService;
 import java.io.IOException;
 import javax.inject.Inject;
@@ -22,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 public class MembershipStatusController extends HttpServlet {
     
     @Inject
-    MembershipRepo memberRepo;
+    MembersRepo membersRepo;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,21 +32,23 @@ public class MembershipStatusController extends HttpServlet {
             throws ServletException, IOException {
         
         String status = request.getParameter("status");
-        Integer id = Integer.parseInt(request.getParameter("member_id"));
+        String id = request.getParameter("member_id");
         
         if (status == null || status.equals("")) {
             ResponseService.fail(request, response, "Failure. Please submit a status and membership id", "/admin");
             return;
         }
         
-        Membership membership = memberRepo.get(id);
+        Member member = membersRepo.get(id);
         
-        if (! membership.setStatus(status)) {
-            ResponseService.fail(request, response, "Failure. Please submit a valid status", "/admin");
+        if (! member.setStatus(status)) {
+            ResponseService.fail(request, response, "Failure. Please submit a valid status", "admin");
             return;
         }
         
-        ResponseService.success(request, response, "Success. The membership status has been updated to " + status, "/admin");
+        member = membersRepo.update(member);
+        
+        ResponseService.success(request, response, "Success. The membership status has been updated to " + member.getStatus(), "admin");
         
     }
 
@@ -67,7 +64,7 @@ public class MembershipStatusController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // processRequest(request, response);
+        processRequest(request, response);
     }
 
     /**
