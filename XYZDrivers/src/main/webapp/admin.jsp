@@ -45,48 +45,47 @@
                 </c:forEach>
             </div>
             <div class="col-md-4">
-                <h2>Members</h2>
-                <c:forEach items="${members}" var="member">
+                <h2>Outstanding Balances</h2>
+                <c:forEach items="${outstandingBalances}" var="outstandingBalance">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Outstanding Balances</h3>
+                        <h3 class="panel-title"><c:out value="${outstandingBalance.name}" /></h3>
                     </div>
                     <div class="panel-body">
-                        <a href="suspend?member=<c:out value="${member[0]}" />">Suspend</a> / <a href="resume?member=<c:out value="${member[0]}" />">Resume</a>
-                        <ul>
-                        <c:forEach items="${outstandingBalances}" var="outstandingBalance">
-                            <li>
-                            - name: <c:out value="${outstandingBalance.name}"/>
-                            - balance: <c:out value="${outstandingBalance.balance}"/>
-                            </li>
-                        </c:forEach>
+                        Balance : <c:out value="${outstandingBalance.balance}"/>
                         </ul>
                     </div>
                 </div>
                 </c:forEach>
             </div>
-        </div>
-        <div class="page row">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">All Members</h3>
+            <div class="col-md-4">
+                <h2>Members</h2>
+                <c:forEach items="${members}" var="member">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><c:out value="${member.name}"/></h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>ID : <c:out value="${member.id}"/></p>
+                        <p>Name : <c:out value="${member.name}"/></p>
+                        <p>Address : <c:out value="${member.address}"/></p>
+                        <p>Date of Birth : <c:out value="${member.dob}"/></p>
+                        <p>Date of Record : <c:out value="${member.dor}"/></p>
+                        <p>Status : <c:out value="${member.status}"/></p>
+                        <p>Balance : <c:out value="${member.balance}"/></p>
+                        <p>
+                            <a href="/XYZDrivers/membership-status?status=SUSPENDED&amp;member_id=<c:out value="${member.id}" />">
+                                Suspend
+                            </a> / 
+                            <a href="/XYZDrivers/membership-status?status=APPROVED&amp;member_id=<c:out value="${member.id}" />">
+                                Resume
+                            </a>
+                        </p>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <ul>
-                    <c:forEach items="${members}" var="member">
-                        <li>
-                            <c:out value="${member.id}"/>
-                        - name: <c:out value="${member.name}"/>
-                        - address: <c:out value="${member.address}"/>
-                        - dob: <c:out value="${member.dob}"/>
-                        - dor: <c:out value="${member.dor}"/>
-                        - status: <c:out value="${member.status}"/>
-                        - balance: <c:out value="${member.balance}"/>
-                        </li>
-                    </c:forEach>
-                    </ul>
-                </div>
+                </c:forEach>
             </div>
         </div>
+        
     </body>
 </html>
