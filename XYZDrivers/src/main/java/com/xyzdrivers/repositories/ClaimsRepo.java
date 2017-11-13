@@ -23,10 +23,16 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
     public Claim get(Integer id) {
         Claim claim = null;
         try {
-            Object[] result = this.sqlService.retrieve(Claim.TABLE_NAME, Claim.PRIMARY_KEY, id.toString());
-            // TODO fix sqlService for retrieve of one object
+            Object[] result = sqlService.retrieve(Claim.TABLE_NAME, Claim.PRIMARY_KEY, id.toString());
             LocalDate date = LocalDate.parse(result[2].toString());
-            Claim cl = new Claim(result[1].toString(), date, result[3].toString(), result[4].toString(), Float.parseFloat(result[5].toString()));
+            claim = new Claim(
+                    Integer.parseInt(result[0].toString()),
+                    result[1].toString(),
+                    date,
+                    result[3].toString(),
+                    result[4].toString(),
+                    Float.parseFloat(result[5].toString())
+            );
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -48,7 +54,14 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
             results = sqlService.retrieve("claims");
             for (Object[] result : results) {
                 LocalDate date = LocalDate.parse(result[2].toString());
-                Claim cl = new Claim(result[1].toString(), date, result[3].toString(), result[4].toString(), Float.parseFloat(result[5].toString()));
+                Claim cl = new Claim(
+                    Integer.parseInt(result[0].toString()),
+                    result[1].toString(),
+                    date,
+                    result[3].toString(),
+                    result[4].toString(),
+                    Float.parseFloat(result[5].toString())
+            );
                 claims.add(cl);
             }
         } catch (SQLException ex) {
@@ -66,15 +79,15 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
     public Claim update(Claim claim) {
       
         Object[] parameters = {
-            claim.getDate(),
+            claim.getDate().toString(),
             claim.getAmount(),
             claim.getReason(),
             claim.getStatus(),
-            claim.getMemberID()
+            claim.getId()
         };
         
         try {
-            this.sqlService.executeUpdateStatement("UPDATE claims SET date=?, amount=?, reason=?, status=? WHERE mem_id=?", parameters);
+            this.sqlService.executeUpdateStatement("UPDATE claims SET \"date\"=?, \"amount\"=?, \"rationale\"=?, \"status\"=? WHERE \"id\"=?", parameters);
         } catch (SQLException ex) {
             Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
         }

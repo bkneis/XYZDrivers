@@ -40,6 +40,14 @@
                         <p><strong>Reason: </strong> <c:out value="${claim.reason}" /></p>
                         <p><strong>Status </strong> <c:out value="${claim.status}" /></p>
                         <p><strong>Amount: </strong> <c:out value="${claim.amount}" /></p>
+                        <c:if test="${claim.status == 'PENDING'}">
+                            <a href="/XYZDrivers/claim-status?status=APPROVED&amp;claim_id=<c:out value="${claim.id}" />">
+                                Approve
+                            </a> / 
+                            <a href="/XYZDrivers/claim-status?status=REJECTED&amp;claim_id=<c:out value="${claim.id}" />">
+                                Reject
+                            </a>
+                        </c:if>
                     </div>
                 </div>
                 </c:forEach>

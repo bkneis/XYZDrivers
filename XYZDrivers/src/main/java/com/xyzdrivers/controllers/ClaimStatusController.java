@@ -37,16 +37,22 @@ public class ClaimStatusController extends HttpServlet {
         
         // Sanity check to ensure required parameters were required, if not respond with failure
         if (status == null || status.equals("")) {
-            ResponseService.fail(request, response, "Failure. Please submit a status and claim id", "/admin");
+            ResponseService.fail(request, response, "Failure. Please submit a status and claim id", "admin");
             return;
         }
         
         // Get the claim to be updated by id
         Claim claim = claimsRepo.get(id);
         
+        // Check we found the claim by ID
+        if (claim == null) {
+            ResponseService.fail(request, response, "Failure. The claim could not be found by id", "admin");
+            return;
+        }
+        
         // Set the status using model's setter to ensure status is valid, if not respond with failure
         if (! claim.setStatus(status)) {
-            ResponseService.fail(request, response, "Failure. Please submit a valid status", "/admin");
+            ResponseService.fail(request, response, "Failure. Please submit a valid status", "admin");
             return;
         }
         
@@ -54,7 +60,7 @@ public class ClaimStatusController extends HttpServlet {
         claim = claimsRepo.update(claim);
         
         // Respond with success
-        ResponseService.success(request, response, "Success. The claim status has been updated to " + claim.getStatus(), "/admin");
+        ResponseService.success(request, response, "Success. The claim status has been updated to " + claim.getStatus(), "admin");
         
     }
 
@@ -70,7 +76,7 @@ public class ClaimStatusController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // processRequest(request, response);
+        processRequest(request, response);
     }
 
     /**
