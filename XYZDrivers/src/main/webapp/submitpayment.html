@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <!--
- - @file submitclaim.html
- - @author Nathan
- - @created 02/11/17
- - @modified 02/11/17
- - @notes -
+ - @file submitmemebershippayment.html
+ - @author Joe Dicker
 -->
 <html>
     <head>
-        <title>Make A Claim</title>
+        <title>Make a Payment to your Membership</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <form action="api/claim" method="post">
-            Reason For Claim: <input type="text" name="reason"> <br>
+        <form action="api/payment" method="post">
             Amount: <input type="number" name="amount">
             <input type="submit" value="Submit">
         </form>

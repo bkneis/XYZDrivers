@@ -26,7 +26,6 @@
               </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
-        
         <div class="page row">
             <div class="col-md-4">
                 <h2>Claims</h2>
@@ -50,13 +49,43 @@
                 <c:forEach items="${members}" var="member">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><c:out value="${member[0]}" /></h3>
+                        <h3 class="panel-title">Outstanding Balances</h3>
                     </div>
                     <div class="panel-body">
                         <a href="suspend?member=<c:out value="${member[0]}" />">Suspend</a> / <a href="resume?member=<c:out value="${member[0]}" />">Resume</a>
+                        <ul>
+                        <c:forEach items="${outstandingBalances}" var="outstandingBalance">
+                            <li>
+                            - name: <c:out value="${outstandingBalance.name}"/>
+                            - balance: <c:out value="${outstandingBalance.balance}"/>
+                            </li>
+                        </c:forEach>
+                        </ul>
                     </div>
                 </div>
                 </c:forEach>
+            </div>
+        </div>
+        <div class="page row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">All Members</h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                    <c:forEach items="${members}" var="member">
+                        <li>
+                            <c:out value="${member.id}"/>
+                        - name: <c:out value="${member.name}"/>
+                        - address: <c:out value="${member.address}"/>
+                        - dob: <c:out value="${member.dob}"/>
+                        - dor: <c:out value="${member.dor}"/>
+                        - status: <c:out value="${member.status}"/>
+                        - balance: <c:out value="${member.balance}"/>
+                        </li>
+                    </c:forEach>
+                    </ul>
+                </div>
             </div>
         </div>
     </body>

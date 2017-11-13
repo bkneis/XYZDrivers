@@ -13,14 +13,15 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import com.xyzdrivers.connection.ConnectionProvider;
 
+@RequestScoped
 public class InsertClaimService {
 
-    private Connection con;
-
-    public InsertClaimService(Connection con) {
-        this.con = con;
-    }
+    @Inject
+    private ConnectionProvider connectionProvider;
 
     public void InsertClaim(Claim c) throws IllegalAccessException, SQLException {
        
@@ -35,19 +36,21 @@ public class InsertClaimService {
                     throw new IllegalArgumentException("One of the declared fields in object c is null.");
                 }
             }
+            
+            String insertSQL = "INSERT INTO Claims (MEM_ID, DATE, RATIONALE, STATUS, AMOUNT) VALUES (?, ?, ?, ?, ?)";
 
-                String insertSQL = "INSERT INTO Claims (MEM_ID, DATE, RATIONALE, STATUS, AMOUNT) VALUES (?, ?, ?, ?, ?)";
+            Connection connection = connectionProvider.getConnection();
+            PreparedStatement p = connection.prepareStatement(insertSQL);
+            
+            p.setString(1, c.getMemberID());
+            p.setDate(2, Date.valueOf(c.getDate()));
+            p.setString(3, c.getReason());
+            p.setString(4, c.getStatus());
+            p.setFloat(5, c.getAmount());
 
-                PreparedStatement p = con.prepareStatement(insertSQL);
+            p.executeUpdate();
 
-                p.setString(1, c.getMemberID());
-                p.setDate(2, Date.valueOf(c.getDate()));
-                p.setString(3, c.getReason());
-                p.setString(4, c.getStatus());
-                p.setFloat(5, c.getAmount());
-
-                p.executeUpdate();
-
-                con.close();
+            connection.close();
+            
         }
     }

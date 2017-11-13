@@ -7,12 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.RequestScoped;
 
 /**
  * DAO for claims model
  * 
  * @author arthur
  */
+@RequestScoped
 public class ClaimsRepo extends Repo<Claim> {
 
     @Override
@@ -39,8 +41,9 @@ public class ClaimsRepo extends Repo<Claim> {
     public List<Claim> get() {
         List<Object[]> results;
         List<Claim> claims = new ArrayList<>();
+        
         try {
-            results = this.sql.retrieve("claims");
+            results = sqlService.retrieve("claims");
             for (Object[] result : results) {
                 LocalDate date = LocalDate.parse(result[2].toString());
                 Claim cl = new Claim(result[1].toString(), date, result[3].toString(), result[4].toString(), Float.parseFloat(result[5].toString()));
@@ -64,6 +67,11 @@ public class ClaimsRepo extends Repo<Claim> {
 
     @Override
     public void delete(Claim model) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    List<Claim> getWhere(String keyColumn, Object keyValue) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
