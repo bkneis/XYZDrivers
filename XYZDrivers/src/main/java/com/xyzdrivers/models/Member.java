@@ -1,14 +1,8 @@
-/**
- * @file    jdbcDriver.java
- * @author  alexander collins
- * @created 06/11/2017
- * @updated
- * @notes
- */
-
 package com.xyzdrivers.models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Member extends Model
 {
@@ -20,6 +14,12 @@ public class Member extends Model
     private LocalDate dor;  //date of registration
     private String status;
     private double balance;
+    
+    private List<String> allowedStatuses;
+    
+    public static String TABLE_NAME = "members";
+    public static String PRIMARY_KEY = "id";
+    
 //constructors
     public Member(String id, String name, String address, LocalDate dob, LocalDate dor, String status, double balance) {
         this.id = id;
@@ -29,6 +29,9 @@ public class Member extends Model
         this.dor = dor;
         this.status = status;
         this.balance = balance;
+        this.allowedStatuses = new ArrayList<>();
+        allowedStatuses.add("SUSPENDED");
+        allowedStatuses.add("APPROVED");
     }
 //getters & setters
     public String getId() {
@@ -52,4 +55,13 @@ public class Member extends Model
     public double getBalance() {
         return balance;
     }
+    
+    public boolean setStatus(String status) {
+        if (allowedStatuses.contains(status)) {
+            this.status = status;
+            return true;
+        }
+        return false;
+    }
+    
 }
