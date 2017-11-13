@@ -76,7 +76,7 @@ public class SQLService
      * 
      * @throws SQLException 
      */
-    private int executeUpdateStatement(String sql, Object... parameters)
+    public int executeUpdateStatement(String sql, Object... parameters)
             throws SQLException
     {
         Connection connection = connectionProvider.getConnection();
@@ -272,6 +272,22 @@ public class SQLService
         return data;
     }
     
+    public Object[] retrieve(String table, String primaryKey, String key) throws SQLException {
+        
+        results = executeQueryStatement("SELECT * FROM " + table + " WHERE \"" + primaryKey + "\" = ?", key);
+        resultsMetaData = results.getMetaData();
+        
+        int columnCount = resultsMetaData.getColumnCount();
+        
+        Object[] data = new Object[columnCount];
+        if (results.next()) {
+            for (int col = 1; col <= columnCount; col++)
+                data[col-1] = results.getObject(col);
+        }
+        
+        return data;
+    }
+    
     /**
      * "SELECT <code>column</code> FROM <code>table</code> WHERE <code>keyColumn</code> = <code>keyValue</code>"
      * 
@@ -404,4 +420,5 @@ public class SQLService
         executeUpdateStatement("DELETE FROM " + table + " WHERE " + query);
     }
     //</editor-fold>
+    
 }
