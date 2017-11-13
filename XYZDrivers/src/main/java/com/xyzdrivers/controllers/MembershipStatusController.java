@@ -41,6 +41,11 @@ public class MembershipStatusController extends HttpServlet {
         
         Member member = membersRepo.get(id);
         
+        if (member == null) {
+            ResponseService.fail(request, response, "Failure. Could not find the member with id", "admin");
+            return;
+        }
+        
         if (! member.setStatus(status)) {
             ResponseService.fail(request, response, "Failure. Please submit a valid status", "admin");
             return;
