@@ -19,7 +19,8 @@
     <servlet>
         <servlet-name>PaymentController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.PaymentController</servlet-class>
-
+    </servlet>
+    <servlet>
         <servlet-name>HomeController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.HomeController</servlet-class>
     </servlet>
