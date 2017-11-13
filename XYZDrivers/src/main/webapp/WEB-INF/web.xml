@@ -17,6 +17,9 @@
         <servlet-class>com.xyzdrivers.controllers.AdminController</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>PaymentController</servlet-name>
+        <servlet-class>com.xyzdrivers.controllers.PaymentController</servlet-class>
+
         <servlet-name>HomeController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.HomeController</servlet-class>
     </servlet>
@@ -47,6 +50,10 @@
     <servlet-mapping>
         <servlet-name>UpgradeMemberController</servlet-name>
         <url-pattern>/upgrademember</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PaymentController</servlet-name>
+        <url-pattern>/api/payment</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
