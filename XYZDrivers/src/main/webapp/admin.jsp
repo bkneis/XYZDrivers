@@ -82,12 +82,16 @@
                         <p>Status : <c:out value="${member.status}"/></p>
                         <p>Balance : <c:out value="${member.balance}"/></p>
                         <p>
+                            <c:if test="${(member.status == 'APPROVED') or (member.status == 'REJECTED')}">
                             <a href="/XYZDrivers/membership-status?status=SUSPENDED&amp;member_id=<c:out value="${member.id}" />">
                                 Suspend
-                            </a> / 
+                            </a> /
+                            </c:if>
+                            <c:if test="${(member.status == 'APPROVED') or (member.status == 'SUSPENDED')}">
                             <a href="/XYZDrivers/membership-status?status=APPROVED&amp;member_id=<c:out value="${member.id}" />">
                                 Resume
                             </a>
+                            </c:if>
                         </p>
                     </div>
                 </div>
