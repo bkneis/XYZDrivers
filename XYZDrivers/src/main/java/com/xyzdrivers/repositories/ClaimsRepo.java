@@ -15,17 +15,19 @@ import javax.enterprise.context.RequestScoped;
  * @author arthur
  */
 @RequestScoped
-public class ClaimsRepo extends Repo<Claim> {
+public class ClaimsRepo extends Repo<Claim, Integer> {
+    
+    public ClaimsRepo() {}
 
     @Override
-    Claim get(Integer id) {
+    public Claim get(Integer id) {
         Claim claim = null;
         try {
-            Object result = this.sql.retrieve(Claim.TABLE_NAME, Claim.PRIMARY_KEY, id);
+            Object[] result = this.sqlService.retrieve(Claim.TABLE_NAME, Claim.PRIMARY_KEY, id.toString());
             // TODO fix sqlService for retrieve of one object
             LocalDate date = LocalDate.parse(result[2].toString());
             Claim cl = new Claim(result[1].toString(), date, result[3].toString(), result[4].toString(), Float.parseFloat(result[5].toString()));
-        } catch (SQLException | IllegalArgumentException ex) {
+        } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -61,8 +63,23 @@ public class ClaimsRepo extends Repo<Claim> {
     }
 
     @Override
-    public Claim update(Claim model) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Claim update(Claim claim) {
+      
+        Object[] parameters = {
+            claim.getDate(),
+            claim.getAmount(),
+            claim.getReason(),
+            claim.getStatus(),
+            claim.getMemberID()
+        };
+        
+        try {
+            this.sqlService.executeUpdateStatement("UPDATE claims SET date=?, amount=?, reason=?, status=? WHERE mem_id=?", parameters);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return claim;
     }
 
     @Override
@@ -74,6 +91,5 @@ public class ClaimsRepo extends Repo<Claim> {
     List<Claim> getWhere(String keyColumn, Object keyValue) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
     
 }
