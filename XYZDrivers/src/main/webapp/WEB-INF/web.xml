@@ -46,7 +46,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MembershipController</servlet-name>
-        <url-pattern>/api/member</url-pattern>
+        <url-pattern>/member</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AdminController</servlet-name>

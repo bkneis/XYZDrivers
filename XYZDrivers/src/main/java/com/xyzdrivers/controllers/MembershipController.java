@@ -1,23 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.xyzdrivers.controllers;
 
+import com.xyzdrivers.models.Claim;
+import com.xyzdrivers.models.Member;
+import com.xyzdrivers.repositories.ClaimsRepo;
+import com.xyzdrivers.repositories.MembersRepo;
+
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author arthur
- */
 public class MembershipController extends HttpServlet {
-
+    @Inject
+    private MembersRepo membersRepo;
+    @Inject
+    private ClaimsRepo claimsRepo;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -28,20 +29,16 @@ public class MembershipController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet MembershipController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet MembershipController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+            throws ServletException, IOException
+    {
+        //get DB data
+        Member memberInfo = membersRepo.getWhere("id", "me-aydin").get(0);
+        List<Claim> memberClaims = claimsRepo.getWhere("mem_id", "me-aydin");
+        //set attributes
+        request.setAttribute("member", memberInfo);
+        request.setAttribute("claims", memberClaims);
+        //fwd .jsp page
+        request.getRequestDispatcher("member.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -82,5 +79,4 @@ public class MembershipController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

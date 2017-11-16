@@ -75,7 +75,7 @@ public class MembersRepo extends Repo<Member, String> {
                 members.add(member);
             }
         } catch (SQLException | IllegalArgumentException ex) {
-            //@TODO
+            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return members;
