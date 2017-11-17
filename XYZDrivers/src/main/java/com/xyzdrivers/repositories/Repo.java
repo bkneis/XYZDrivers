@@ -6,33 +6,30 @@
 package com.xyzdrivers.repositories;
 
 import com.xyzdrivers.services.SQLService;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
 
 /**
  *
  * @author arthur
  * @param <Model>
+ * @param <PrimaryKey>
  */
-public abstract class Repo<Model> {
+public abstract class Repo<Model, PrimaryKey> {
     
     @Inject
     protected SQLService sqlService;
     
-    abstract Model get(int id);
+    abstract Model get(PrimaryKey id) throws RepositoryException;
     
-    abstract List<Model> get();
+    abstract List<Model> get() throws RepositoryException;
     
-    abstract List<Model> getWhere(String[] conditions);
+    abstract List<Model> getWhere(String keyColumn, Object keyValue) throws RepositoryException;
     
-    abstract List<Model> getWhere(String keyColumn, Object keyValue);
+    abstract void insert(Model model) throws RepositoryException;
     
-    abstract Model update(Model model);
+    abstract void update(Model model) throws RepositoryException;
     
-    abstract void delete(Model model);
+    abstract void delete(Model model) throws RepositoryException;
     
 }

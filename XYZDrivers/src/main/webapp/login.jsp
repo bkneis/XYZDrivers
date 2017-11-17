@@ -24,6 +24,12 @@
             </div><!-- /.container-fluid -->
         </nav>
         
+        <c:if test="${requestScope.loginFailed}">
+            <div class="alert">
+                Login failed. Please check you have the correct credentials.
+            </div>
+        </c:if>
+        
         <div class="row text-center">
             <div class="col-md-4 col-md-offset-4">
                 <div class="panel panel-default">
@@ -31,7 +37,7 @@
                         <h3 class="panel-title">Login</h3>
                     </div>
                     <div class="panel-body">
-                        <form method="POST" action="/auth">
+                        <form method="POST" action="auth">
                             <div class="form-group">
                                 <label for="username">Username</label>
                                 <input type="text" name="username" class="form-control" />
@@ -40,6 +46,7 @@
                                 <label for="password">Password</label>
                                 <input type="password" name="password" class="form-control" />
                             </div>
+                            <input type="hidden" name="userType" value="${requestScope.userType}">
                             <input type="submit" value="Login" />
                         </form>
                     </div>

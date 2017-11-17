@@ -328,6 +328,48 @@ public class SQLService
         //execute statement
         executeUpdateStatement("UPDATE " + table + " SET " + column + " = ? WHERE " + keyColumn + " = ?", value, keyValue);
     }
+    
+    /**
+     * Update an item within <code>table</code> where <code>primaryKeyColumn = primaryKey</code>.
+     * Columns to update are given by <code>columnValues</code>.
+     * 
+     * @param table the table containing the item to update. e.g. 'users'.
+     * @param primaryKeyColumn the primary key column for the given table. e.g. 'id'.
+     * @param primaryKey the primary key value of the record which should be updated. e.g. 3.
+     * @param columnValues a list of column/value pairs representing changes to be made to the record in the database.
+     * 
+     * @throws java.sql.SQLException
+     */
+    public void update(String table, String primaryKeyColumn, Object primaryKey, List<ColumnValuePair> columnValues)
+            throws SQLException
+    {
+        if (table == null) {
+            throw new IllegalArgumentException("table cannot be null.");
+        }
+        
+        if (primaryKeyColumn == null) {
+            throw new IllegalArgumentException("primaryKeyColumn cannot be null.");
+        }
+        
+        if (primaryKey == null) {
+            throw new IllegalArgumentException("primaryKey cannot be null.");
+        }
+        
+        if (columnValues == null) {
+            throw new IllegalArgumentException("columnValues cannot be null.");
+        }
+                
+        if (columnValues.isEmpty()) {
+            return;
+        }
+        
+        String updateTemplate = "UPDATE ? SET ? = ? WHERE ? = ?";
+        
+        for (ColumnValuePair pair : columnValues)
+        {
+            executeUpdateStatement(updateTemplate, table, pair.getColumnName(), pair.getValue(), primaryKeyColumn, primaryKey);
+        }
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="insert() functions...">
@@ -387,21 +429,20 @@ public class SQLService
     
     //<editor-fold defaultstate="collapsed" desc="remove() functions...">
     /**
-     * "DELETE FROM <code>table</code> WHERE <code>query</code>"
-     * <code>query</code> must be valid SQL syntax, the <code>query</code>
-     * String is appended to the end of "DELETE FROM "+table+" WHERE ".
+     * Remove a row of data from <code>table</code>, identified by 
+     * <code>primaryKeyColumn</code> and <code>primaryKeyValue</code>.
      * 
      * NOTE: query should be updated to match standards in retrieve (if we have time)
      * 
      * @param table the table you want to remove the row from
-     * @param query a string containing an SQL removal condition, appended to 
-     * the end of "DELETE FROM "+table+" WHERE ".
+     * @param primaryKeyColumn the primary key column of the table
+     * @param primaryKeyValue the value of the primary key for the record that will be deleted
      * 
      * @throws SQLException 
      */
-    public void remove(String table, String query) throws SQLException
+    public void remove(String table, String primaryKeyColumn, Object primaryKeyValue) throws SQLException
     {
-        executeUpdateStatement("DELETE FROM " + table + " WHERE " + query);
+        executeUpdateStatement("DELETE FROM ? WHERE ? = ?", table, primaryKeyColumn, primaryKeyValue);
     }
     //</editor-fold>
 }

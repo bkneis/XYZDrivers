@@ -27,7 +27,7 @@
             </div><!-- /.container-fluid -->
         </nav>
         
-        <form action="api/claim" method="post">
+        <form action="claim" method="post">
             Reason For Claim: <input type="text" name="reason"> <br>
             Amount: <input type="number" name="amount">
             <input type="submit" value="Submit">

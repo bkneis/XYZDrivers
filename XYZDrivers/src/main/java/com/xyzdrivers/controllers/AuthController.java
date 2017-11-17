@@ -5,12 +5,18 @@
  */
 package com.xyzdrivers.controllers;
 
+import com.xyzdrivers.models.User;
+import com.xyzdrivers.repositories.RepositoryException;
+import com.xyzdrivers.repositories.UserRepo;
+import com.xyzdrivers.services.UserService;
 import java.io.IOException;
-import java.io.PrintWriter;
+import javax.inject.Inject;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -18,31 +24,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AuthController extends HttpServlet {
     
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AuthController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AuthController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+    @Inject
+    private UserService userService;
+    
+    @Inject
+    private UserRepo userRepo;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -56,7 +42,12 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        // Pass userType along from Home index
+        request.setAttribute("userType", request.getParameter("userType"));
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+        dispatcher.forward(request, response);
     }
 
     /**
@@ -70,7 +61,47 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        String username = (String)request.getParameter("username");
+        String password = (String)request.getParameter("password");
+        String userType = (String)request.getParameter("userType");
+        
+        User loggedInUser = null;
+        HttpSession session = request.getSession(true);
+                
+        try {
+            if (userService.checkLoginDetails(username, password))
+            {
+                session.setAttribute("username", username);
+                loggedInUser = userRepo.get(username);
+            }
+        } catch (RepositoryException ex) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("error.html");
+            dispatcher.forward(request, response);
+            return;
+        }
+        
+        if (loggedInUser == null) {
+            request.setAttribute("userType", userType);
+            request.setAttribute("loginFailed", true);
+            
+            RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+            dispatcher.forward(request, response);
+        }
+        else {
+            String status = loggedInUser.getStatus();
+            
+            // AuthorisationFilter hasn't had a chance to run yet, so fill in the user here
+            session.setAttribute("user", loggedInUser);
+            
+            if ("admin".equals(userType)) {
+                response.sendRedirect(request.getContextPath() + "/admin");
+            }
+            else {
+                response.sendRedirect(request.getContextPath() + "/member");
+            }
+        }
+        
     }
 
     /**
