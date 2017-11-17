@@ -43,7 +43,7 @@ public class HomeController extends HttpServlet {
         request.setAttribute("userType", userType);
         
         // Determine which view to send
-        if (actionType.equals("login")) {
+        if ("login".equals(actionType)) {
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             request.getRequestDispatcher("register.jsp").forward(request, response);

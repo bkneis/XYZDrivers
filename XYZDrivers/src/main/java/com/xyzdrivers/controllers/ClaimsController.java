@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 public class ClaimsController extends HttpServlet {
@@ -57,7 +58,10 @@ public class ClaimsController extends HttpServlet {
             String reason = request.getParameter("reason");
             String amount = request.getParameter("amount");
             
-            Claim claim = new Claim("null", date, reason, "SUBMITTED", Float.parseFloat(amount));
+            HttpSession session = request.getSession();
+            String username = (String)session.getAttribute("username");
+            
+            Claim claim = new Claim(username, date, reason, "SUBMITTED", Float.parseFloat(amount));
 
             insertClaimService.InsertClaim(claim);
         } catch (SQLException | IllegalAccessException ex) {

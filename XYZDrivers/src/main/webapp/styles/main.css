@@ -1,3 +1,11 @@
 .page {
     padding: 0 80px;
 }
+
+.alert {
+    padding: 20px;
+    border: 1px solid black;    
+    
+    font-weight: bold;
+    color: red;
+}

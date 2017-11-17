@@ -26,6 +26,9 @@
               </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
+        
+        <span>Hello, ${requestScope.user.id}!</span>
+        
         <div class="page row">
             <div class="col-md-2">
                 <h2>Total Turnover</h2>
