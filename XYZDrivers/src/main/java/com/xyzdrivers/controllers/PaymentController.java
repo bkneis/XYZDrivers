@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Joe Dicker
@@ -51,8 +52,14 @@ public class PaymentController extends HttpServlet {
 
             Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/xyzdrivers");
             String amount = request.getParameter("amount");
-
-            MembershipPayment p = new MembershipPayment("null", "FEE", Float.parseFloat(amount), date, time);
+            
+            /*
+            HttpSession session = request.getSession();
+            
+            String username = (String)session.getAttribute("usermame");
+            */
+            
+            MembershipPayment p = new MembershipPayment("m-malcolm", "FEE", Float.parseFloat(amount), date, time);
 
             InsertPaymentService ips = new InsertPaymentService(con);
 
