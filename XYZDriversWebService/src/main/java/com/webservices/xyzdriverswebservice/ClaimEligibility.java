@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.xyzdriverswebservice;
+package com.webservices.xyzdriverswebservice;
 
 import java.util.Calendar;
 import java.util.ArrayList;
@@ -32,28 +32,35 @@ public class ClaimEligibility {
 
         int claimCounter = 0;
         Calendar calendar = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance(); 
 
         try {
             NullCheck(username, joinedDate, listOfClaimDates, listOfClaimStatuses);
 
-            calendar.add(Calendar.MONTH, -6); //this takes us to six months ago
+            calendar.add(Calendar.MONTH, -6); //six months ago
 
             if (joinedDate.after(calendar)) {
                 return username + ", you have joined less than six months ago. As such, you are not yet eligible to make a claim.";
             }
 
-            calendar.add(Calendar.MONTH, -6); //this takes us to a year ago
+            calendar.set(Calendar.YEAR, 2017); //start of current year
+            calendar.set(Calendar.MONTH, Calendar.JANUARY);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            
+            calendar2.set(Calendar.YEAR, 2017); //end of current year
+            calendar2.set(Calendar.MONTH, Calendar.DECEMBER);
+            calendar2.set(Calendar.DAY_OF_MONTH, 31);
 
             for (int i = 0; i < listOfClaimDates.size(); i++) {
-                if (listOfClaimDates.get(i).after(calendar)) {
-                    if (!"REJECTED".equals(listOfClaimStatuses.get(i))) {
+                if (listOfClaimDates.get(i).after(calendar) && listOfClaimDates.get(i).before(calendar2)) {
+                    if ("APPROVED".equals(listOfClaimStatuses.get(i))) {
                         claimCounter++;
                     }
                 }
             }
 
             if (claimCounter >= 2) {
-                return username + ", you have made too many claims in the past year. As such, you are not yet eligible to make a claim.";
+                return username + ", you have made too many claims this year. As such, you are not yet eligible to make a claim.";
             }
 
         } catch (NullPointerException ex) {
