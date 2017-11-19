@@ -40,10 +40,10 @@ public class InsertClaimService {
             String insertSQL = "INSERT INTO Claims (MEM_ID, DATE, RATIONALE, STATUS, AMOUNT) VALUES (?, ?, ?, ?, ?)";
 
             Connection connection = connectionProvider.getConnection();
-            PreparedStatement p = connection.prepareStatement(insertSQL);
+            PreparedStatement p = connection.prepareStatement(insertSQL);           
             
             p.setString(1, c.getMemberID());
-            p.setDate(2, Date.valueOf(c.getDate()));
+            p.setDate(2, new Date(c.getDate().getTimeInMillis()));
             p.setString(3, c.getReason());
             p.setString(4, c.getStatus());
             p.setDouble(5, c.getAmount());

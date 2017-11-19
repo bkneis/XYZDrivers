@@ -11,7 +11,7 @@ import com.xyzdrivers.models.Claim;
 import com.xyzdrivers.services.InsertClaimService;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.util.Calendar;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -53,7 +53,7 @@ public class ClaimsController extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            LocalDate date = LocalDate.now();
+            Calendar date = Calendar.getInstance();
             
             String reason = request.getParameter("reason");
             String amount = request.getParameter("amount");
