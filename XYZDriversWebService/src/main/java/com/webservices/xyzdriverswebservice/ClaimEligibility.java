@@ -40,7 +40,7 @@ public class ClaimEligibility {
             calendar.add(Calendar.MONTH, -6); //six months ago
 
             if (joinedDate.after(calendar)) {
-                return username + ", you have joined less than six months ago. As such, you are not yet eligible to make a claim.";
+                return username + " has joined less than six months ago. As such, they are not yet eligible to make a claim.";
             }
 
             calendar.set(Calendar.YEAR, 2017); //start of current year
@@ -60,14 +60,14 @@ public class ClaimEligibility {
             }
 
             if (claimCounter >= 2) {
-                return username + ", you have made too many claims this year. As such, you are not yet eligible to make a claim.";
+                return username + "has made too many claims this year. As such, they are not yet eligible to make a claim.";
             }
 
         } catch (NullPointerException ex) {
             return ex.toString();
         }
 
-        return "You are eligible to make a claim! You have made " + claimCounter + " claims this year.";
+        return "This user is eligible to make a claim! They have made " + claimCounter + " claims this year.";
     }
 
     private void NullCheck(String username, Calendar joinedDate, ArrayList listOfClaimDates, ArrayList listOfClaimStatuses) throws NullPointerException {
