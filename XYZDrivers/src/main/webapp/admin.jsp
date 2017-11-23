@@ -55,14 +55,33 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Outstanding Balances</h3>
+                        <h3 class="panel-title">All Claims</h3>
                     </div>
                     <div class="panel-body">
                         <ul>
-                            <c:forEach items="${outstandingBalances}" var="outstandingBalance">
+                            <c:forEach items="${claims}" var="claim">
                                 <li>
-                                    - name: <c:out value="${outstandingBalance.name}"/>
-                                    - balance: <c:out value="${outstandingBalance.balance}"/>
+                                    <c:out value="${claim.date}" />
+                                    - Member: <c:out value="${claim.memberID}" />
+                                    - Reason: <c:out value="${claim.reason}" />
+                                    - Status <c:out value="${claim.status}" />
+                                    - Amount <c:out value="${claim.amount}" />
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">User Claim Eligibility Status</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                            <c:forEach items="${eligibleClaims}" var="eligibleClaims">
+                                <li>
+                                    <c:out value="${eligibleClaims}"/>                                    
                                 </li>
                             </c:forEach>
                         </ul>
@@ -91,6 +110,6 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div>       
     </body>
 </html>
