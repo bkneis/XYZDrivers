@@ -3,6 +3,7 @@
  */
 package com.xyzdrivers.controllers;
 
+import com.webservices.xyzdriverswebservice.ClaimEligibility_Service;
 import com.xyzdrivers.models.Claim;
 import com.xyzdrivers.models.Member;
 import com.xyzdrivers.repositories.ClaimsRepo;
@@ -18,8 +19,14 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.ws.WebServiceRef;
 
 public class AdminController extends HttpServlet {
+
+    @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_9090/ClaimEligibility/ClaimEligibility.wsdl")
+    private ClaimEligibility_Service service;
     
     @Inject
     private MembersService membersService;
@@ -52,6 +59,22 @@ public class AdminController extends HttpServlet {
         request.setAttribute("members", members);
         request.setAttribute("outstandingBalance", outstandingBalance);
         request.setAttribute("claims", claims);
+        
+        
+        try { // Call Web Service Operation
+            com.webservices.xyzdriverswebservice.ClaimEligibility port = service.getClaimEligibilityPort();
+            // TODO initialize WS operation arguments here
+            String username = "";
+            XMLGregorianCalendar joinedDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+            List<XMLGregorianCalendar> listOfClaimDates = new ArrayList<XMLGregorianCalendar>();
+            List<String> listOfClaimStatuses = new ArrayList<String>();
+            // TODO process result here
+            java.lang.String result = port.eligibility(username, joinedDate, listOfClaimDates, listOfClaimStatuses);
+            System.out.println("Result = "+result);
+        } catch (Exception ex) {
+            // TODO handle custom exceptions here
+        }
+
         
         //fwd .jsp page
         request.getRequestDispatcher("admin.jsp").forward(request, response);
