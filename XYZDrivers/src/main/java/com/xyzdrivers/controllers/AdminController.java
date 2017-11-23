@@ -27,16 +27,16 @@ public class AdminController extends HttpServlet {
 
     @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_9090/ClaimEligibility/ClaimEligibility.wsdl")
     private ClaimEligibility_Service service;
-    
+
     @Inject
     private MembersService membersService;
-    
+
     @Inject
     private MembersRepo membersRepo;
-    
+
     @Inject
-    private ClaimsRepo  claimsRepo;
-    
+    private ClaimsRepo claimsRepo;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -49,33 +49,35 @@ public class AdminController extends HttpServlet {
      * @throws com.xyzdrivers.repositories.RepositoryException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, RepositoryException
-    {
+            throws ServletException, IOException, SQLException, RepositoryException {
         List<Object[]> members = membersService.getMembers();
         List<Member> outstandingBalance = membersRepo.getWhere("status", "OUTSTANDING");
         List<Claim> claims = claimsRepo.get();
         
+        com.webservices.xyzdriverswebservice.ClaimEligibility port = service.getClaimEligibilityPort();
+        List<String> eligibleClaims = new ArrayList();
+
+        for (Object[] member : members) {
+            String username = member[1].toString();
+            String joinedDate = member[2].toString();
+            List<String> listOfClaimDates = new ArrayList();
+            List<String> listOfClaimStatuses = new ArrayList();
+
+            for (Claim c : claims) {
+                if (c.getMemberID().equals(username)) {
+                    listOfClaimDates.add(c.getDate().toString());
+                    listOfClaimStatuses.add(c.getStatus());
+                }
+            }
+            eligibleClaims.add(port.eligibility(username, joinedDate, listOfClaimDates, listOfClaimStatuses));
+        }
+
         //set attributes
         request.setAttribute("members", members);
         request.setAttribute("outstandingBalance", outstandingBalance);
         request.setAttribute("claims", claims);
-        
-        
-        try { // Call Web Service Operation
-            com.webservices.xyzdriverswebservice.ClaimEligibility port = service.getClaimEligibilityPort();
-            // TODO initialize WS operation arguments here
-            String username = "";
-            XMLGregorianCalendar joinedDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
-            List<XMLGregorianCalendar> listOfClaimDates = new ArrayList<XMLGregorianCalendar>();
-            List<String> listOfClaimStatuses = new ArrayList<String>();
-            // TODO process result here
-            java.lang.String result = port.eligibility(username, joinedDate, listOfClaimDates, listOfClaimStatuses);
-            System.out.println("Result = "+result);
-        } catch (Exception ex) {
-            // TODO handle custom exceptions here
-        }
+        request.setAttribute("eligibilityClaims", eligibleClaims);
 
-        
         //fwd .jsp page
         request.getRequestDispatcher("admin.jsp").forward(request, response);
     }

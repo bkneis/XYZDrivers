@@ -7,8 +7,8 @@
 <xs:complexType name="Eligibility">
 <xs:sequence>
 <xs:element name="username" type="xs:string" minOccurs="0"/>
-<xs:element name="joinedDate" type="xs:dateTime" minOccurs="0"/>
-<xs:element name="listOfClaimDates" type="xs:dateTime" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="joinedDate" type="xs:string" minOccurs="0"/>
+<xs:element name="listOfClaimDates" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 <xs:element name="listOfClaimStatuses" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 </xs:sequence>
 </xs:complexType>
