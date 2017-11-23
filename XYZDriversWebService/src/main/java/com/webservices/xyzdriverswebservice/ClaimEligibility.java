@@ -82,7 +82,7 @@ public class ClaimEligibility {
             return ex.toString();
         }
 
-        return "This user is eligible to make a claim! They have made " + claimCounter + " claims this year.";
+        return username + " is eligible to make a claim! They have made " + claimCounter + " claims this year.";
     }
 
     private void NullCheck(String username, Calendar joinedDate, ArrayList listOfClaimDates, ArrayList listOfClaimStatuses) throws NullPointerException {
