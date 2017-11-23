@@ -17,19 +17,21 @@
     <body>
         <nav class="navbar navbar-default">
             <div class="container-fluid">
-              <div class="navbar-header">
-                <a class="navbar-brand" href="#">XYZ Drivers Association</a>
-              </div>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">XYZ Drivers Association</a>
+                </div>
 
-              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                  <li><a href="#">Home</a></li>
-                </ul>
-  
-                <ul class="nav navbar-nav navbar-right">
-                  <li><a href="#">Logout</a></li>
-                </ul>
-              </div><!-- /.navbar-collapse -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#">Home</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="submit-claim.jsp">Submit A Claim</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
         <div class="page row">
@@ -45,13 +47,13 @@
                                     <c:out value="${member.id}"/>
                                 </li>
                                 <li>
-                                - name: <c:out value="${member.name}"/>
+                                    - name: <c:out value="${member.name}"/>
                                 </li>
                                 <li>
-                                - status: <c:out value="${member.status}"/>
+                                    - status: <c:out value="${member.status}"/>
                                 </li>
                                 <li>
-                                - balance: <c:out value="${member.balance}"/>
+                                    - balance: <c:out value="${member.balance}"/>
                                 </li>
                             </ul>
                         </c:if>
@@ -65,15 +67,15 @@
                     </div>
                     <div class="panel-body">
                         <ul>
-                        <c:forEach items="${claims}" var="claim">
-                            <li>
-                                <c:out value="${claim.date}" />
-                                - Member: <c:out value="${claim.memberID}" />
-                                - Reason: <c:out value="${claim.reason}" />
-                                - Status <c:out value="${claim.status}" />
-                                - Amount <c:out value="${claim.amount}" />
-                            </li>
-                        </c:forEach>
+                            <c:forEach items="${claims}" var="claim">
+                                <li>
+                                    <c:out value="${claim.date}" />
+                                    - Member: <c:out value="${claim.memberID}" />
+                                    - Reason: <c:out value="${claim.reason}" />
+                                    - Status <c:out value="${claim.status}" />
+                                    - Amount <c:out value="${claim.amount}" />
+                                </li>
+                            </c:forEach>
                         </ul>
                     </div>
                 </div>

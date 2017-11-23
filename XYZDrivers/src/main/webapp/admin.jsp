@@ -20,9 +20,6 @@
                         <li><a href="#">Home</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="submit-claim.jsp">Submit A Claim</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
                         <li><a href="#">Logout</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
@@ -55,17 +52,14 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">All Claims</h3>
+                        <h3 class="panel-title">Outstanding Balances</h3>
                     </div>
                     <div class="panel-body">
                         <ul>
-                            <c:forEach items="${claims}" var="claim">
+                            <c:forEach items="${outstandingBalances}" var="outstandingBalance">
                                 <li>
-                                    <c:out value="${claim.date}" />
-                                    - Member: <c:out value="${claim.memberID}" />
-                                    - Reason: <c:out value="${claim.reason}" />
-                                    - Status <c:out value="${claim.status}" />
-                                    - Amount <c:out value="${claim.amount}" />
+                                    - name: <c:out value="${outstandingBalance.name}" />
+                                    - balance: <c:out value="${outstandingBalance.balance}" />
                                 </li>
                             </c:forEach>
                         </ul>
