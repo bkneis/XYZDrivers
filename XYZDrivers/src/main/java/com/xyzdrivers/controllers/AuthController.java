@@ -46,7 +46,18 @@ public class AuthController extends HttpServlet {
         // Pass userType along from Home index
         request.setAttribute("userType", request.getParameter("userType"));
         
-        RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+        String actionType = request.getParameter("actionType");
+        
+        RequestDispatcher dispatcher;
+        
+        if ("login".equals(actionType))
+        {
+            dispatcher = request.getRequestDispatcher("login.jsp");
+        }
+        else {
+            dispatcher = request.getRequestDispatcher("register.jsp");
+        }
+        
         dispatcher.forward(request, response);
     }
 

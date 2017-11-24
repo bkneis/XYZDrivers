@@ -33,7 +33,7 @@ public class InsertPaymentService {
     public void InsertPayment(MembershipPayment mp) throws IllegalAccessException, SQLException, RepositoryException {
 
         if (mp == null) {
-            throw new IllegalArgumentException("The object p is null.");
+            throw new IllegalArgumentException("The object mp is null.");
         }
 
         for (Field f : mp.getClass().getDeclaredFields()) {
@@ -49,6 +49,7 @@ public class InsertPaymentService {
         Member member = membersRepo.get(mp.getMemberID());
         member.setBalance(member.getBalance() - mp.getPaymentAmount());
         membersRepo.update(member);
+        
     }
 
 }
