@@ -44,9 +44,10 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
      * Retrieve all claims
      * 
      * @return ArrayList<Claim> All claims
+     * @throws com.xyzdrivers.repositories.RepositoryException
      */
     @Override
-    public List<Claim> get() {
+    public List<Claim> get() throws RepositoryException {
         List<Object[]> results;
         List<Claim> claims = new ArrayList<>();
         
@@ -65,18 +66,14 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
                 claims.add(cl);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RepositoryException("Retrieval failed.", ex);
         }
+        
         return claims;
     }
 
     @Override
-    public List<Claim> getWhere(String[] conditions) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Claim update(Claim claim) {
+    public Claim update(Claim claim) throws RepositoryException {
       
         Object[] parameters = {
             claim.getDate().toString(),
@@ -96,12 +93,37 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
     }
 
     @Override
-    public void delete(Claim model) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void insert(Claim model) throws RepositoryException {
+        throw new UnsupportedOperationException();
+    }
+        
+    @Override
+    public List<Claim> getWhere(String keyColumn, Object keyValue) {
+        List<Object[]> results;
+        List<Claim> claims = new ArrayList();
+            
+        try {
+            // get data
+            results = this.sqlService.retrieve("CLAIMS", "*", keyColumn, keyValue);
+            //parse members data
+            for (Object[] claimData : results)
+            {
+                Claim claim = new Claim(claimData[1].toString(),                    //mem_id
+                                        LocalDate.parse(claimData[2].toString()),   //date
+                                        claimData[3].toString(),                    //rational
+                                        claimData[4].toString(),                    //status
+                                        (double)claimData[5]);                       //amount
+                claims.add(claim);
+            }
+        } catch (SQLException | IllegalArgumentException ex) {
+            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return claims;
     }
 
     @Override
-    List<Claim> getWhere(String keyColumn, Object keyValue) {
+    void delete(Claim model) throws RepositoryException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

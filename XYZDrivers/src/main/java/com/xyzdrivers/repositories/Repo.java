@@ -9,22 +9,23 @@ import javax.inject.Inject;
  * 
  * @author arthur
  * @param <Model>
+ * @param <PrimaryKeyType>
  */
 public abstract class Repo<Model, PrimaryKeyType> {
     
     @Inject
     protected SQLService sqlService;
+
+    abstract Model get(PrimaryKeyType id) throws RepositoryException;
+
+    abstract List<Model> get() throws RepositoryException;
     
-    abstract Model get(PrimaryKeyType id);
+    abstract List<Model> getWhere(String keyColumn, Object keyValue) throws RepositoryException;
     
-    abstract List<Model> get();
+    abstract void insert(Model model) throws RepositoryException;
     
-    abstract List<Model> getWhere(String[] conditions);
+    abstract Model update(Model model) throws RepositoryException;
     
-    abstract List<Model> getWhere(String keyColumn, Object keyValue);
-    
-    abstract Model update(Model model);
-    
-    abstract void delete(Model model);
+    abstract void delete(Model model) throws RepositoryException;
     
 }

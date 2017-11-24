@@ -7,6 +7,8 @@ import com.xyzdrivers.models.Claim;
 import com.xyzdrivers.models.Member;
 import com.xyzdrivers.models.MembershipPayment;
 import com.xyzdrivers.repositories.ClaimsRepo;
+import com.xyzdrivers.repositories.RepositoryException;
+import com.xyzdrivers.services.MembersService;
 import com.xyzdrivers.repositories.MembersRepo;
 import com.xyzdrivers.repositories.PaymentRepo;
 
@@ -39,9 +41,10 @@ public class AdminController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      * @throws java.sql.SQLException
+     * @throws com.xyzdrivers.repositories.RepositoryException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException
+            throws ServletException, IOException, SQLException, RepositoryException
     {
         //get DB data
         List<Member> members = membersRepo.get();
@@ -62,12 +65,14 @@ public class AdminController extends HttpServlet {
         for (MembershipPayment payment: payments) {
             totalTurnover += payment.getPaymentAmount();
         }
+        
         //set attributes
         request.setAttribute("members", normalMembers);
         request.setAttribute("provisionalMembers", provisionalMembers);
         request.setAttribute("outstandingBalance", outstandingBalance);
         request.setAttribute("claims", claims);
         request.setAttribute("totalTurnover", totalTurnover);
+
         //fwd .jsp page
         request.getRequestDispatcher("admin.jsp").forward(request, response);
     }
@@ -86,7 +91,7 @@ public class AdminController extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
+        } catch (SQLException | RepositoryException ex) {
             Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

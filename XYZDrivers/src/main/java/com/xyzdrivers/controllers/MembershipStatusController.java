@@ -2,8 +2,11 @@ package com.xyzdrivers.controllers;
 
 import com.xyzdrivers.models.Member;
 import com.xyzdrivers.repositories.MembersRepo;
+import com.xyzdrivers.repositories.RepositoryException;
 import com.xyzdrivers.services.ResponseService;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -51,7 +54,11 @@ public class MembershipStatusController extends HttpServlet {
             return;
         }
         
-        member = membersRepo.update(member);
+        try {
+            member = membersRepo.update(member);
+        } catch (RepositoryException ex) {
+            Logger.getLogger(MembershipStatusController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         ResponseService.success(request, response, "Success. The membership status has been updated to " + member.getStatus(), "admin");
         

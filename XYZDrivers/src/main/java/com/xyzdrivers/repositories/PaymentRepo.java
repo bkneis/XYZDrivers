@@ -48,11 +48,6 @@ public class PaymentRepo extends Repo<MembershipPayment, Integer> {
     }
 
     @Override
-    List<MembershipPayment> getWhere(String[] conditions) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     List<MembershipPayment> getWhere(String keyColumn, Object keyValue) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -64,6 +59,11 @@ public class PaymentRepo extends Repo<MembershipPayment, Integer> {
 
     @Override
     void delete(MembershipPayment model) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    void insert(MembershipPayment model) throws RepositoryException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
