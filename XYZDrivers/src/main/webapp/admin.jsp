@@ -87,10 +87,10 @@
                         <p>Date of Record : <c:out value="${provisionalMember.dor}"/></p>
                         <p>Status : <c:out value="${provisionalMember.status}"/></p>
                         <p>
-                            <a href="/XYZDrivers/membership-status?status=APPROVED&amp;member_id=<c:out value="${member.id}" />">
+                            <a href="/XYZDrivers/membership-status?status=APPROVED&amp;member_id=<c:out value="${provisionalMember.id}" />">
                                 Approve
                             </a> /
-                            <a href="/XYZDrivers/membership-status?status=REJECTED&amp;member_id=<c:out value="${member.id}" />">
+                            <a href="/XYZDrivers/membership-status?status=REJECTED&amp;member_id=<c:out value="${provisionalMember.id}" />">
                                 Reject
                             </a>
                         </p>
