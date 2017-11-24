@@ -30,7 +30,7 @@ public class InsertPaymentService {
     @Inject
     private SQLService sqlService;
 
-    public void InsertPayment(MembershipPayment mp) throws IllegalAccessException, SQLException, RepositoryException {
+    public void InsertPayment(MembershipPayment mp) throws IllegalAccessException, RepositoryException {
 
         if (mp == null) {
             throw new IllegalArgumentException("The object mp is null.");

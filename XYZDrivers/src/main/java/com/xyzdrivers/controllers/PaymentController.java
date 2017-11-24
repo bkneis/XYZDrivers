@@ -1,6 +1,7 @@
 package com.xyzdrivers.controllers;
 
 import com.xyzdrivers.models.MembershipPayment;
+import com.xyzdrivers.repositories.RepositoryException;
 import com.xyzdrivers.services.InsertPaymentService;
 import java.io.IOException;
 import java.sql.Connection;
@@ -60,7 +61,7 @@ public class PaymentController extends HttpServlet {
             MembershipPayment p = new MembershipPayment(username, "FEE", Float.parseFloat(amount), date, time);
 
             insertPaymentService.InsertPayment(p);
-        } catch (SQLException | IllegalAccessException ex) {
+        } catch (RepositoryException | IllegalAccessException ex) {
             throw new RuntimeException(ex);
         }
     }
