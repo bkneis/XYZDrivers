@@ -12,44 +12,77 @@ import java.time.LocalDate;
 
 public class Member extends Model
 {
-//variables
     private String id;
     private String name;
     private String address;
-    private LocalDate dob;  //date of birth
-    private LocalDate dor;  //date of registration
+    private LocalDate dateOfBirth;
+    private LocalDate dateOfRegistration;
     private String status;
     private double balance;
-//constructors
+    
     public Member(String id, String name, String address, LocalDate dob, LocalDate dor, String status, double balance) {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.dob = dob;
-        this.dor = dor;
+        this.dateOfBirth = dob;
+        this.dateOfRegistration = dor;
         this.status = status;
         this.balance = balance;
     }
-//getters & setters
+    
     public String getId() {
         return id;
     }
+    
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getAddress() {
         return address;
     }
-    public LocalDate getDob() {
-        return dob;
+
+    public void setAddress(String address) {
+        this.address = address;
     }
-    public LocalDate getDor() {
-        return dor;
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
+
+    public void setDateOfBirth(LocalDate dob) {
+        this.dateOfBirth = dob;
+    }
+
+    public LocalDate getDateOfRegistration() {
+        return dateOfRegistration;
+    }
+
+    public void setDateOfRegistration(LocalDate dor) {
+        this.dateOfRegistration = dor;
+    }
+
     public String getStatus() {
         return status;
     }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public double getBalance() {
         return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 }

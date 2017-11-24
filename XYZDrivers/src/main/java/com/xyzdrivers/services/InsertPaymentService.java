@@ -1,6 +1,10 @@
 package com.xyzdrivers.services;
 
+import com.xyzdrivers.models.Member;
 import com.xyzdrivers.models.MembershipPayment;
+import com.xyzdrivers.repositories.MembersRepo;
+import com.xyzdrivers.repositories.PaymentsRepo;
+import com.xyzdrivers.repositories.RepositoryException;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.Date;
@@ -8,22 +12,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 /*
  * @author Joe Dicker
  */
+@RequestScoped
 public class InsertPaymentService {
+    
+    @Inject
+    private MembersRepo membersRepo;
+    
+    @Inject
+    private PaymentsRepo paymentsRepo;
+    
+    @Inject
+    private SQLService sqlService;
 
-    private Connection con;
-    private float balance;
-    private float currentBalance;
-    private ResultSet results;
-
-    public InsertPaymentService(Connection con) {
-        this.con = con;
-    }
-
-    public void InsertPayment(MembershipPayment mp) throws IllegalAccessException, SQLException {
+    public void InsertPayment(MembershipPayment mp) throws IllegalAccessException, SQLException, RepositoryException {
 
         if (mp == null) {
             throw new IllegalArgumentException("The object p is null.");
@@ -37,42 +44,11 @@ public class InsertPaymentService {
             }
         }
         
-        String query = "INSERT INTO PAYMENTS (MEM_ID, TYPE_OF_PAYMENT, AMOUNT, DATE, TIME) VALUES (?, ?, ?, ?, ?)";
-
-        PreparedStatement ps = con.prepareStatement(query);
-
-        ps.setString(1, mp.getMemberID());
-        ps.setString(2, mp.getPaymentType());
-        ps.setFloat(3, mp.getPaymentAmount());
-        ps.setDate(4, Date.valueOf(mp.getDate()));
-        ps.setTime(5, Time.valueOf(mp.getTime()));
-
-                ps.executeUpdate();
-                
-        String query2 = "SELECT BALANCE FROM MEMBERS WHERE ID = ?";
-
-        PreparedStatement ps2 = con.prepareStatement(query2);
-
-        ps2.setString(1, mp.getMemberID());
-
-        results = ps2.executeQuery();
-
-        while (results.next()) {
-            currentBalance = results.getFloat("BALANCE");
-        }
-
-        balance = currentBalance - mp.getPaymentAmount();
-
-        String query3 = "UPDATE MEMBERS SET BALANCE = ? WHERE ID = ?";
-
-        PreparedStatement ps3 = con.prepareStatement(query3);
-
-        ps3.setFloat(1, balance);
-        ps3.setString(2, mp.getMemberID());
-
-        ps3.execute();
-
-        con.close();
+        paymentsRepo.insert(mp);
+        
+        Member member = membersRepo.get(mp.getMemberID());
+        member.setBalance(member.getBalance() - mp.getPaymentAmount());
+        membersRepo.update(member);
     }
 
 }

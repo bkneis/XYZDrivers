@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,10 @@ import javax.servlet.http.HttpSession;
  * @author Joe Dicker
  */
 public class PaymentController extends HttpServlet {
-
+    
+    @Inject
+    private InsertPaymentService insertPaymentService;
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -49,18 +53,13 @@ public class PaymentController extends HttpServlet {
             LocalDate date = LocalDate.now();
             LocalTime time = LocalTime.now();
 
-            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/xyzdrivers");
-            String amount = request.getParameter("amount");
-
             HttpSession session = request.getSession();
-
+            String amount = request.getParameter("amount");
             String username = (String) session.getAttribute("usermame");
 
             MembershipPayment p = new MembershipPayment(username, "FEE", Float.parseFloat(amount), date, time);
 
-            InsertPaymentService ips = new InsertPaymentService(con);
-
-            ips.InsertPayment(p);
+            insertPaymentService.InsertPayment(p);
         } catch (SQLException | IllegalAccessException ex) {
             throw new RuntimeException(ex);
         }
