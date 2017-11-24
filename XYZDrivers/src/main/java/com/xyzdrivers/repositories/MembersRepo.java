@@ -34,19 +34,19 @@ public class MembersRepo extends Repo<Member, String> {
     @Override
     public List<Member> get() {
         List<Object[]> results;
-        List<Member> memberships = new ArrayList<>();
+        List<Member> members = new ArrayList<>();
         try {
             results = this.sqlService.retrieve(Member.TABLE_NAME);
             for (Object[] result : results) {
                 LocalDate dob = LocalDate.parse(result[3].toString());
                 LocalDate dor = LocalDate.parse(result[4].toString());
                 Member membership = new Member(result[0].toString(), result[1].toString(), result[2].toString(), dob, dor, result[5].toString(), Float.parseFloat(result[6].toString()));
-                memberships.add(membership);
+                members.add(membership);
             }
         } catch (SQLException ex) {
             Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return memberships;
+        return members;
     }
 
     @Override

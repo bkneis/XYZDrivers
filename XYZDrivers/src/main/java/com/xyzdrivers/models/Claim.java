@@ -36,7 +36,7 @@ public class Claim extends Model {
         this.allowedStatuses = new ArrayList<>();
         allowedStatuses.add("APPROVED");
         allowedStatuses.add("REJECTED");
-        allowedStatuses.add("PENDING");
+        allowedStatuses.add("SUBMITTED");
     }
     
     public Claim(String member_id, LocalDate date, String reason, String status, float amount) {

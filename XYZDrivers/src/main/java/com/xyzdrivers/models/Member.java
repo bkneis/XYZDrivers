@@ -32,6 +32,7 @@ public class Member extends Model
         this.allowedStatuses = new ArrayList<>();
         allowedStatuses.add("SUSPENDED");
         allowedStatuses.add("APPROVED");
+        allowedStatuses.add("REJECTED");
     }
 //getters & setters
     public String getId() {
