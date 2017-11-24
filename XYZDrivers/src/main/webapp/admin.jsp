@@ -119,7 +119,7 @@
                                 Suspend
                             </a> /
                             </c:if>
-                            <c:if test="${(member.status == 'APPROVED') or (member.status == 'SUSPENDED')}">
+                            <c:if test="${member.status == 'SUSPENDED'}">
                             <a href="/XYZDrivers/membership-status?status=APPROVED&amp;member_id=<c:out value="${member.id}" />">
                                 Resume
                             </a>
