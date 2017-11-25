@@ -71,29 +71,6 @@ public class InsertPaymentService {
         ps3.setString(2, mp.getMemberID());
         
         ps3.execute();
-//
-//        String query2 = "SELECT BALANCE FROM MEMBERS WHERE ID = ?";
-//
-//        PreparedStatement ps2 = con.prepareStatement(query2);
-//
-//        ps2.setString(1, mp.getMemberID());
-//
-//        results = ps2.executeQuery();
-//
-//        while (results.next()) {
-//            currentBalance = results.getFloat("BALANCE");
-//        }
-//
-//        balance = currentBalance - mp.getPaymentAmount();
-//
-//        String query3 = "UPDATE MEMBERS SET BALANCE = ? WHERE ID = ?";
-//
-//        PreparedStatement ps3 = con.prepareStatement(query3);
-//
-//        ps3.setFloat(1, balance);
-//        ps3.setString(2, mp.getMemberID());
-//
-//        ps3.execute();
 
         con.close();
     }
