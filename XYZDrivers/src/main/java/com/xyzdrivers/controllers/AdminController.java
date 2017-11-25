@@ -13,14 +13,13 @@ import com.xyzdrivers.repositories.MembersRepo;
 
 import java.io.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.WebServiceRef;
 
 public class AdminController extends HttpServlet {
@@ -56,16 +55,18 @@ public class AdminController extends HttpServlet {
         
         com.webservices.xyzdriverswebservice.ClaimEligibility port = service.getClaimEligibilityPort();
         List<String> eligibleClaims = new ArrayList();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
 
         for (Object[] member : members) {
-            String username = member[1].toString();
-            String joinedDate = member[2].toString();
+            String username = member[0].toString();
+            String joinedDate = member[4].toString();
             List<String> listOfClaimDates = new ArrayList();
             List<String> listOfClaimStatuses = new ArrayList();
 
             for (Claim c : claims) {
                 if (c.getMemberID().equals(username)) {
-                    listOfClaimDates.add(c.getDate().toString());
+                    String str = sdf.format(c.getDate().getTime());                                      
+                    listOfClaimDates.add(str); 
                     listOfClaimStatuses.add(c.getStatus());
                 }
             }
