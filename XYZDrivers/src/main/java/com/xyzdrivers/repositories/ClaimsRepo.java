@@ -1,7 +1,6 @@
 package com.xyzdrivers.repositories;
 
 import com.xyzdrivers.models.Claim;
-import java.lang.reflect.Field;
 import java.sql.Date;
 import java.lang.reflect.Field;
 import java.sql.SQLException;
@@ -39,13 +38,13 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         List<Object[]> results;
         List<Claim> claims = new ArrayList<>();
-        Calendar date = Calendar.getInstance();
 
         try {
             results = sqlService.retrieve("claims");
-            for (Object[] result : results) {              
-                String dateTime = df.format(result[2]);
-                date.setTime(df.parse(dateTime));
+            for (Object[] result : results) {
+                Calendar date = Calendar.getInstance();
+                String tempDateTime = df.format(result[2]);
+                date.setTime(df.parse(tempDateTime));
                 Claim cl = new Claim(result[1].toString(), date, result[3].toString(), result[4].toString(), Float.parseFloat(result[5].toString()));
                 claims.add(cl);
             }

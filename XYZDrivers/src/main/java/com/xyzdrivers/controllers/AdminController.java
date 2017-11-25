@@ -60,8 +60,8 @@ public class AdminController extends HttpServlet {
 
         for (Member member : members) {
             String username = member.getId();
-            java.util.Date date = member.getDor().getTime();
-            String hello = sdf.format(date);
+            java.util.Date tempDate = member.getDor().getTime();
+            String joinedDate = sdf.format(tempDate);
             List<String> listOfClaimDates = new ArrayList();
             List<String> listOfClaimStatuses = new ArrayList();
 
@@ -72,7 +72,7 @@ public class AdminController extends HttpServlet {
                     listOfClaimStatuses.add(c.getStatus());
                 }
             }
-            eligibleClaims.add(port.eligibility(username, hello, listOfClaimDates, listOfClaimStatuses));
+            eligibleClaims.add(port.eligibility(username, joinedDate, listOfClaimDates, listOfClaimStatuses));
         }
 
         //set attributes

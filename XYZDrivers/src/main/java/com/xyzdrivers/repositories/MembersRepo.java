@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -22,8 +21,6 @@ public class MembersRepo extends Repo<Member, Integer> {
     @Override
     public List<Member> get() throws RepositoryException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar dob = Calendar.getInstance();
-        Calendar dor = Calendar.getInstance();
         List<Object[]> results;
         List<Member> members = new ArrayList();
 
@@ -32,6 +29,9 @@ public class MembersRepo extends Repo<Member, Integer> {
             results = this.sqlService.retrieve("MEMBERS");
             //parse members data
             for (Object[] memberData : results) {
+                Calendar dob = Calendar.getInstance();
+                Calendar dor = Calendar.getInstance();
+                
                 String dateTime = df.format(memberData[3]);
                 String dateTime2 = df.format(memberData[4]);
 
@@ -64,8 +64,6 @@ public class MembersRepo extends Repo<Member, Integer> {
     @Override
     public List<Member> getWhere(String keyColumn, Object keyValue) throws RepositoryException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar dob = Calendar.getInstance();
-        Calendar dor = Calendar.getInstance();
         List<Object[]> results;
         List<Member> members = new ArrayList();
 
@@ -74,6 +72,9 @@ public class MembersRepo extends Repo<Member, Integer> {
             results = this.sqlService.retrieve("MEMBERS", "*", keyColumn, keyValue);
             //parse members data
             for (Object[] memberData : results) {
+                Calendar dob = Calendar.getInstance();
+                Calendar dor = Calendar.getInstance();
+                
                 String dateTime = df.format(memberData[3]);
                 String dateTime2 = df.format(memberData[4]);
 
@@ -89,7 +90,7 @@ public class MembersRepo extends Repo<Member, Integer> {
                         (double) memberData[6]);  //balance
                 members.add(member);
             }
-        } catch (SQLException | IllegalArgumentException | ParseException ex) {
+        } catch (SQLException | ParseException ex) {
             throw new RepositoryException("Failed to retrieve matching Members. See inner exception for details.", ex);
         }
 
