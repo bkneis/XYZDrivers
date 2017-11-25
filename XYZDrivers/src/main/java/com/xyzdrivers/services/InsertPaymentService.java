@@ -30,12 +30,24 @@ public class InsertPaymentService {
             throw new IllegalArgumentException("The object mp is null.");
         }
 
-        for (Field f : mp.getClass().getDeclaredFields()) {
-            f.setAccessible(true);
-            Object value = f.get(mp);
-            if (value == null) {
-                throw new IllegalArgumentException("One of the declared fields in object mp is null.");
-            }
+        if (mp.getDate() == null)
+        {
+            throw new IllegalArgumentException("Given MembershipPayment must have a non-null date.");
+        }
+        
+        if (mp.getPaymentAmount() <= 0)
+        {
+            throw new IllegalArgumentException("Given MembershipPayment must have a payment amount >= 0.");
+        }
+        
+        if (mp.getPaymentType() == null)
+        {
+            throw new IllegalArgumentException("Given MembershipPayment must have a non-null payment type.");
+        }
+        
+        if (mp.getTime() == null)
+        {
+            throw new IllegalArgumentException("Given MembershipPayment must have a non-null time.");
         }
         
         paymentsRepo.insert(mp);
