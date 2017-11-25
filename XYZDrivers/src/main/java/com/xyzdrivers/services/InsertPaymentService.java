@@ -71,7 +71,7 @@ public class InsertPaymentService {
         ps3.setString(2, mp.getMemberID());
         
         ps3.execute();
-
+        
         con.close();
     }
 

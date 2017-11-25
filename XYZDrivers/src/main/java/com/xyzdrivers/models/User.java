@@ -60,4 +60,16 @@ public class User {
         this.status = status;
     }
     
+    /**
+     * Checks to see if this user is an administrator or not.
+     * @return whether or not this user is an administrator
+     */
+    public boolean isAdministrator() {
+        if (status == null) {
+            return false;
+        }
+        
+        return status.toLowerCase().trim().equals("admin");
+    }
+    
 }

@@ -3,18 +3,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Make A Claim</title>
+        <title>Fatal Error</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="styles/main.css" />
     </head>
     <body>
         <jsp:include page="nav.jsp"></jsp:include>
         
-        <form action="claim" method="post">
-            Reason For Claim: <input type="text" name="reason"> <br>
-            Amount: <input type="number" name="amount">
-            <input type="submit" value="Submit">
-        </form>
+        <h1>A fatal error occurred when processing your request.</h1>
     </body>
 </html>
