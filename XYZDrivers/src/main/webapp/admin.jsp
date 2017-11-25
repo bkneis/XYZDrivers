@@ -73,7 +73,7 @@
                     </div>
                     <div class="panel-body">
                         <ul>
-                            <c:forEach items="${eligibleClaims}" var="eligibleClaims">
+                            <c:forEach items="${eligibleClaims}" var="eligibileClaims">
                                 <li>
                                     <c:out value="${eligibleClaims}"/>                                    
                                 </li>

@@ -50,7 +50,7 @@ public class AdminController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, RepositoryException {
-        List<Object[]> members = membersService.getMembers();
+        List<Member> members = membersRepo.get();
         List<Member> outstandingBalance = membersRepo.getWhere("STATUS", "OUTSTANDING");
         List<Claim> claims = claimsRepo.get();
         
@@ -58,9 +58,10 @@ public class AdminController extends HttpServlet {
         List<String> eligibleClaims = new ArrayList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
 
-        for (Object[] member : members) {
-            String username = member[0].toString();
-            String joinedDate = member[4].toString();
+        for (Member member : members) {
+            String username = member.getId();
+            java.util.Date date = member.getDor().getTime();
+            String hello = sdf.format(date);
             List<String> listOfClaimDates = new ArrayList();
             List<String> listOfClaimStatuses = new ArrayList();
 
@@ -71,14 +72,14 @@ public class AdminController extends HttpServlet {
                     listOfClaimStatuses.add(c.getStatus());
                 }
             }
-            eligibleClaims.add(port.eligibility(username, joinedDate, listOfClaimDates, listOfClaimStatuses));
+            eligibleClaims.add(port.eligibility(username, hello, listOfClaimDates, listOfClaimStatuses));
         }
 
         //set attributes
         request.setAttribute("members", members);
         request.setAttribute("outstandingBalance", outstandingBalance);
         request.setAttribute("claims", claims);
-        request.setAttribute("eligibilityClaims", eligibleClaims);
+        request.setAttribute("eligibleClaims", eligibleClaims);
 
         //fwd .jsp page
         request.getRequestDispatcher("admin.jsp").forward(request, response);
