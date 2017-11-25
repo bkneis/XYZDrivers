@@ -73,6 +73,22 @@
         <filter-name>AuthorisationFilter</filter-name>
         <url-pattern>/payment/*</url-pattern>
     </filter-mapping> 
+    <filter-mapping>
+        <filter-name>AuthorisationFilter</filter-name>
+        <url-pattern>/admin.jsp</url-pattern>
+    </filter-mapping> 
+    <filter-mapping>
+        <filter-name>AuthorisationFilter</filter-name>
+        <url-pattern>/member.jsp</url-pattern>
+    </filter-mapping> 
+    <filter-mapping>
+        <filter-name>AuthorisationFilter</filter-name>
+        <url-pattern>/submit-claim.jsp</url-pattern>
+    </filter-mapping> 
+    <filter-mapping>
+        <filter-name>AuthorisationFilter</filter-name>
+        <url-pattern>/submitpayment.html</url-pattern>
+    </filter-mapping> 
     
     <servlet-mapping>
         <servlet-name>UpgradeMemberController</servlet-name>

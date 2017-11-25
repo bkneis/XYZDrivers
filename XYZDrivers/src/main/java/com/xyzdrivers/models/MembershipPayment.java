@@ -42,8 +42,4 @@ public class MembershipPayment {
         return this.time;
     }
 
-    public void updateBalance() {
-
-    }
-
 }

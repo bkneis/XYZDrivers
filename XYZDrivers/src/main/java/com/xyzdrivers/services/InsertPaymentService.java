@@ -6,12 +6,6 @@ import com.xyzdrivers.repositories.MembersRepo;
 import com.xyzdrivers.repositories.PaymentsRepo;
 import com.xyzdrivers.repositories.RepositoryException;
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Time;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -40,7 +34,7 @@ public class InsertPaymentService {
             f.setAccessible(true);
             Object value = f.get(mp);
             if (value == null) {
-                throw new IllegalArgumentException("One of the declared fields in object p is null.");
+                throw new IllegalArgumentException("One of the declared fields in object mp is null.");
             }
         }
         
