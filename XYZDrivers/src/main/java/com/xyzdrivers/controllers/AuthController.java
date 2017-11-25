@@ -79,7 +79,7 @@ public class AuthController extends BaseController {
         User loggedInUser = null;
         HttpSession session = request.getSession(true);
         
-        if (username != null && password == null)
+        if (username != null && password != null)
         {      
             try {            
                 if (userService.checkLoginDetails(username, password))
