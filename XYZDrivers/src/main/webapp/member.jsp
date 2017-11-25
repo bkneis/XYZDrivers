@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -66,7 +67,7 @@
                         <ul>
                             <c:forEach items="${claims}" var="claim">
                                 <li>
-                                    <c:out value="${claim.date}" />
+                                    <fmt:formatDate value="${claim.date.getTime()}" pattern="yyyy-MM-dd"/>
                                     - Member: <c:out value="${claim.memberID}" />
                                     - Reason: <c:out value="${claim.reason}" />
                                     - Status <c:out value="${claim.status}" />

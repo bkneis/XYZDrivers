@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -36,9 +37,9 @@
                     </div>
                     <div class="panel-body">
                         <ul>
-                            <c:forEach items="${claims}" var="claim">
-                                <li>
-                                    <c:out value="${claim.date.getTime()}" />
+                            <c:forEach items="${claims}" var="claim">                                
+                                <li>                                    
+                                    <fmt:formatDate value="${claim.date.getTime()}" pattern="yyyy-MM-dd"/>
                                     - Member: <c:out value="${claim.memberID}" />
                                     - Reason: <c:out value="${claim.reason}" />
                                     - Status <c:out value="${claim.status}" />
@@ -73,9 +74,9 @@
                     </div>
                     <div class="panel-body">
                         <ul>
-                            <c:forEach items="${eligibleClaims}" var="eligibileClaims">
+                            <c:forEach items="${eligibleClaims}" var="current">
                                 <li>
-                                    <c:out value="${eligibleClaims}"/>                                    
+                                    <c:out value="${current}"/><br>                                    
                                 </li>
                             </c:forEach>
                         </ul>
@@ -90,13 +91,13 @@
                 </div>
                 <div class="panel-body">
                     <ul>
-                        <c:forEach items="${members}" var="member">
-                            <li>
+                        <c:forEach items="${members}" var="member">                                                     
+                            <li>                                   
                                 <c:out value="${member.id}"/>
                                 - name: <c:out value="${member.name}"/>
                                 - address: <c:out value="${member.address}"/>
-                                - dob: <c:out value="${member.dob.getTime()}"/>
-                                - dor: <c:out value="${member.dor.getTime()}"/>
+                                - dob:  <fmt:formatDate value="${member.dob.getTime()}" pattern="yyyy-MM-dd"/>
+                                - dor:  <fmt:formatDate value="${member.dor.getTime()}" pattern="yyyy-MM-dd"/>
                                 - status: <c:out value="${member.status}"/>
                                 - balance: <c:out value="${member.balance}"/>
                             </li>
