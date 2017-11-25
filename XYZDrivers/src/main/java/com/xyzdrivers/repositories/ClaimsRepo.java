@@ -36,15 +36,16 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
      */
     @Override
     public List<Claim> get() throws RepositoryException {
-        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<Object[]> results;
         List<Claim> claims = new ArrayList<>();
+        Calendar date = Calendar.getInstance();
 
         try {
             results = sqlService.retrieve("claims");
-            for (Object[] result : results) {
-                Calendar date = Calendar.getInstance();
-                date.setTime(df.parse(result[2].toString()));
+            for (Object[] result : results) {              
+                String dateTime = df.format(result[2]);
+                date.setTime(df.parse(dateTime));
                 Claim cl = new Claim(result[1].toString(), date, result[3].toString(), result[4].toString(), Float.parseFloat(result[5].toString()));
                 claims.add(cl);
             }
