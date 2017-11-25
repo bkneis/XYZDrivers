@@ -4,6 +4,7 @@
 package com.xyzdrivers.controllers;
 
 import com.webservices.xyzdriverswebservice.ClaimEligibility_Service;
+import com.webservices.xyzdriverswebservice.ClaimEligibility;
 import com.xyzdrivers.models.Claim;
 import com.xyzdrivers.models.Member;
 import com.xyzdrivers.repositories.ClaimsRepo;
@@ -53,7 +54,7 @@ public class AdminController extends HttpServlet {
         List<Member> outstandingBalance = membersRepo.getWhere("STATUS", "OUTSTANDING");
         List<Claim> claims = claimsRepo.get();
         
-        com.webservices.xyzdriverswebservice.ClaimEligibility port = service.getClaimEligibilityPort();
+        ClaimEligibility port = service.getClaimEligibilityPort();
         List<String> eligibleClaims = new ArrayList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
 
