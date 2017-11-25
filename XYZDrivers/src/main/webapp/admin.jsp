@@ -27,7 +27,7 @@
             </div><!-- /.container-fluid -->
         </nav>
         
-        <span>Hello, ${requestScope.user.id}!</span>
+        <span>Hello, ${sessionScope.username}!</span>
         
         <div class="page row">
             <div class="col-md-6">
