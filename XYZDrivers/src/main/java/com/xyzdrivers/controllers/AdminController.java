@@ -28,7 +28,7 @@ public class AdminController extends HttpServlet {
     private MembersRepo membersRepo;
     
     @Inject
-    private ClaimsRepo  claimsRepo;
+    private ClaimsRepo claimsRepo;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
