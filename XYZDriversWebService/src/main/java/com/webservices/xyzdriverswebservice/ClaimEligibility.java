@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
@@ -40,13 +41,15 @@ public class ClaimEligibility {
         List<Calendar> calendarClaimDates = new ArrayList();
         
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");        
-            calendarJoinedDate.setTime(sdf.parse(joinedDate));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = sdf.parse(joinedDate);
+            calendarJoinedDate.setTime(date);
             
             for(int i = 0; i < listOfClaimDates.size(); i++)
             {
                 Calendar tempCalendar = Calendar.getInstance();
-                tempCalendar.setTime(sdf.parse(listOfClaimDates.get(i)));
+                Date tempDate = sdf.parse(listOfClaimDates.get(i));
+                tempCalendar.setTime(tempDate);
                 calendarClaimDates.add(tempCalendar);
             }
             
