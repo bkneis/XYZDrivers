@@ -16,40 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author arthur
  */
 public class HomeController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        // Get the request parameters
-        String userType = request.getParameter("userType");
-        String actionType = request.getParameter("actionType");
-
-        // If neither are set, default to login
-        if (userType == null || actionType == null) {
-            request.setAttribute("userType", "user");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }
-        
-        // Set the user type for the view
-        request.setAttribute("userType", userType);
-        
-        // Determine which view to send
-        if ("login".equals(actionType)) {
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-        }
-    }
-
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -62,7 +29,7 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
     /**
@@ -76,7 +43,26 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // processRequest(request, response);
+        
+        // Get the request parameters
+        String userType = request.getParameter("userType");
+        String actionType = request.getParameter("actionType");
+
+        // If neither are set, default to home
+        if (userType == null || actionType == null) {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }
+        
+        // Set the user type for the view
+        request.setAttribute("userType", userType);
+        
+        // Determine which view to send
+        if ("login".equals(actionType)) {
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+        }
+        
     }
 
     /**

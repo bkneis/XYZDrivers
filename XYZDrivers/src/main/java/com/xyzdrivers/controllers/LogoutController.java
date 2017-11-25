@@ -22,14 +22,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author arthur
  */
-public class AuthController extends HttpServlet {
+public class LogoutController extends HttpServlet {
     
-    @Inject
-    private UserService userService;
-    
-    @Inject
-    private UserRepo userRepo;
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -42,12 +36,6 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // Pass userType along from Home index
-        request.setAttribute("userType", request.getParameter("userType"));
-        
-        RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
-        dispatcher.forward(request, response);
     }
 
     /**
@@ -68,39 +56,12 @@ public class AuthController extends HttpServlet {
         
         User loggedInUser = null;
         HttpSession session = request.getSession(true);
-                
-        try {
-            if (userService.checkLoginDetails(username, password))
-            {
-                session.setAttribute("username", username);
-                loggedInUser = userRepo.get(username);
-            }
-        } catch (RepositoryException ex) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
-            dispatcher.forward(request, response);
-            return;
-        }
         
-        if (loggedInUser == null) {
-            request.setAttribute("userType", userType);
-            request.setAttribute("loginFailed", true);
-            
-            RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
-            dispatcher.forward(request, response);
-        }
-        else {
-            String status = loggedInUser.getStatus();
-            
-            // AuthorisationFilter hasn't had a chance to run yet, so fill in the user here
-            session.setAttribute("user", loggedInUser);
-            
-            if ("admin".equals(userType)) {
-                response.sendRedirect(request.getContextPath() + "/admin");
-            }
-            else {
-                response.sendRedirect(request.getContextPath() + "/member");
-            }
-        }
+        session.removeAttribute("username");
+        session.removeAttribute("user");
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        dispatcher.forward(request, response);
         
     }
 
