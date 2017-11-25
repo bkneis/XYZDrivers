@@ -51,7 +51,7 @@ public class AdminController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, RepositoryException {
         List<Object[]> members = membersService.getMembers();
-        List<Member> outstandingBalance = membersRepo.getWhere("status", "OUTSTANDING");
+        List<Member> outstandingBalance = membersRepo.getWhere("STATUS", "OUTSTANDING");
         List<Claim> claims = claimsRepo.get();
         
         com.webservices.xyzdriverswebservice.ClaimEligibility port = service.getClaimEligibilityPort();
