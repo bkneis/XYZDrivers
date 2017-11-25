@@ -26,9 +26,6 @@
                         <li><a href="#">Home</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="submit-claim.jsp">Submit A Claim</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
                         <li><a href="#">Logout</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
