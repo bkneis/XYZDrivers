@@ -5,17 +5,24 @@
  */
 package com.xyzdrivers.controllers;
 
+import com.xyzdrivers.models.User;
+import com.xyzdrivers.repositories.RepositoryException;
+import com.xyzdrivers.repositories.UserRepo;
+import com.xyzdrivers.services.UserService;
 import java.io.IOException;
+import javax.inject.Inject;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author arthur
  */
-public class HomeController extends HttpServlet {
+public class LogoutController extends HttpServlet {
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -29,7 +36,7 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        processRequest(request, response);   
     }
 
     /**
@@ -43,26 +50,7 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // Get the request parameters
-        String userType = request.getParameter("userType");
-        String actionType = request.getParameter("actionType");
-
-        // If neither are set, default to home
-        if (userType == null || actionType == null) {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-        }
-        
-        // Set the user type for the view
-        request.setAttribute("userType", userType);
-        
-        // Determine which view to send
-        if ("login".equals(actionType)) {
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-        }
-        
+        processRequest(request, response);        
     }
 
     /**
@@ -72,7 +60,26 @@ public class HomeController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Controller to direct the user to correct page based on an action";
+        return "Short description";
+    }
+
+    
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        String username = (String)request.getParameter("username");
+        String password = (String)request.getParameter("password");
+        String userType = (String)request.getParameter("userType");
+        
+        User loggedInUser = null;
+        HttpSession session = request.getSession(true);
+        
+        session.removeAttribute("username");
+        session.removeAttribute("user");
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        dispatcher.forward(request, response);        
+        
     }// </editor-fold>
 
 }

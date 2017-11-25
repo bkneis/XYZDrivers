@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -6,13 +8,8 @@
         <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
     </head>
     <body>
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-              <div class="navbar-header">
-                <a class="navbar-brand" href="#">XYZ Drivers Association</a>
-              </div>
-            </div><!-- /.container-fluid -->
-        </nav>
+        <jsp:include page="nav.jsp"></jsp:include>
+        
         <div class="row text-center">
             <h1>Welcome to the driver's Association</h1>
             <h3>Please select an action</h3>
