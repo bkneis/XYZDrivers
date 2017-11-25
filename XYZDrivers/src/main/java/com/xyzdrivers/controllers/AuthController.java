@@ -13,7 +13,6 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -22,7 +21,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author arthur
  */
-public class AuthController extends HttpServlet {
+public class AuthController extends BaseController {
     
     @Inject
     private UserService userService;
@@ -87,8 +86,7 @@ public class AuthController extends HttpServlet {
                 loggedInUser = userRepo.get(username);
             }
         } catch (RepositoryException ex) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("error.html");
-            dispatcher.forward(request, response);
+            redirectError(ex.getMessage(), "error.jsp", request, response);
             return;
         }
         
@@ -96,8 +94,7 @@ public class AuthController extends HttpServlet {
             request.setAttribute("userType", userType);
             request.setAttribute("loginFailed", true);
             
-            RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
-            dispatcher.forward(request, response);
+            redirectError("Login failed. Please check your credentials are correct.", "login.jsp", request, response);
         }
         else {
             String status = loggedInUser.getStatus();
@@ -112,7 +109,6 @@ public class AuthController extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/member");
             }
         }
-        
     }
 
     /**

@@ -37,7 +37,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Your outstanding balances</h3>
-                        <a href="submitpayment.html">Submit Payment</a>
+                        <a href="submitpayment.jsp">Submit Payment</a>
                     </div>
                     <div class="panel-body">
                         <c:if test="${member.status == \"OUTSTANDING\"}"> 

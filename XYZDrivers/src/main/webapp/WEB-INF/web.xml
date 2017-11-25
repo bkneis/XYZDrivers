@@ -87,7 +87,7 @@
     </filter-mapping> 
     <filter-mapping>
         <filter-name>AuthorisationFilter</filter-name>
-        <url-pattern>/submitpayment.html</url-pattern>
+        <url-pattern>/submitpayment.jsp</url-pattern>
     </filter-mapping> 
     
     <servlet-mapping>

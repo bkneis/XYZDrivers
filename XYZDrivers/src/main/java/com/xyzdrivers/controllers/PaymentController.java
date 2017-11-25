@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import javax.inject.Inject;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpSession;
 /**
  * @author Joe Dicker
  */
-public class PaymentController extends HttpServlet {
+public class PaymentController extends BaseController {
     
     @Inject
     private InsertPaymentService insertPaymentService;
@@ -47,20 +48,36 @@ public class PaymentController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        LocalDate date = LocalDate.now();
+        LocalTime time = LocalTime.now();
+        float amount;
+
         try {
-            LocalDate date = LocalDate.now();
-            LocalTime time = LocalTime.now();
+            amount = Float.parseFloat(request.getParameter("amount"));
+        }
+        catch (NumberFormatException ex)
+        {
+            amount = 0;
+        }
 
-            HttpSession session = request.getSession();
-            String amount = request.getParameter("amount");
-            String username = (String) session.getAttribute("usermame");
+        if (amount <= 0)
+        {
+            redirectError("Amount was not valid.", "submitpayment.jsp", request, response);
+            return;
+        }                
+        
+        
 
-            MembershipPayment p = new MembershipPayment(username, "FEE", Float.parseFloat(amount), date, time);
+        HttpSession session = request.getSession();            
+        String username = (String) session.getAttribute("usermame");
+        MembershipPayment p = new MembershipPayment(username, "FEE", amount, date, time);
 
+        try {
             insertPaymentService.InsertPayment(p);
         } catch (RepositoryException | IllegalAccessException ex) {
             throw new RuntimeException(ex);
         }
+        
     }
 
     /**

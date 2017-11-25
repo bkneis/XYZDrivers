@@ -12,5 +12,7 @@ and open the template in the editor.
     </head>
     <body>
         <div>A fatal error occurred when processing your request.</div>
+		
+		${requestScope.errorMessage}
     </body>
 </html>
