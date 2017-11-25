@@ -7,7 +7,6 @@ import com.xyzdrivers.models.Claim;
 import com.xyzdrivers.models.Member;
 import com.xyzdrivers.repositories.ClaimsRepo;
 import com.xyzdrivers.repositories.RepositoryException;
-import com.xyzdrivers.services.MembersService;
 import com.xyzdrivers.repositories.MembersRepo;
 
 import java.io.*;
@@ -20,10 +19,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 public class AdminController extends HttpServlet {
-    
-    @Inject
-    private MembersService membersService;
-    
+        
     @Inject
     private MembersRepo membersRepo;
     
@@ -44,7 +40,7 @@ public class AdminController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, RepositoryException
     {
-        List<Object[]> members = membersService.getMembers();
+        List<Member> members = membersRepo.get();
         List<Member> outstandingBalance = membersRepo.getWhere("status", "OUTSTANDING");
         List<Claim> claims = claimsRepo.get();
         
