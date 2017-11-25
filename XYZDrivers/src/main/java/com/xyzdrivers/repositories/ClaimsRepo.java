@@ -36,7 +36,7 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
      */
     @Override
     public List<Claim> get() throws RepositoryException {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         List<Object[]> results;
         List<Claim> claims = new ArrayList<>();
         Calendar date = Calendar.getInstance();
@@ -101,7 +101,7 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
 
     @Override
     public List<Claim> getWhere(String keyColumn, Object keyValue) {
-        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         List<Object[]> results;
         List<Claim> claims = new ArrayList();
 

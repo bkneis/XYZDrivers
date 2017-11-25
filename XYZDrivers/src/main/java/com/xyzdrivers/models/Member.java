@@ -9,6 +9,7 @@
 package com.xyzdrivers.models;
 
 import java.time.LocalDate;
+import java.util.Calendar;
 
 public class Member extends Model
 {
@@ -16,12 +17,12 @@ public class Member extends Model
     private String id;
     private String name;
     private String address;
-    private LocalDate dob;  //date of birth
-    private LocalDate dor;  //date of registration
+    private Calendar dob;  //date of birth
+    private Calendar dor;  //date of registration
     private String status;
     private double balance;
 //constructors
-    public Member(String id, String name, String address, LocalDate dob, LocalDate dor, String status, double balance) {
+    public Member(String id, String name, String address, Calendar dob, Calendar dor, String status, double balance) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -40,10 +41,10 @@ public class Member extends Model
     public String getAddress() {
         return address;
     }
-    public LocalDate getDob() {
+    public Calendar getDob() {
         return dob;
     }
-    public LocalDate getDor() {
+    public Calendar getDor() {
         return dor;
     }
     public String getStatus() {
