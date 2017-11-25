@@ -91,7 +91,7 @@ public class AuthController extends BaseController {
                 redirectError(ex.getMessage(), "error.jsp", request, response);
                 return;
             }
-        }       
+        }    
         
         if (loggedInUser == null) {
             request.setAttribute("userType", userType);

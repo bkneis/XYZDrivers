@@ -55,7 +55,6 @@ public class InsertPaymentService {
         Member member = membersRepo.get(mp.getMemberID());
         member.setBalance(member.getBalance() - mp.getPaymentAmount());
         membersRepo.update(member);
-        
     }
 
 }
