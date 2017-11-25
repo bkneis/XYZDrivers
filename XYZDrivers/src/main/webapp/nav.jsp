@@ -23,7 +23,7 @@
             <li><a href="member">Members</a></li>
         </c:if>
 
-            <li><a href="auth?logout=true">Logout</a></li>
+            <li><a href="logout">Logout</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
