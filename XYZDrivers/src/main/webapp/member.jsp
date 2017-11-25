@@ -63,7 +63,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Your claims</h3>
-                        <a href="submit-claim.html">Submit Claim</a>
+                        <a href="submit-claim.jsp">Submit Claim</a>
                     </div>
                     <div class="panel-body">
                         <ul>
