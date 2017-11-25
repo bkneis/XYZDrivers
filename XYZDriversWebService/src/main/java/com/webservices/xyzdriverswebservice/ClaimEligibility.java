@@ -35,73 +35,73 @@ public class ClaimEligibility {
             @WebParam(name = "listOfClaimStatuses") ArrayList<String> listOfClaimStatuses) {
 
         int claimCounter = 0;
-        Calendar calendar = Calendar.getInstance();
-        Calendar calendar2 = Calendar.getInstance();
-        Calendar calendarJoinedDate = Calendar.getInstance();
-        List<Calendar> calendarClaimDates = new ArrayList();
+        Calendar calendarStartYear = Calendar.getInstance();  //initially is six months ago then set to start of current year
+        Calendar calendarEndYear = Calendar.getInstance();    //set to end of current year
+        Calendar calendarJoinedDate = Calendar.getInstance(); //incoming joined date is converted to calender
+        List<Calendar> calendarClaimDates = new ArrayList();  //incoming List<String> is converted to List<Calender>  
         
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date date = sdf.parse(joinedDate);
             calendarJoinedDate.setTime(date);
             
-            for(int i = 0; i < listOfClaimDates.size(); i++)
+            NullCheck(username, calendarJoinedDate, listOfClaimDates, listOfClaimStatuses); //check for null values
+                                   
+            for(int i = 0; i < listOfClaimDates.size(); i++) //convert dates list
             {
                 Calendar tempCalendar = Calendar.getInstance();
                 Date tempDate = sdf.parse(listOfClaimDates.get(i));
                 tempCalendar.setTime(tempDate);
                 calendarClaimDates.add(tempCalendar);
             }
-            
-            NullCheck(username, calendarJoinedDate, listOfClaimDates, listOfClaimStatuses);
+                       
+            calendarStartYear.add(Calendar.MONTH, -6); //six months ago
 
-            calendar.add(Calendar.MONTH, -6); //six months ago
-
-            if (calendarJoinedDate.after(calendar)) {
+            if (calendarJoinedDate.after(calendarStartYear)) {
                 return username + " has joined less than six months ago. As such, they are not yet eligible to make a claim.";
             }
 
-            calendar.set(Calendar.YEAR, 2017); //start of current year
-            calendar.set(Calendar.MONTH, Calendar.JANUARY);
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            calendarStartYear.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR)); //start of current year
+            calendarStartYear.set(Calendar.MONTH, Calendar.JANUARY);
+            calendarStartYear.set(Calendar.DAY_OF_MONTH, 1);
             
-            calendar2.set(Calendar.YEAR, 2017); //end of current year
-            calendar2.set(Calendar.MONTH, Calendar.DECEMBER);
-            calendar2.set(Calendar.DAY_OF_MONTH, 31);
+            calendarEndYear.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR)); //end of current year
+            calendarEndYear.set(Calendar.MONTH, Calendar.DECEMBER);
+            calendarEndYear.set(Calendar.DAY_OF_MONTH, 31);
 
             for (int i = 0; i < calendarClaimDates.size(); i++) {
-                if (calendarClaimDates.get(i).after(calendar) && calendarClaimDates.get(i).before(calendar2)) {
-                    if ("APPROVED".equals(listOfClaimStatuses.get(i))) {
+                if (calendarClaimDates.get(i).after(calendarStartYear) && calendarClaimDates.get(i).before(calendarEndYear)) {
+                    if ("APPROVED".equals(listOfClaimStatuses.get(i))) { //only increment claim counter if the claim has been approved
                         claimCounter++;
                     }
                 }
             }
 
-            if (claimCounter >= 2) {
-                return username + "has made too many claims this year. As such, they are not yet eligible to make a claim.";
+            if (claimCounter >= 2) { //if user has made more than two claims in current year
+                return username + " has made too many claims this year. As such, they are not yet eligible to make a claim.";
             }
 
-        } catch (NullPointerException | ParseException ex) {
+        } catch (IllegalArgumentException | ParseException ex) {
             return ex.toString();
         }
 
         return username + " is eligible to make a claim! They have made " + claimCounter + " claims this year.";
     }
 
-    private void NullCheck(String username, Calendar joinedDate, ArrayList listOfClaimDates, ArrayList listOfClaimStatuses) throws NullPointerException {
+    private void NullCheck(String username, Calendar joinedDate, ArrayList listOfClaimDates, ArrayList listOfClaimStatuses) throws IllegalArgumentException {
         if (username == null || username.isEmpty()) {
-            throw new NullPointerException("Username is null or empty: " + username);
+            throw new IllegalArgumentException("Username is null or empty: " + username);
         }
         if (joinedDate == null) {
-            throw new NullPointerException("Joined Date is null: " + joinedDate);
+            throw new IllegalArgumentException("Joined Date is null: " + joinedDate);
         }
 
-        if (listOfClaimDates.isEmpty()) {
-            throw new NullPointerException("List of claim dates is empty: " + listOfClaimDates);
+        if (listOfClaimDates == null) {
+            throw new IllegalArgumentException("List of claim dates is empty: " + listOfClaimDates);
         }
 
-        if (listOfClaimStatuses.isEmpty()) {
-            throw new NullPointerException("List of claim statuses is empty: " + listOfClaimStatuses);
+        if (listOfClaimStatuses == null) {
+            throw new IllegalArgumentException("List of claim statuses is empty: " + listOfClaimStatuses);
         }
 
     }
