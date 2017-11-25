@@ -17,7 +17,7 @@
             <li><a href="home">Home</a></li>
 
         <c:if test="${not empty sessionScope.user and sessionScope.user.isAdministrator()}">
-            <li><a href="home">Admin</a></li>
+            <li><a href="admin">Admin</a></li>
         </c:if>
         <c:if test="${not empty sessionScope.user}">
             <li><a href="member">Members</a></li>
