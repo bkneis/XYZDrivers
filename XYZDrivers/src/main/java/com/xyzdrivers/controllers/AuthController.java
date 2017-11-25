@@ -78,17 +78,20 @@ public class AuthController extends BaseController {
         
         User loggedInUser = null;
         HttpSession session = request.getSession(true);
-                
-        try {
-            if (userService.checkLoginDetails(username, password))
-            {
-                session.setAttribute("username", username);
-                loggedInUser = userRepo.get(username);
+        
+        if (username != null && password == null)
+        {      
+            try {            
+                if (userService.checkLoginDetails(username, password))
+                {
+                    session.setAttribute("username", username);
+                    loggedInUser = userRepo.get(username);
+                }
+            } catch (RepositoryException ex) {
+                redirectError(ex.getMessage(), "error.jsp", request, response);
+                return;
             }
-        } catch (RepositoryException ex) {
-            redirectError(ex.getMessage(), "error.jsp", request, response);
-            return;
-        }
+        }       
         
         if (loggedInUser == null) {
             request.setAttribute("userType", userType);
