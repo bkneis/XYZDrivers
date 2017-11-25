@@ -38,7 +38,7 @@
                         <ul>
                             <c:forEach items="${claims}" var="claim">
                                 <li>
-                                    <c:out value="${claim.date}" />
+                                    <c:out value="${claim.date.getTime()}" />
                                     - Member: <c:out value="${claim.memberID}" />
                                     - Reason: <c:out value="${claim.reason}" />
                                     - Status <c:out value="${claim.status}" />
@@ -95,8 +95,8 @@
                                 <c:out value="${member.id}"/>
                                 - name: <c:out value="${member.name}"/>
                                 - address: <c:out value="${member.address}"/>
-                                - dob: <c:out value="${member.dob}"/>
-                                - dor: <c:out value="${member.dor}"/>
+                                - dob: <c:out value="${member.dob.getTime()}"/>
+                                - dor: <c:out value="${member.dor.getTime()}"/>
                                 - status: <c:out value="${member.status}"/>
                                 - balance: <c:out value="${member.balance}"/>
                             </li>
