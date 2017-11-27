@@ -22,10 +22,10 @@ import javax.servlet.http.HttpSession;
  * @author arthur
  */
 public class AuthController extends BaseController {
-    
+
     @Inject
     private UserService userService;
-    
+
     @Inject
     private UserRepo userRepo;
 
@@ -41,22 +41,20 @@ public class AuthController extends BaseController {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         // Pass userType along from Home index
         request.setAttribute("userType", request.getParameter("userType"));
-        
+
         String actionType = request.getParameter("actionType");
-        
+
         RequestDispatcher dispatcher;
-        
-        if ("login".equals(actionType))
-        {
+
+        if ("login".equals(actionType)) {
             dispatcher = request.getRequestDispatcher("login.jsp");
-        }
-        else {
+        } else {
             dispatcher = request.getRequestDispatcher("register.jsp");
         }
-        
+
         dispatcher.forward(request, response);
     }
 
@@ -71,19 +69,17 @@ public class AuthController extends BaseController {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String username = (String)request.getParameter("username");
-        String password = (String)request.getParameter("password");
-        String userType = (String)request.getParameter("userType");
-        
+
+        String username = (String) request.getParameter("username");
+        String password = (String) request.getParameter("password");
+        String userType = (String) request.getParameter("userType");
+
         User loggedInUser = null;
         HttpSession session = request.getSession(true);
-        
-        if (username != null && password != null)
-        {      
-            try {            
-                if (userService.checkLoginDetails(username, password))
-                {
+
+        if (username != null && password != null) {
+            try {
+                if (userService.checkLoginDetails(username, password)) {
                     session.setAttribute("username", username);
                     loggedInUser = userRepo.get(username);
                 }
@@ -91,24 +87,22 @@ public class AuthController extends BaseController {
                 redirectError(ex.getMessage(), "error.jsp", request, response);
                 return;
             }
-        }    
-        
+        }
+
         if (loggedInUser == null) {
             request.setAttribute("userType", userType);
             request.setAttribute("loginFailed", true);
-            
+
             redirectError("Login failed. Please check your credentials are correct.", "login.jsp", request, response);
-        }
-        else {
+        } else {
             String status = loggedInUser.getStatus();
-            
+
             // AuthorisationFilter hasn't had a chance to run yet, so fill in the user here
             session.setAttribute("user", loggedInUser);
-            
+
             if ("admin".equals(userType)) {
                 response.sendRedirect(request.getContextPath() + "/admin");
-            }
-            else {
+            } else {
                 response.sendRedirect(request.getContextPath() + "/member");
             }
         }

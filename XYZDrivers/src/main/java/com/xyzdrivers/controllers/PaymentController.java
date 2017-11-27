@@ -18,10 +18,10 @@ import javax.servlet.http.HttpSession;
  * @author Joe Dicker
  */
 public class PaymentController extends BaseController {
-    
+
     @Inject
     private InsertPaymentService insertPaymentService;
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -54,19 +54,16 @@ public class PaymentController extends BaseController {
 
         try {
             amount = Float.parseFloat(request.getParameter("amount"));
-        }
-        catch (NumberFormatException ex)
-        {
+        } catch (NumberFormatException ex) {
             amount = 0;
         }
 
-        if (amount <= 0)
-        {
+        if (amount <= 0) {
             redirectError("Amount was not valid.", "submitpayment.jsp", request, response);
             return;
-        }                
-        
-        HttpSession session = request.getSession();            
+        }
+
+        HttpSession session = request.getSession();
         String username = (String) session.getAttribute("usermame");
         MembershipPayment p = new MembershipPayment(username, "FEE", amount, date, time);
 
@@ -75,7 +72,7 @@ public class PaymentController extends BaseController {
         } catch (RepositoryException | IllegalAccessException ex) {
             throw new RuntimeException(ex);
         }
-        
+
     }
 
     /**
