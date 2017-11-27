@@ -99,7 +99,7 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
     }
 
     @Override
-    public List<Claim> getWhere(String keyColumn, Object keyValue) {
+    public List<Claim> getWhere(String keyColumn, Object keyValue) throws RepositoryException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         List<Object[]> results;
         List<Claim> claims = new ArrayList();
@@ -119,8 +119,8 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
                         (double) claimData[5]);                       //amount
                 claims.add(claim);
             }
-        } catch (SQLException | IllegalArgumentException | ParseException ex) {
-            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException | ParseException ex) {
+           throw new RepositoryException("Retrieval failed.", ex);
         }
 
         return claims;
