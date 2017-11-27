@@ -56,7 +56,7 @@ public class MembersRepo extends Repo<Member, String> {
 
     @Override
     public Member get(String id) throws RepositoryException {
-        List<Member> members = getWhere("id", id);
+        List<Member> members = getWhere("ID", id);
 
         return members.get(0);
     }

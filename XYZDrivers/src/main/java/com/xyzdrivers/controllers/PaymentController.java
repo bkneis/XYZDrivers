@@ -61,7 +61,7 @@ public class PaymentController extends BaseController {
         }
 
         HttpSession session = request.getSession();
-        String username = (String) session.getAttribute("usermame");
+        String username = (String) session.getAttribute("username");
         MembershipPayment p = new MembershipPayment(username, "FEE", amount, date, time);
 
         try {
