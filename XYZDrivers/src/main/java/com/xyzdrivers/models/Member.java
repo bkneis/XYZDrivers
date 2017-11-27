@@ -126,6 +126,10 @@ public class Member extends Model {
     }
 
     public void setBalance(double balance) {
+        if (balance < 0) {
+            throw new IllegalArgumentException("balance cannot be negative.");
+        }
+        
         this.balance = balance;
     }
 }
