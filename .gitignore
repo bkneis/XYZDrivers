@@ -5,3 +5,4 @@ target/
 /XYZDrivers/XYZDrivers/src/main/resources/connection.properties
 XYZDrivers/src/main/resources/connection.properties
 node_modules/
+.idea/*
