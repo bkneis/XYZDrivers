@@ -3,9 +3,11 @@ package com.xyzdrivers.repositories;
 import com.xyzdrivers.models.MembershipPayment;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 
@@ -19,6 +21,8 @@ public class PaymentsRepo extends Repo<MembershipPayment, String> {
      */
     @Override
     public List<MembershipPayment> get() throws RepositoryException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         List<Object[]> results;
         List<MembershipPayment> payments = new ArrayList();
 
@@ -27,14 +31,19 @@ public class PaymentsRepo extends Repo<MembershipPayment, String> {
             results = this.sqlService.retrieve("MEMBERS");
             //parse members data
             for (Object[] memberData : results) {
+                Calendar date = Calendar.getInstance();
+                Calendar time = Calendar.getInstance();
+                date.setTime(dateFormat.parse(memberData[3].toString()));
+                time.setTime(timeFormat.parse(memberData[4].toString()));
+
                 MembershipPayment payment = new MembershipPayment(memberData[0].toString(), // mem_id
                         memberData[1].toString(), // Type of payment
                         (float) memberData[2],
-                        LocalDate.parse(memberData[3].toString()), // date
-                        LocalTime.parse(memberData[4].toString())); // time
+                        date, // date
+                        time); // time
                 payments.add(payment);
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | ParseException ex) {
             throw new RepositoryException("Failed to retrieve payments. See inner exception for details.", ex);
         }
 
@@ -50,6 +59,8 @@ public class PaymentsRepo extends Repo<MembershipPayment, String> {
 
     @Override
     public List<MembershipPayment> getWhere(String keyColumn, Object keyValue) throws RepositoryException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         List<Object[]> results;
         List<MembershipPayment> payments = new ArrayList();
 
@@ -58,14 +69,19 @@ public class PaymentsRepo extends Repo<MembershipPayment, String> {
             results = this.sqlService.retrieve("MEMBERS", "*", keyColumn, keyValue);
             //parse members data
             for (Object[] memberData : results) {
+                Calendar date = Calendar.getInstance();
+                Calendar time = Calendar.getInstance();
+                date.setTime(dateFormat.parse(memberData[3].toString()));
+                time.setTime(timeFormat.parse(memberData[4].toString()));
+
                 MembershipPayment payment = new MembershipPayment(memberData[0].toString(), // mem_id
                         memberData[1].toString(), // Type of payment
                         (float) memberData[2],
-                        LocalDate.parse(memberData[3].toString()), // date
-                        LocalTime.parse(memberData[4].toString())); // time
+                        date, // date
+                        time); // time
                 payments.add(payment);
             }
-        } catch (SQLException | IllegalArgumentException ex) {
+        } catch (SQLException | IllegalArgumentException | ParseException ex) {
             throw new RepositoryException("Failed to retrieve matching payments. See inner exception for details.", ex);
         }
 
@@ -85,7 +101,7 @@ public class PaymentsRepo extends Repo<MembershipPayment, String> {
     @Override
     public void insert(MembershipPayment model) throws RepositoryException {
         try {
-            sqlService.insert("payments", new Object [] {
+            sqlService.insert("payments", new Object[]{
                 model.getMemberID(),
                 model.getPaymentType(),
                 model.getPaymentAmount(),

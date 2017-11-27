@@ -4,12 +4,9 @@ import com.xyzdrivers.models.MembershipPayment;
 import com.xyzdrivers.repositories.RepositoryException;
 import com.xyzdrivers.services.InsertPaymentService;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.Calendar;
 import javax.inject.Inject;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -48,8 +45,8 @@ public class PaymentController extends BaseController {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        LocalDate date = LocalDate.now();
-        LocalTime time = LocalTime.now();
+        Calendar date = Calendar.getInstance();
+        Calendar time = Calendar.getInstance();
         float amount;
 
         try {

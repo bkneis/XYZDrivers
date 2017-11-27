@@ -1,7 +1,6 @@
 package com.xyzdrivers.models;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.Calendar;
 
 /*
  * @author Joe Dicker
@@ -10,11 +9,11 @@ public class MembershipPayment {
 
     private String mem_id;
     private String type_of_payment;
-    private LocalDate date;
+    private Calendar date;
     private float amount;
-    private LocalTime time;
+    private Calendar time;
 
-    public MembershipPayment(String mem_id, String type_of_payment, float amount, LocalDate date, LocalTime time) {
+    public MembershipPayment(String mem_id, String type_of_payment, float amount, Calendar date, Calendar time) {
         this.mem_id = mem_id;
         this.type_of_payment = type_of_payment;
         this.amount = amount;
@@ -30,7 +29,7 @@ public class MembershipPayment {
         return this.type_of_payment;
     }
 
-    public LocalDate getDate() {
+    public Calendar getDate() {
         return this.date;
     }
 
@@ -38,7 +37,7 @@ public class MembershipPayment {
         return this.amount;
     }
 
-    public LocalTime getTime() {
+    public Calendar getTime() {
         return this.time;
     }
 

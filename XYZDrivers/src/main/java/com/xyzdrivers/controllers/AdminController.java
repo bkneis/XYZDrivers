@@ -28,9 +28,6 @@ public class AdminController extends HttpServlet {
     private ClaimEligibility_Service service;
 
     @Inject
-    private MembersService membersService;
-
-    @Inject
     private MembersRepo membersRepo;
 
     @Inject
