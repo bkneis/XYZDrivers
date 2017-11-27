@@ -9,6 +9,9 @@
 package com.xyzdrivers.models;
 
 import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class Member extends Model
 {
@@ -67,6 +70,18 @@ public class Member extends Model
     }
 
     public void setDateOfRegistration(LocalDate dor) {
+        Calendar now = Calendar.getInstance();
+        TimeZone zone = TimeZone.getDefault();
+        Locale locale = Locale.getDefault();
+        
+        Calendar calendarDor = Calendar.getInstance();
+        calendarDor.set(dor.getYear(), dor.getMonthValue(), dor.getDayOfMonth());
+        
+        if (now.before(calendarDor))
+        {
+            throw new IllegalArgumentException("Argument 'dor' is a date in the future, which is not permitted.");
+        }
+        
         this.dateOfRegistration = dor;
     }
 
