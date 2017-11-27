@@ -75,7 +75,7 @@ public class Member extends Model
         Locale locale = Locale.getDefault();
         
         Calendar calendarDor = Calendar.getInstance();
-        calendarDor.set(dor.getYear(), dor.getMonthValue(), dor.getDayOfMonth());
+        calendarDor.set(dor.getYear(), dor.getMonthValue() - 1, dor.getDayOfMonth());
         
         if (now.before(calendarDor))
         {

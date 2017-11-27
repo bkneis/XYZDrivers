@@ -314,24 +314,4 @@ public class UserRepoTests {
 
     }
 
-//    private boolean verifyColumnsUpdatedCorrectly(User expected, List<ColumnValuePair> columnValues) {
-//        if (columnValues.size() != 2) {
-//            return false;
-//        }
-//
-//        boolean passwordPairPresent = columnValues.stream().anyMatch(x
-//                -> x.getColumnName().equals("password")
-//                && x.getValue().equals(expected.getPassword()));
-//
-//        if (!passwordPairPresent) {
-//            return false;
-//        }
-//
-//        boolean statusPairPresent = columnValues.stream().anyMatch(x
-//                -> x.getColumnName().equals("status")
-//                && x.getValue().equals(expected.getStatus()));
-//
-//        return statusPairPresent;
-//    }
-
 }
