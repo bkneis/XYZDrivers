@@ -21,6 +21,12 @@ public class Member extends Model {
     private LocalDate dateOfRegistration;
     private String status;
     private double balance;
+    
+    private final String[] validStatuses = {
+        "APPROVED",
+        "SUBMITTED",
+        "REJECTED"
+    };
 
     public Member(String id, String name, String address, LocalDate dob, LocalDate dor, String status, double balance) {
         this.id = id;
@@ -93,7 +99,25 @@ public class Member extends Model {
         return status;
     }
 
+    private boolean isStatusValid(String status) {        
+        for (String test : validStatuses) {
+            if (test.equals(status)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     public void setStatus(String status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Argument 'status' cannot be null.");
+        }
+        
+        if (!isStatusValid(status)) {
+            throw new IllegalArgumentException("Argument 'status' is not valid.");
+        }
+        
         this.status = status;
     }
 
