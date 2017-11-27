@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- - @file submitmemebershippayment.jsp
+ - @file submitpayment.jsp
  - @author Joe Dicker
 -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

@@ -11,9 +11,9 @@
     </head>
     <body>
         <jsp:include page="nav.jsp"></jsp:include>
-
-        <span>Hello, ${requestScope.user.id}!</span>
-
+      
+        <span>Hello, ${sessionScope.username}!</span>
+        
         <div class="page row">
             <div class="col-md-6">
                 <div class="panel panel-default">

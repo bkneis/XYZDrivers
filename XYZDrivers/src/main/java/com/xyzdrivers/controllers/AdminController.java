@@ -9,7 +9,6 @@ import com.xyzdrivers.models.Claim;
 import com.xyzdrivers.models.Member;
 import com.xyzdrivers.repositories.ClaimsRepo;
 import com.xyzdrivers.repositories.RepositoryException;
-import com.xyzdrivers.services.MembersService;
 import com.xyzdrivers.repositories.MembersRepo;
 
 import java.io.*;
@@ -52,6 +51,7 @@ public class AdminController extends HttpServlet {
             throws ServletException, IOException, SQLException, RepositoryException {
         List<Member> members = membersRepo.get();
         List<Member> outstandingBalance = membersRepo.getWhere("STATUS", "OUTSTANDING");
+
         List<Claim> claims = claimsRepo.get();
         
         ClaimEligibility port = service.getClaimEligibilityPort();

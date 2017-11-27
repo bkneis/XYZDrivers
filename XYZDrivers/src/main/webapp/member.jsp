@@ -23,6 +23,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Your outstanding balances</h3>
+                        <a href="submitpayment.jsp">Submit Payment</a>
                     </div>
                     <div class="panel-body">
                         <c:if test="${member.status == \"OUTSTANDING\"}"> 
@@ -48,6 +49,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Your claims</h3>
+                        <a href="submit-claim.jsp">Submit Claim</a>
                     </div>
                     <div class="panel-body">
                         <ul>

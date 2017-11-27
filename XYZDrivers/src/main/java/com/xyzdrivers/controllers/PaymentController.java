@@ -1,13 +1,13 @@
 package com.xyzdrivers.controllers;
 
 import com.xyzdrivers.models.MembershipPayment;
+import com.xyzdrivers.repositories.RepositoryException;
 import com.xyzdrivers.services.InsertPaymentService;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import javax.inject.Inject;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +17,10 @@ import javax.servlet.http.HttpSession;
 /**
  * @author Joe Dicker
  */
-public class PaymentController extends HttpServlet {
+public class PaymentController extends BaseController {
+
+    @Inject
+    private InsertPaymentService insertPaymentService;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -45,25 +48,31 @@ public class PaymentController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        LocalDate date = LocalDate.now();
+        LocalTime time = LocalTime.now();
+        float amount;
+
         try {
-            LocalDate date = LocalDate.now();
-            LocalTime time = LocalTime.now();
+            amount = Float.parseFloat(request.getParameter("amount"));
+        } catch (NumberFormatException ex) {
+            amount = 0;
+        }
 
-            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/xyzdrivers");
-            String amount = request.getParameter("amount");
+        if (amount <= 0) {
+            redirectError("Amount was not valid.", "submitpayment.jsp", request, response);
+            return;
+        }
 
-            HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("usermame");
+        MembershipPayment p = new MembershipPayment(username, "FEE", amount, date, time);
 
-            String username = (String) session.getAttribute("usermame");
-
-            MembershipPayment p = new MembershipPayment(username, "FEE", Float.parseFloat(amount), date, time);
-
-            InsertPaymentService ips = new InsertPaymentService(con);
-
-            ips.InsertPayment(p);
-        } catch (SQLException | IllegalAccessException ex) {
+        try {
+            insertPaymentService.InsertPayment(p);
+        } catch (RepositoryException | IllegalAccessException ex) {
             throw new RuntimeException(ex);
         }
+
     }
 
     /**
