@@ -8,7 +8,7 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 
 @RequestScoped
-public class MembersRepo extends Repo<Member, Integer> {
+public class MembersRepo extends Repo<Member, String> {
 
     /**
      * Retrieve ALL data from MEMBERS table
@@ -42,7 +42,7 @@ public class MembersRepo extends Repo<Member, Integer> {
     }
 
     @Override
-    public Member get(Integer id) throws RepositoryException {
+    public Member get(String id) throws RepositoryException {
         List<Member> members = getWhere("id", id);
 
         return members.get(0);

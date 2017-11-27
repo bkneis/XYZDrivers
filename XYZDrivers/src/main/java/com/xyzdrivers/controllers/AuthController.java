@@ -13,7 +13,6 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -22,11 +21,11 @@ import javax.servlet.http.HttpSession;
  *
  * @author arthur
  */
-public class AuthController extends HttpServlet {
-    
+public class AuthController extends BaseController {
+
     @Inject
     private UserService userService;
-    
+
     @Inject
     private UserRepo userRepo;
 
@@ -42,11 +41,20 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         // Pass userType along from Home index
         request.setAttribute("userType", request.getParameter("userType"));
-        
-        RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+
+        String actionType = request.getParameter("actionType");
+
+        RequestDispatcher dispatcher;
+
+        if ("login".equals(actionType)) {
+            dispatcher = request.getRequestDispatcher("login.jsp");
+        } else {
+            dispatcher = request.getRequestDispatcher("register.jsp");
+        }
+
         dispatcher.forward(request, response);
     }
 
@@ -61,47 +69,43 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String username = (String)request.getParameter("username");
-        String password = (String)request.getParameter("password");
-        String userType = (String)request.getParameter("userType");
-        
+
+        String username = (String) request.getParameter("username");
+        String password = (String) request.getParameter("password");
+        String userType = (String) request.getParameter("userType");
+
         User loggedInUser = null;
         HttpSession session = request.getSession(true);
-                
-        try {
-            if (userService.checkLoginDetails(username, password))
-            {
-                session.setAttribute("username", username);
-                loggedInUser = userRepo.get(username);
+
+        if (username != null && password != null) {
+            try {
+                if (userService.checkLoginDetails(username, password)) {
+                    session.setAttribute("username", username);
+                    loggedInUser = userRepo.get(username);
+                }
+            } catch (RepositoryException ex) {
+                redirectError(ex.getMessage(), "error.jsp", request, response);
+                return;
             }
-        } catch (RepositoryException ex) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
-            dispatcher.forward(request, response);
-            return;
         }
-        
+
         if (loggedInUser == null) {
             request.setAttribute("userType", userType);
             request.setAttribute("loginFailed", true);
-            
-            RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
-            dispatcher.forward(request, response);
-        }
-        else {
+
+            redirectError("Login failed. Please check your credentials are correct.", "login.jsp", request, response);
+        } else {
             String status = loggedInUser.getStatus();
-            
+
             // AuthorisationFilter hasn't had a chance to run yet, so fill in the user here
             session.setAttribute("user", loggedInUser);
-            
+
             if ("admin".equals(userType)) {
                 response.sendRedirect(request.getContextPath() + "/admin");
-            }
-            else {
+            } else {
                 response.sendRedirect(request.getContextPath() + "/member");
             }
         }
-        
     }
 
     /**

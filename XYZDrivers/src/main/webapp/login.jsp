@@ -11,9 +11,9 @@
     <body>
         <jsp:include page="nav.jsp"></jsp:include>
         
-        <c:if test="${requestScope.loginFailed}">
+        <c:if test="${not empty requestScope.errorMessage}">
             <div class="alert">
-                Login failed. Please check you have the correct credentials.
+                ${requestScope.errorMessage}
             </div>
         </c:if>
         
