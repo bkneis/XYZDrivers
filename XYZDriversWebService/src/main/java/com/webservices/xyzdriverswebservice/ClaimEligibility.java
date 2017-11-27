@@ -11,6 +11,8 @@ import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -77,6 +79,7 @@ public class ClaimEligibility {
             }
 
         } catch (IllegalArgumentException | ParseException ex) {
+            Logger.getLogger(ClaimEligibility.class.getName()).log(Level.SEVERE, null, ex);
             return ex.toString();
         }
 
@@ -87,7 +90,9 @@ public class ClaimEligibility {
         int claimCounter = 0;
 
         for (int i = 0; i < calendarClaimDates.size(); i++) {
-            if (calendarClaimDates.get(i).after(calendarStartYear) && calendarClaimDates.get(i).before(calendarEndYear)) {
+            Calendar currentClaim = calendarClaimDates.get(i);
+            
+            if (currentClaim.after(calendarStartYear) && currentClaim.before(calendarEndYear)) {
                 if ("APPROVED".equals(listOfClaimStatuses.get(i))) { //only increment claim counter if the claim has been approved
                     claimCounter++;
                 }
