@@ -17,8 +17,8 @@ public class Member extends Model
     
     private List<String> allowedStatuses;
     
-    public static String TABLE_NAME = "members";
-    public static String PRIMARY_KEY = "id";
+    public static final String TABLE_NAME = "members";
+    public static final String PRIMARY_KEY = "id";
     
 //constructors
     public Member(String id, String name, String address, LocalDate dob, LocalDate dor, String status, double balance) {

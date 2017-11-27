@@ -23,8 +23,8 @@ public class Claim extends Model {
     
     private List<String> allowedStatuses;
     
-    public static String TABLE_NAME = "claims";
-    public static String PRIMARY_KEY = "id";
+    public static final String TABLE_NAME = "claims";
+    public static final String PRIMARY_KEY = "id";
 
     public Claim(Integer id, String member_id, LocalDate date, String reason, String status, double amount) {
         this.id = id;

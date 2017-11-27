@@ -17,7 +17,7 @@ import javax.enterprise.context.RequestScoped;
 public class MembersRepo extends Repo<Member, String> {
 
     @Override
-    public Member get(String id) {
+    public Member get(String id) throws RepositoryException {
         Member member = null;
         try {
             Object[] result = this.sqlService.retrieve(Member.TABLE_NAME, Member.PRIMARY_KEY, id);
@@ -25,7 +25,7 @@ public class MembersRepo extends Repo<Member, String> {
             LocalDate dor = LocalDate.parse(result[4].toString());
             member = new Member(result[0].toString(), result[1].toString(), result[2].toString(), dob, dor, result[5].toString(), Float.parseFloat(result[6].toString()));
         } catch (IllegalArgumentException | SQLException ex) {
-            Logger.getLogger(MembersRepo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RepositoryException("Failed to retrieve data", ex);
         }
         
         return member;
@@ -107,7 +107,7 @@ public class MembersRepo extends Repo<Member, String> {
         try {
             this.sqlService.executeUpdateStatement(updateQuery, parameters);
         } catch (SQLException ex) {
-            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RepositoryException("Failed to retrieve data", ex);
         }
         
         return membership;

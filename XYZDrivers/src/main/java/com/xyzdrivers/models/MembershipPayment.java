@@ -16,8 +16,8 @@ public class MembershipPayment {
     private float amount;
     private LocalTime time;
     
-    public static String TABLE_NAME = "payments";
-    public static String PRIMARY_KEY = "id";
+    public static final String TABLE_NAME = "payments";
+    public static final String PRIMARY_KEY = "id";
     
     public MembershipPayment(String mem_id, String type_of_payment, float amount, LocalDate date, LocalTime time){
         this.mem_id = mem_id;

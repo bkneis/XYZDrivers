@@ -20,7 +20,7 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
     public ClaimsRepo() {}
 
     @Override
-    public Claim get(Integer id) {
+    public Claim get(Integer id) throws RepositoryException {
         Claim claim = null;
         try {
             Object[] result = sqlService.retrieve(Claim.TABLE_NAME, Claim.PRIMARY_KEY, id.toString());
@@ -34,7 +34,7 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
                     Float.parseFloat(result[5].toString())
             );
         } catch (IllegalArgumentException | SQLException ex) {
-            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RepositoryException("Failed to retrieve data", ex);
         }
         
         return claim;
@@ -86,7 +86,7 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
         try {
             this.sqlService.executeUpdateStatement("UPDATE claims SET \"date\"=?, \"amount\"=?, \"rationale\"=?, \"status\"=? WHERE \"id\"=?", parameters);
         } catch (SQLException ex) {
-            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RepositoryException("Failed to retrieve data", ex);
         }
         
         return claim;
@@ -98,7 +98,7 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
     }
         
     @Override
-    public List<Claim> getWhere(String keyColumn, Object keyValue) {
+    public List<Claim> getWhere(String keyColumn, Object keyValue) throws RepositoryException {
         List<Object[]> results;
         List<Claim> claims = new ArrayList();
             
@@ -116,7 +116,7 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
                 claims.add(claim);
             }
         } catch (SQLException | IllegalArgumentException ex) {
-            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RepositoryException("Failed to retrieve data", ex);
         }
         
         return claims;

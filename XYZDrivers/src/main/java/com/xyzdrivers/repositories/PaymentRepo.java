@@ -23,7 +23,7 @@ public class PaymentRepo extends Repo<MembershipPayment, Integer> {
     }
 
     @Override
-    public List<MembershipPayment> get() {
+    public List<MembershipPayment> get() throws RepositoryException {
         List<Object[]> results;
         List<MembershipPayment> payments = new ArrayList<>();
         try {
@@ -42,7 +42,7 @@ public class PaymentRepo extends Repo<MembershipPayment, Integer> {
                 payments.add(payment);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RepositoryException("Failed to retrieve data", ex);
         }
         return payments;
     }
