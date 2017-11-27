@@ -76,7 +76,7 @@ public class AuthController extends HttpServlet {
                 loggedInUser = userRepo.get(username);
             }
         } catch (RepositoryException ex) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("error.html");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
             dispatcher.forward(request, response);
             return;
         }

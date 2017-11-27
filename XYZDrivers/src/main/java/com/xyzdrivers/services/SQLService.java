@@ -50,8 +50,10 @@ public class SQLService {
      *
      * @throws SQLException
      */
+
     private ResultSet executeQueryStatement(String sql, Object... parameters)
             throws SQLException {
+
         Connection connection = connectionProvider.getConnection();
 
         //prepare statement
