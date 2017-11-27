@@ -9,25 +9,9 @@
         <link rel="stylesheet" type="text/css" href="styles/main.css" />
     </head>
     <body>
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-              <div class="navbar-header">
-                <a class="navbar-brand" href="#">XYZ Drivers Association</a>
-              </div>
+        <jsp:include page="nav.jsp"></jsp:include>
 
-              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                  <li><a href="/XYZDrivers">Home</a></li>
-                </ul>
-  
-                <ul class="nav navbar-nav navbar-right">
-                  <li><a href="logout">Logout</a></li>
-                </ul>
-              </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
-        
-        <span>Hello, ${requestScope.user.id}!</span>
+        <span>Hello, ${sessionScope.username}!</span>
         
         <div class="page row">
             <div class="col-md-2">
@@ -50,7 +34,7 @@
                         <c:if test="${claim.status == 'PENDING'}">
                             <a href="/XYZDrivers/claim-status?status=APPROVED&amp;claim_id=<c:out value="${claim.id}" />">
                                 Approve
-                            </a> / 
+                            </a> /
                             <a href="/XYZDrivers/claim-status?status=REJECTED&amp;claim_id=<c:out value="${claim.id}" />">
                                 Reject
                             </a>
@@ -58,7 +42,7 @@
                     </div>
                 </div>
                 </c:forEach>
-                
+
                 <h2>Outstanding Balances</h2>
                 <c:forEach items="${outstandingBalances}" var="outstandingBalance">
                 <div class="panel panel-default">
@@ -79,7 +63,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title"><c:out value="${provisionalMember.name}" /></h3>
                     </div>
-                    <div class="panel-body">
+
                         <p>ID : <c:out value="${provisionalMember.id}"/></p>
                         <p>Name : <c:out value="${provisionalMember.name}"/></p>
                         <p>Address : <c:out value="${provisionalMember.address}"/></p>
@@ -98,6 +82,42 @@
                 </div>
                 </c:forEach>
             </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">User Claim Eligibility Status</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                            <c:forEach items="${eligibleClaims}" var="current">
+                                <li>
+                                    <c:out value="${current}"/><br>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">All Members</h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        <c:forEach items="${members}" var="member">
+                            <li>
+                                <c:out value="${member.id}"/>
+                                - name: <c:out value="${member.name}"/>
+                                - address: <c:out value="${member.address}"/>
+                                - dob:  <fmt:formatDate value="${member.dob.getTime()}" pattern="yyyy-MM-dd"/>
+                                - dor:  <fmt:formatDate value="${member.dor.getTime()}" pattern="yyyy-MM-dd"/>
+                                - status: <c:out value="${member.status}"/>
+                                - balance: <c:out value="${member.balance}"/>
+                            </li>
+                        </c:forEach>
+                    </ul>
             <div class="col-md-4">
                 <h2>Members</h2>
                 <c:forEach items="${members}" var="member">
@@ -130,6 +150,5 @@
                 </c:forEach>
             </div>
         </div>
-        
     </body>
 </html>

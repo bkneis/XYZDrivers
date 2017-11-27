@@ -3,35 +3,39 @@
  */
 package com.xyzdrivers.controllers;
 
+import com.webservices.xyzdriverswebservice.ClaimEligibility_Service;
+import com.webservices.xyzdriverswebservice.ClaimEligibility;
 import com.xyzdrivers.models.Claim;
 import com.xyzdrivers.models.Member;
 import com.xyzdrivers.models.MembershipPayment;
 import com.xyzdrivers.repositories.ClaimsRepo;
 import com.xyzdrivers.repositories.RepositoryException;
-import com.xyzdrivers.services.MembersService;
 import com.xyzdrivers.repositories.MembersRepo;
 import com.xyzdrivers.repositories.PaymentRepo;
 
 import java.io.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.xml.ws.WebServiceRef;
 
 public class AdminController extends HttpServlet {
-    
+
+    @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_9090/ClaimEligibility/ClaimEligibility.wsdl")
+    private ClaimEligibility_Service service;
+
     @Inject
     private MembersRepo membersRepo;
-    
+
     @Inject
     private ClaimsRepo  claimsRepo;
-    
     @Inject
     private PaymentRepo paymentRepo;
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -57,7 +61,7 @@ public class AdminController extends HttpServlet {
                 normalMembers.add(member);
             }
         }
-        
+
         List<Member> outstandingBalance = membersRepo.getWhere("status", "OUTSTANDING");
         List<Claim> claims = claimsRepo.get();
         List<MembershipPayment> payments = paymentRepo.get();
@@ -65,13 +69,36 @@ public class AdminController extends HttpServlet {
         for (MembershipPayment payment: payments) {
             totalTurnover += payment.getPaymentAmount();
         }
-        
+
+        ClaimEligibility port = service.getClaimEligibilityPort();
+        List<String> eligibleClaims = new ArrayList();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (Member member : members) {
+            String username = member.getId();
+            java.util.Date tempDate = member.getDor().getTime();
+            String joinedDate = sdf.format(tempDate);
+            List<String> listOfClaimDates = new ArrayList();
+            List<String> listOfClaimStatuses = new ArrayList();
+
+            for (Claim c : claims) {
+                if (c.getMemberID().equals(username)) {
+                    String str = sdf.format(c.getDate().getTime());
+                    listOfClaimDates.add(str);
+                    listOfClaimStatuses.add(c.getStatus());
+                }
+            }
+            eligibleClaims.add(port.eligibility(username, joinedDate, listOfClaimDates, listOfClaimStatuses));
+        }
+
         //set attributes
         request.setAttribute("members", normalMembers);
         request.setAttribute("provisionalMembers", provisionalMembers);
         request.setAttribute("outstandingBalance", outstandingBalance);
         request.setAttribute("claims", claims);
         request.setAttribute("totalTurnover", totalTurnover);
+
+        request.setAttribute("eligibleClaims", eligibleClaims);
 
         //fwd .jsp page
         request.getRequestDispatcher("admin.jsp").forward(request, response);
