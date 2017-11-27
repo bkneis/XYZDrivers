@@ -17,8 +17,8 @@ public class Member extends Model {
     private String id;
     private String name;
     private String address;
-    private LocalDate dateOfBirth;
-    private LocalDate dateOfRegistration;
+    private Calendar dob;  //date of birth
+    private Calendar dor;  //date of registration
     private String status;
     private double balance;
     
@@ -28,7 +28,7 @@ public class Member extends Model {
         "REJECTED"
     };
 
-    public Member(String id, String name, String address, LocalDate dob, LocalDate dor, String status, double balance) {
+    public Member(String id, String name, String address, Calendar dob, Calendar dor, String status, double balance) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -57,6 +57,14 @@ public class Member extends Model {
 
     public String getAddress() {
         return address;
+    }
+
+    public Calendar getDob() {
+        return dob;
+    }
+      
+    public Calendar getDor() {
+        return dor;
     }
 
     public void setAddress(String address) {

@@ -2,8 +2,11 @@ package com.xyzdrivers.repositories;
 
 import com.xyzdrivers.models.Member;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 
@@ -17,6 +20,7 @@ public class MembersRepo extends Repo<Member, String> {
      */
     @Override
     public List<Member> get() throws RepositoryException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         List<Object[]> results;
         List<Member> members = new ArrayList();
 
@@ -25,16 +29,25 @@ public class MembersRepo extends Repo<Member, String> {
             results = this.sqlService.retrieve("MEMBERS");
             //parse members data
             for (Object[] memberData : results) {
+                Calendar dob = Calendar.getInstance();
+                Calendar dor = Calendar.getInstance();
+                
+                String dateTime = df.format(memberData[3]);
+                String dateTime2 = df.format(memberData[4]);
+
+                dob.setTime(df.parse(dateTime));
+                dor.setTime(df.parse(dateTime2));
+
                 Member member = new Member(memberData[0].toString(), //id
                         memberData[1].toString(), //name
                         memberData[2].toString(), //address
-                        LocalDate.parse(memberData[3].toString()), //dob
-                        LocalDate.parse(memberData[4].toString()), //dor
+                                             dob, //dob
+                                             dor, //dor
                         memberData[5].toString(), //status
-                        (double) memberData[6]);                     //balance
+                        (double) memberData[6]);  //balance
                 members.add(member);
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | ParseException ex) {
             throw new RepositoryException("Failed to retrieve members. See inner exception for details.", ex);
         }
 
@@ -50,6 +63,7 @@ public class MembersRepo extends Repo<Member, String> {
 
     @Override
     public List<Member> getWhere(String keyColumn, Object keyValue) throws RepositoryException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         List<Object[]> results;
         List<Member> members = new ArrayList();
 
@@ -58,16 +72,25 @@ public class MembersRepo extends Repo<Member, String> {
             results = this.sqlService.retrieve("MEMBERS", "*", keyColumn, keyValue);
             //parse members data
             for (Object[] memberData : results) {
+                Calendar dob = Calendar.getInstance();
+                Calendar dor = Calendar.getInstance();
+                
+                String dateTime = df.format(memberData[3]);
+                String dateTime2 = df.format(memberData[4]);
+
+                dob.setTime(df.parse(dateTime));
+                dor.setTime(df.parse(dateTime2));
+
                 Member member = new Member(memberData[0].toString(), //id
                         memberData[1].toString(), //name
                         memberData[2].toString(), //address
-                        LocalDate.parse(memberData[3].toString()), //dob
-                        LocalDate.parse(memberData[4].toString()), //dor
+                                             dob, //dob
+                                             dor, //dor
                         memberData[5].toString(), //status
-                        (double) memberData[6]);                     //balance
+                        (double) memberData[6]);  //balance
                 members.add(member);
             }
-        } catch (SQLException | IllegalArgumentException ex) {
+        } catch (SQLException | ParseException ex) {
             throw new RepositoryException("Failed to retrieve matching Members. See inner exception for details.", ex);
         }
 

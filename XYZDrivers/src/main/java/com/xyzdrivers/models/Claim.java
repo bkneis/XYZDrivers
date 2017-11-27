@@ -8,17 +8,17 @@
 
 package com.xyzdrivers.models;
 
-import java.time.LocalDate;
+import java.util.Calendar;
 
 public class Claim extends Model {
 
     private String member_id;
-    private LocalDate date;
+    private Calendar date;
     private String reason;
     private String status;
     private double amount;
 
-    public Claim(String member_id, LocalDate date, String reason, String status, double amount) {
+    public Claim(String member_id, Calendar date, String reason, String status, double amount) {
         this.member_id = member_id;
         this.date = date;
         this.reason = reason;
@@ -30,7 +30,7 @@ public class Claim extends Model {
         return this.member_id;
     }
 
-    public LocalDate getDate() {
+    public Calendar getDate() {
         return this.date;
     }
 

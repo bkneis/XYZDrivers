@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -16,7 +17,7 @@
     </head>
     <body>
         <jsp:include page="nav.jsp"></jsp:include>
-        
+
         <div class="page row">
             <div class="col-md-6">
                 <div class="panel panel-default">
@@ -31,13 +32,13 @@
                                     <c:out value="${member.id}"/>
                                 </li>
                                 <li>
-                                - name: <c:out value="${member.name}"/>
+                                    - name: <c:out value="${member.name}"/>
                                 </li>
                                 <li>
-                                - status: <c:out value="${member.status}"/>
+                                    - status: <c:out value="${member.status}"/>
                                 </li>
                                 <li>
-                                - balance: <c:out value="${member.balance}"/>
+                                    - balance: <c:out value="${member.balance}"/>
                                 </li>
                             </ul>
                         </c:if>
@@ -52,15 +53,15 @@
                     </div>
                     <div class="panel-body">
                         <ul>
-                        <c:forEach items="${claims}" var="claim">
-                            <li>
-                                <c:out value="${claim.date}" />
-                                - Member: <c:out value="${claim.memberID}" />
-                                - Reason: <c:out value="${claim.reason}" />
-                                - Status <c:out value="${claim.status}" />
-                                - Amount <c:out value="${claim.amount}" />
-                            </li>
-                        </c:forEach>
+                            <c:forEach items="${claims}" var="claim">
+                                <li>
+                                    <fmt:formatDate value="${claim.date.getTime()}" pattern="yyyy-MM-dd"/>
+                                    - Member: <c:out value="${claim.memberID}" />
+                                    - Reason: <c:out value="${claim.reason}" />
+                                    - Status <c:out value="${claim.status}" />
+                                    - Amount <c:out value="${claim.amount}" />
+                                </li>
+                            </c:forEach>
                         </ul>
                     </div>
                 </div>
