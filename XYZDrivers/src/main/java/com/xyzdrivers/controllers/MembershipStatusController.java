@@ -42,7 +42,12 @@ public class MembershipStatusController extends HttpServlet {
             return;
         }
         
-        Member member = membersRepo.get(id);
+        Member member = null;
+        try {
+            member = membersRepo.get(id);
+        } catch (RepositoryException ex) {
+            Logger.getLogger(MembershipStatusController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         if (member == null) {
             ResponseService.fail(request, response, "Failure. Could not find the member with id", "admin");

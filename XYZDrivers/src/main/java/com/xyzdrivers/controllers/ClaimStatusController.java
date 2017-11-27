@@ -32,7 +32,7 @@ public class ClaimStatusController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException  {
         
         // Get the http request params
         String status = request.getParameter("status");
@@ -45,7 +45,12 @@ public class ClaimStatusController extends HttpServlet {
         }
         
         // Get the claim to be updated by id
-        Claim claim = claimsRepo.get(id);
+        Claim claim = null;
+        try {
+            claim = claimsRepo.get(id);
+        } catch (RepositoryException ex) {
+            Logger.getLogger(ClaimStatusController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         // Check we found the claim by ID
         if (claim == null) {
