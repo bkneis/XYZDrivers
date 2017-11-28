@@ -66,6 +66,7 @@ public class PaymentController extends BaseController {
 
         try {
             insertPaymentService.InsertPayment(p);
+            response.sendRedirect("member.jsp");
         } catch (RepositoryException | IllegalAccessException ex) {
             throw new RuntimeException(ex);
         }

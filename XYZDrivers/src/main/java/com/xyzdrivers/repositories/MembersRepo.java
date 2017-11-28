@@ -1,6 +1,8 @@
 package com.xyzdrivers.repositories;
 
 import com.xyzdrivers.models.Member;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -31,7 +33,7 @@ public class MembersRepo extends Repo<Member, String> {
             for (Object[] memberData : results) {
                 Calendar dob = Calendar.getInstance();
                 Calendar dor = Calendar.getInstance();
-                
+
                 String dateTime = df.format(memberData[3]);
                 String dateTime2 = df.format(memberData[4]);
 
@@ -41,8 +43,8 @@ public class MembersRepo extends Repo<Member, String> {
                 Member member = new Member(memberData[0].toString(), //id
                         memberData[1].toString(), //name
                         memberData[2].toString(), //address
-                                             dob, //dob
-                                             dor, //dor
+                        dob, //dob
+                        dor, //dor
                         memberData[5].toString(), //status
                         (double) memberData[6]);  //balance
                 members.add(member);
@@ -74,7 +76,7 @@ public class MembersRepo extends Repo<Member, String> {
             for (Object[] memberData : results) {
                 Calendar dob = Calendar.getInstance();
                 Calendar dor = Calendar.getInstance();
-                
+
                 String dateTime = df.format(memberData[3]);
                 String dateTime2 = df.format(memberData[4]);
 
@@ -84,8 +86,8 @@ public class MembersRepo extends Repo<Member, String> {
                 Member member = new Member(memberData[0].toString(), //id
                         memberData[1].toString(), //name
                         memberData[2].toString(), //address
-                                             dob, //dob
-                                             dor, //dor
+                        dob, //dob
+                        dor, //dor
                         memberData[5].toString(), //status
                         (double) memberData[6]);  //balance
                 members.add(member);
@@ -100,6 +102,22 @@ public class MembersRepo extends Repo<Member, String> {
     @Override
     public void update(Member model) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void update(String username) throws RepositoryException {
+                if (username == null || username.isEmpty()) {
+            throw new IllegalArgumentException("The string used to identify a user is null or empty: " + username);
+        }
+
+         String updateQuery = "UPDATE MEMBERS SET STATUS = ? WHERE ID = ?";
+         
+         try {
+             this.sqlService.executeUpdateStatement(updateQuery, username);
+         }
+         catch(SQLException ex) {
+             throw new RepositoryException("Failed to update data.", ex);
+         }
+                
     }
 
     @Override

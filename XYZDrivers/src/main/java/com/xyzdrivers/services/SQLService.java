@@ -79,7 +79,7 @@ public class SQLService {
      *
      * @throws SQLException
      */
-    private int executeUpdateStatement(String sql, Object... parameters)
+    public int executeUpdateStatement(String sql, Object... parameters)
             throws SQLException {
         Connection connection = connectionProvider.getConnection();
 
