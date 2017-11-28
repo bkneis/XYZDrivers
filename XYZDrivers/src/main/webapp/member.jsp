@@ -44,20 +44,6 @@
                                 </tr>
                             </tbody>
                             </table>
-                            <ul>
-                                <li>
-                                    
-                                </li>
-                                <li>
-                                    - name: 
-                                </li>
-                                <li>
-                                    - status: 
-                                </li>
-                                <li>
-                                    - balance: 
-                                </li>
-                            </ul>
                         </c:if>
                     </div>
                     <div class="panel-heading" style="text-align: right;">
