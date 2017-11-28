@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class UpgradeMemberController extends HttpServlet {
 
@@ -33,8 +34,10 @@ public class UpgradeMemberController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String user = "e-aydin"; //this will be fetched from the admin page once it has a list of applied memberships    
-            upgradeMemberService.UpgradeMember(user);
+            HttpSession session = request.getSession();
+            String username = (String) session.getAttribute("username");
+            
+            upgradeMemberService.UpgradeMember(username);
             response.sendRedirect("admin.jsp");
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
