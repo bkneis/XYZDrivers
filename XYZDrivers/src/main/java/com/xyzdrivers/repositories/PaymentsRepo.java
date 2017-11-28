@@ -101,7 +101,8 @@ public class PaymentsRepo extends Repo<MembershipPayment, String> {
     @Override
     public void insert(MembershipPayment model) throws RepositoryException {
         try {
-            sqlService.insert("payments", new Object[]{
+            String columns = ("MEM_ID, TYPE_OF_PAYMENT, AMOUNT, DATE, TIME");
+            sqlService.insert("PAYMENTS", columns,  new Object[]{
                 model.getMemberID(),
                 model.getPaymentType(),
                 model.getPaymentAmount(),
