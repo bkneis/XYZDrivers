@@ -130,7 +130,7 @@ public class UserRepo extends Repo<User, String> {
     }
 
     @Override
-    public void update(User user) throws RepositoryException {
+    public User update(User user) throws RepositoryException {
         validateUser(user);
 
         List<ColumnValuePair> columnValues = new ArrayList<>();
@@ -142,6 +142,8 @@ public class UserRepo extends Repo<User, String> {
         } catch (SQLException ex) {
             throw new RepositoryException("Update failed.", ex);
         }
+        
+        return user;
     }
 
     private void validateUser(User user) throws IllegalArgumentException {

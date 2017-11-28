@@ -1,13 +1,16 @@
 /**
  * @file    jdbcDriver.java
- * @author alexander collins
+ * @author  alexander collins
  * @created 06/11/2017
  * @updated
  * @notes
  */
+
 package com.xyzdrivers.models;
 
 import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Member extends Model {
 
@@ -19,11 +22,10 @@ public class Member extends Model {
     private String status;
     private double balance;
 
-    private final String[] validStatuses = {
-        "APPROVED",
-        "SUBMITTED",
-        "REJECTED"
-    };
+    private List<String> allowedStatuses;
+
+    public static final String TABLE_NAME = "members";
+    public static final String PRIMARY_KEY = "id";
 
     public Member(String id, String name, String address, Calendar dob, Calendar dor, String status, double balance) {
         this.id = id;
@@ -33,6 +35,10 @@ public class Member extends Model {
         this.dor = dor;
         this.status = status;
         this.balance = balance;
+        this.allowedStatuses = new ArrayList<>();
+        allowedStatuses.add("SUSPENDED");
+        allowedStatuses.add("APPROVED");
+        allowedStatuses.add("REJECTED");
 
         setDor(dor);
     }
@@ -92,31 +98,22 @@ public class Member extends Model {
         return status;
     }
 
-    private boolean isStatusValid(String status) {
-        for (String test : validStatuses) {
-            if (test.equals(status)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public void setStatus(String status) {
-        if (status == null) {
-            throw new IllegalArgumentException("Argument 'status' cannot be null.");
-        }
-
-        if (!isStatusValid(status)) {
-            throw new IllegalArgumentException("Argument 'status' is not valid.");
-        }
-
-        this.status = status;
-    }
-
     public double getBalance() {
         return balance;
     }
+
+    public boolean isProvisional() {
+        return this.status.equals("APPLIED");
+    }
+
+    public boolean setStatus(String status) {
+        if (allowedStatuses.contains(status)) {
+            this.status = status;
+            return true;
+        }
+        return false;
+    }
+
 
     public void setBalance(double balance) {
         if (balance < 0) {

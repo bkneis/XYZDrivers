@@ -7,11 +7,15 @@ import java.util.Calendar;
  */
 public class MembershipPayment {
 
+    private Integer id;
     private String mem_id;
     private String type_of_payment;
     private Calendar date;
     private float amount;
     private Calendar time;
+
+    public static final String TABLE_NAME = "payments";
+    public static final String PRIMARY_KEY = "id";
 
     public MembershipPayment(String mem_id, String type_of_payment, float amount, Calendar date, Calendar time) {
         this.mem_id = mem_id;
@@ -20,8 +24,8 @@ public class MembershipPayment {
         this.date = date;
         this.time = time;
     }
-
-    public String getMemberID() {
+   
+    public String getMemberID(){
         return this.mem_id;
     }
 

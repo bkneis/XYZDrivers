@@ -277,7 +277,21 @@ public class SQLService {
         //return results
         return data;
     }
+    public Object[] retrieve(String table, String primaryKey, String key) throws SQLException {
 
+        results = executeQueryStatement("SELECT * FROM " + table + " WHERE \"" + primaryKey + "\" = ?", key);
+        resultsMetaData = results.getMetaData();
+
+        int columnCount = resultsMetaData.getColumnCount();
+
+        Object[] data = new Object[columnCount];
+        if (results.next()) {
+            for (int col = 1; col <= columnCount; col++)
+                data[col-1] = results.getObject(col);
+        }
+
+        return data;
+    }
     /**
      * "SELECT <code>column</code> FROM <code>table</code> WHERE
      * <code>keyColumn</code> = <code>keyValue</code>"
@@ -450,7 +464,7 @@ public class SQLService {
      */
     public void insert(String table, String columns, Object[] values)
             throws SQLException {
-        
+
         //prepare statement query "INSERT INTO table VALUES (?, ...)"
         String insertQuery = "INSERT INTO " + table + columns + " VALUES (";
         for (int i = 0; i < values.length; i++) {
@@ -484,4 +498,5 @@ public class SQLService {
         executeUpdateStatement("DELETE FROM ? WHERE ? = ?", table, primaryKeyColumn, primaryKeyValue);
     }
     //</editor-fold>
+
 }

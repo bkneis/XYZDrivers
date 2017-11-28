@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 
 /**
@@ -19,10 +21,30 @@ import javax.enterprise.context.RequestScoped;
  */
 @RequestScoped
 public class ClaimsRepo extends Repo<Claim, Integer> {
-
+        public ClaimsRepo() {}
     @Override
     public Claim get(Integer id) throws RepositoryException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Claim claim = null;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Object[] result = sqlService.retrieve(Claim.TABLE_NAME, Claim.PRIMARY_KEY, id.toString());
+            Calendar date = Calendar.getInstance();
+            String dateTime = df.format(result[3]);
+            date.setTime(df.parse(result[2].toString()));
+            claim = new Claim(
+                    result[1].toString(),
+                    date,
+                    result[3].toString(),
+                    result[4].toString(),
+                    (double) result[5]
+            );
+        } catch (IllegalArgumentException | SQLException ex) {
+            throw new RepositoryException("Failed to retrieve data", ex);
+        }   catch (ParseException ex) {
+                Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        return claim;
     }
 
     /**
@@ -43,7 +65,13 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
                 Calendar date = Calendar.getInstance();
                 String tempDateTime = df.format(result[2]);
                 date.setTime(df.parse(tempDateTime));
-                Claim cl = new Claim(result[1].toString(), date, result[3].toString(), result[4].toString(), Float.parseFloat(result[5].toString()));
+                Claim cl = new Claim(
+                    result[1].toString(),
+                    date,
+                    result[3].toString(),
+                    result[4].toString(),
+                    Float.parseFloat(result[5].toString())
+            );
                 claims.add(cl);
             }
         } catch (SQLException | ParseException ex) {
@@ -54,13 +82,23 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
     }
 
     @Override
-    public void update(Claim model) throws RepositoryException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public Claim update(Claim claim) throws RepositoryException {
 
-    @Override
-    public void delete(Claim model) throws RepositoryException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Object[] parameters = {
+            claim.getDate().toString(),
+            claim.getAmount(),
+            claim.getReason(),
+            claim.getStatus(),
+            claim.getId()
+        };
+
+        try {
+            this.sqlService.executeUpdateStatement("UPDATE claims SET \"date\"=?, \"amount\"=?, \"rationale\"=?, \"status\"=? WHERE \"id\"=?", parameters);
+        } catch (SQLException ex) {
+            throw new RepositoryException("Failed to retrieve data", ex);
+        }
+
+        return claim;
     }
 
     @Override
@@ -78,15 +116,15 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
                     throw new IllegalArgumentException("One of the declared fields in object c is null.");
                 }
             }
-                                      
+
             splitClaim[0] = c.getMemberID();
             splitClaim[1] = new Date(c.getDate().getTimeInMillis());
             splitClaim[2] = c.getReason();
             splitClaim[3] = c.getStatus();
             splitClaim[4] = c.getAmount();
-            
+
             String columns = "(MEM_ID, DATE, RATIONALE, STATUS, AMOUNT)";
-        
+
 
             this.sqlService.insert("CLAIMS", columns, splitClaim);
 
@@ -123,5 +161,9 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
 
         return claims;
     }
-
+    
+    @Override
+    void delete(Claim model) throws RepositoryException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
