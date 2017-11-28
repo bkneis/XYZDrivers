@@ -35,9 +35,10 @@ public class MembershipController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, RepositoryException {
+        String user = (String)request.getSession().getAttribute("username");
         //get DB data
-        Member memberInfo = membersRepo.getWhere("ID", "me-aydin").get(0);
-        List<Claim> memberClaims = claimsRepo.getWhere("MEM_ID", "me-aydin");
+        Member memberInfo = membersRepo.getWhere("ID", user).get(0);
+        List<Claim> memberClaims = claimsRepo.getWhere("MEM_ID", user);
         //set attributes
         request.setAttribute("member", memberInfo);
         request.setAttribute("claims", memberClaims);
