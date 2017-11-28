@@ -169,7 +169,20 @@ public class MembersRepo extends Repo<Member, String> {
 
     @Override
     public void insert(Member model) throws RepositoryException {
-        throw new UnsupportedOperationException();
+        try {
+            String columns = "(\"id\", \"name\", \"address\", \"dob\", \"dor\", \"status\", \"balance\")";
+            sqlService.insert(Member.TABLE_NAME, columns,  new Object[]{
+                model.getId(),
+                model.getName(),
+                model.getAddress(),
+                model.getDob(),
+                model.getDor(),
+                model.getStatus(),
+                model.getBalance()
+            });
+        } catch (SQLException ex) {
+            throw new RepositoryException("Failed to insert member. See inner exception for details.", ex);
+        }
     }
 
 }
