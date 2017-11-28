@@ -7,9 +7,12 @@
  */
 package com.xyzdrivers.controllers;
 
-import com.xyzdrivers.services.UpgradeMemberService;
+import com.xyzdrivers.repositories.MembersRepo;
+import com.xyzdrivers.repositories.RepositoryException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +23,7 @@ import javax.servlet.http.HttpSession;
 public class UpgradeMemberController extends HttpServlet {
 
     @Inject
-    private UpgradeMemberService upgradeMemberService;
+    private MembersRepo membersRepo;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,16 +35,13 @@ public class UpgradeMemberController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            HttpSession session = request.getSession();
-            String username = (String) session.getAttribute("username");
-            
-            upgradeMemberService.UpgradeMember(username);
-            response.sendRedirect("admin.jsp");
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
+            throws ServletException, IOException, RepositoryException  {
+
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("username");
+
+        membersRepo.update(username);
+        response.sendRedirect("admin.jsp");
 
     }
 
@@ -71,7 +71,11 @@ public class UpgradeMemberController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (RepositoryException ex) {
+            Logger.getLogger(ClaimsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
