@@ -51,6 +51,8 @@ public class ClaimsController extends HttpServlet {
         Claim claim = new Claim(username, date, reason, "SUBMITTED", Float.parseFloat(amount));
 
         claimsRepo.insert(claim);
+        
+        response.sendRedirect("member.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
