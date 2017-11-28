@@ -18,16 +18,7 @@
                         <h3 class="panel-title">Register</h3>
                     </div>
                     <div class="panel-body">
-                        <form method="POST" action="/register">
-                            <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" name="username" class="form-control" />
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" name="password" class="form-control" />
-                            </div>
-                            <hr>
+                        <form method="POST" action="register">
                             <div class="form-group">
                                 <label for="name">Name</label>
                                 <input type="text" name="name" class="form-control" />
