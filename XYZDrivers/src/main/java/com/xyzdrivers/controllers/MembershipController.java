@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class MembershipController extends HttpServlet {
 
@@ -35,9 +36,14 @@ public class MembershipController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, RepositoryException {
+        //get user
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("username");
+        
+        
         //get DB data
-        Member memberInfo = membersRepo.getWhere("ID", "me-aydin").get(0);
-        List<Claim> memberClaims = claimsRepo.getWhere("MEM_ID", "me-aydin");
+        Member memberInfo = membersRepo.getWhere("ID", username).get(0);
+        List<Claim> memberClaims = claimsRepo.getWhere("MEM_ID", username);
         //set attributes
         request.setAttribute("member", memberInfo);
         request.setAttribute("claims", memberClaims);
