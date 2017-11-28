@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 
 /**
@@ -23,20 +25,24 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
     @Override
     public Claim get(Integer id) throws RepositoryException {
         Claim claim = null;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Object[] result = sqlService.retrieve(Claim.TABLE_NAME, Claim.PRIMARY_KEY, id.toString());
-            LocalDate date = LocalDate.parse(result[2].toString());
+            Calendar date = Calendar.getInstance();
+            String dateTime = df.format(result[3]);
+            date.setTime(df.parse(result[2].toString()));
             claim = new Claim(
-                    Integer.parseInt(result[0].toString()),
                     result[1].toString(),
                     date,
                     result[3].toString(),
                     result[4].toString(),
-                    Float.parseFloat(result[5].toString())
+                    (double) result[5]
             );
         } catch (IllegalArgumentException | SQLException ex) {
             throw new RepositoryException("Failed to retrieve data", ex);
-        }
+        }   catch (ParseException ex) {
+                Logger.getLogger(ClaimsRepo.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         return claim;
     }
@@ -60,7 +66,6 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
                 String tempDateTime = df.format(result[2]);
                 date.setTime(df.parse(tempDateTime));
                 Claim cl = new Claim(
-                    Integer.parseInt(result[0].toString()),
                     result[1].toString(),
                     date,
                     result[3].toString(),

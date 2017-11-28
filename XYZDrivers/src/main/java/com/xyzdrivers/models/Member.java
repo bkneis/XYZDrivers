@@ -27,10 +27,6 @@ public class Member extends Model {
     public static final String TABLE_NAME = "members";
     public static final String PRIMARY_KEY = "id";
 
-//constructors
-    public Member(String id, String name, String address, LocalDate dob, LocalDate dor, String status, double balance) {
-
-
     public Member(String id, String name, String address, Calendar dob, Calendar dor, String status, double balance) {
         this.id = id;
         this.name = name;
@@ -100,28 +96,6 @@ public class Member extends Model {
 
     public String getStatus() {
         return status;
-    }
-
-    private boolean isStatusValid(String status) {
-        for (String test : validStatuses) {
-            if (test.equals(status)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public void setStatus(String status) {
-        if (status == null) {
-            throw new IllegalArgumentException("Argument 'status' cannot be null.");
-        }
-
-        if (!isStatusValid(status)) {
-            throw new IllegalArgumentException("Argument 'status' is not valid.");
-        }
-
-        this.status = status;
     }
 
     public double getBalance() {

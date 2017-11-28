@@ -24,14 +24,7 @@ public class MembershipPayment {
         this.date = date;
         this.time = time;
     }
-    public MembershipPayment(Integer id, String mem_id, String type_of_payment, float amount, LocalDate date, LocalTime time){
-        this.id = id;
-        this.mem_id = mem_id;
-        this.type_of_payment = type_of_payment;
-        this.amount = amount;
-        this.date = date;
-        this.time = time;
-    }
+   
     public String getMemberID(){
         return this.mem_id;
     }

@@ -11,7 +11,7 @@ import com.xyzdrivers.models.MembershipPayment;
 import com.xyzdrivers.repositories.ClaimsRepo;
 import com.xyzdrivers.repositories.RepositoryException;
 import com.xyzdrivers.repositories.MembersRepo;
-import com.xyzdrivers.repositories.PaymentRepo;
+import com.xyzdrivers.repositories.PaymentsRepo;
 
 import java.io.*;
 import java.sql.*;
@@ -35,7 +35,7 @@ public class AdminController extends HttpServlet {
     @Inject
     private ClaimsRepo  claimsRepo;
     @Inject
-    private PaymentRepo paymentRepo;
+    private PaymentsRepo paymentRepo;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

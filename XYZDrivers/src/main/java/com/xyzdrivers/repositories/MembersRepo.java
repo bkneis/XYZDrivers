@@ -22,13 +22,22 @@ public class MembersRepo extends Repo<Member, String> {
     @Override
     public Member get(String id) throws RepositoryException {
         Member member = null;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Object[] result = this.sqlService.retrieve(Member.TABLE_NAME, Member.PRIMARY_KEY, id);
-            LocalDate dob = LocalDate.parse(result[3].toString());
-            LocalDate dor = LocalDate.parse(result[4].toString());
+            Calendar dob = Calendar.getInstance();
+            Calendar dor = Calendar.getInstance();
+
+            String dateTime = df.format(result[3]);
+            String dateTime2 = df.format(result[4]);
+
+            dob.setTime(df.parse(dateTime));
+            dor.setTime(df.parse(dateTime2));
             member = new Member(result[0].toString(), result[1].toString(), result[2].toString(), dob, dor, result[5].toString(), Float.parseFloat(result[6].toString()));
         } catch (IllegalArgumentException | SQLException ex) {
             throw new RepositoryException("Failed to retrieve data", ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(MembersRepo.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return member;
