@@ -35,7 +35,7 @@ public class Claim extends Model {
         this.allowedStatuses = new ArrayList<>();
         allowedStatuses.add("APPROVED");
         allowedStatuses.add("REJECTED");
-        allowedStatuses.add("PENDING");
+        allowedStatuses.add("SUBMITTED");
     }
     
     public Claim(Integer id, String member_id, Calendar date, String reason, String status, double amount) {
@@ -48,7 +48,7 @@ public class Claim extends Model {
         this.allowedStatuses = new ArrayList<>();
         allowedStatuses.add("APPROVED");
         allowedStatuses.add("REJECTED");
-        allowedStatuses.add("PENDING");
+        allowedStatuses.add("SUBMITTED");
     }
 
     public Integer getId() {
