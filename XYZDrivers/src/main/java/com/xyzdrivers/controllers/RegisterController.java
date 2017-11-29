@@ -73,7 +73,7 @@ public class RegisterController extends HttpServlet {
         String password = passwordFormat.format(date);
         
         // Create auth user
-        User user = new User(username, password, "PENDING");
+        User user = new User(username, password, "SUBMITTED");
         try {
             userRepo.insert(user);
         } catch (RepositoryException ex) {
@@ -83,7 +83,7 @@ public class RegisterController extends HttpServlet {
         }
         
         // Create membership
-        Member member = new Member(username, name, address, dob, dor, "APPROVED", 10.00);
+        Member member = new Member(username, name, address, dob, dor, "APPLIED", 10.00);
         try {
             memberRepo.insert(member);
         } catch (RepositoryException ex) {

@@ -1,10 +1,18 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.xyzdrivers.controllers;
 
-import com.xyzdrivers.models.Claim;
-import com.xyzdrivers.repositories.ClaimsRepo;
+import com.xyzdrivers.models.Member;
+import com.xyzdrivers.repositories.MembersRepo;
 import com.xyzdrivers.repositories.RepositoryException;
 import com.xyzdrivers.services.ResponseService;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -17,10 +25,10 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author arthur
  */
-public class ClaimStatusController extends HttpServlet {
+public class ChargeMembersController extends HttpServlet {
     
     @Inject
-    ClaimsRepo claimsRepo;
+    private MembersRepo memberRepo;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,49 +40,36 @@ public class ClaimStatusController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException  {
+            throws ServletException, IOException {
         
-        // Get the http request params
-        String status = request.getParameter("status");
-        Integer id = Integer.parseInt(request.getParameter("claim_id"));
+        double total = Double.parseDouble(request.getParameter("amount"));
+        int numMembers = Integer.parseInt(request.getParameter("num_members"));
         
-        // Sanity check to ensure required parameters were required, if not respond with failure
-        if (status == null || status.equals("")) {
-            ResponseService.fail(request, response, "Failure. Please submit a status and claim id", "admin");
-            return;
-        }
+        double amount = total / numMembers;
+        amount = Math.round(amount * 100);
+        amount = amount / 100;
         
-        // Get the claim to be updated by id
-        Claim claim = null;
+        List<Member> members;
         try {
-            claim = claimsRepo.get(id);
+            members = memberRepo.getWhere("STATUS", "APPROVED");
         } catch (RepositoryException ex) {
-            Logger.getLogger(ClaimStatusController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        // Check we found the claim by ID
-        if (claim == null) {
-            ResponseService.fail(request, response, "Failure. The claim could not be found by id", "admin");
+            Logger.getLogger(ChargeMembersController.class.getName()).log(Level.SEVERE, null, ex);
+            ResponseService.fail(request, response, "Error: We could not find the members", "admin");
             return;
         }
-        
-        // Set the status using model's setter to ensure status is valid, if not respond with failure
-        if (! claim.setStatus(status)) {
-            ResponseService.fail(request, response, "Failure. Please submit a valid status", "admin");
-            return;
-        }
-        
         try {
-            // Update the model and persist to DB
-            claim = claimsRepo.update(claim);
-        } catch (RepositoryException ex) {
-            Logger.getLogger(ClaimStatusController.class.getName()).log(Level.SEVERE, null, ex);
-            ResponseService.fail(request, response, "Failure. Please submit a valid status", "admin");
+            for (Member member: members) {
+                member.setBalance(member.getBalance() + amount);
+                memberRepo.update(member);
+            }
+        }
+        catch (RepositoryException ex) {
+            Logger.getLogger(ChargeMembersController.class.getName()).log(Level.SEVERE, null, ex);
+            ResponseService.fail(request, response, "Error: We could not update the members balance", "admin");
             return;
         }
         
-        // Respond with success
-        ResponseService.success(request, response, "Success. The claim status has been updated to " + claim.getStatus(), "admin");
+        ResponseService.success(request, response, "Success. All full members have been charged " + amount, "admin");
         
     }
 

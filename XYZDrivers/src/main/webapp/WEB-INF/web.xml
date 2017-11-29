@@ -44,6 +44,10 @@
         <servlet-name>RegisterController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.RegisterController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChargeMembersController</servlet-name>
+        <servlet-class>com.xyzdrivers.controllers.ChargeMembersController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ClaimsController</servlet-name>
         <url-pattern>/claim</url-pattern>
@@ -127,6 +131,10 @@
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChargeMembersController</servlet-name>
+        <url-pattern>/charge-members</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

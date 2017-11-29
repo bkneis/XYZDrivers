@@ -29,9 +29,10 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
         try {
             Object[] result = sqlService.retrieve(Claim.TABLE_NAME, Claim.PRIMARY_KEY, id.toString());
             Calendar date = Calendar.getInstance();
-            String dateTime = df.format(result[3]);
+            
             date.setTime(df.parse(result[2].toString()));
             claim = new Claim(
+                    Integer.parseInt(result[0].toString()),
                     result[1].toString(),
                     date,
                     result[3].toString(),
@@ -66,6 +67,7 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
                 String tempDateTime = df.format(result[2]);
                 date.setTime(df.parse(tempDateTime));
                 Claim cl = new Claim(
+                    Integer.parseInt(result[0].toString()),
                     result[1].toString(),
                     date,
                     result[3].toString(),
@@ -85,7 +87,7 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
     public Claim update(Claim claim) throws RepositoryException {
 
         Object[] parameters = {
-            claim.getDate().toString(),
+            claim.getDate(),
             claim.getAmount(),
             claim.getReason(),
             claim.getStatus(),

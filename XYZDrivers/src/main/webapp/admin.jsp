@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -32,7 +33,7 @@
                         <p><strong>Reason: </strong> <c:out value="${claim.reason}" /></p>
                         <p><strong>Status </strong> <c:out value="${claim.status}" /></p>
                         <p><strong>Amount: </strong> <c:out value="${claim.amount}" /></p>
-                        <c:if test="${claim.status == 'PENDING'}">
+                        <c:if test="${claim.status == 'SUBMITTED'}">
                             <a href="/XYZDrivers/claim-status?status=APPROVED&amp;claim_id=<c:out value="${claim.id}" />">
                                 Approve
                             </a> /
@@ -57,6 +58,7 @@
                         <p>Address : <c:out value="${provisionalMember.address}"/></p>
                         <p>Date of Birth : <fmt:formatDate value="${provisionalMember.dob.getTime()}" pattern="yyyy-MM-dd"/></p>
                         <p>Date of Record : <fmt:formatDate value="${provisionalMember.dor.getTime()}" pattern="yyyy-MM-dd"/></p>
+                        <p>Balance : <c:out value="${provisionalMember.balance}"/></p>
                         <p>Status : <c:out value="${provisionalMember.status}"/></p>
                         <p>
                             <a href="/XYZDrivers/membership-status?status=APPROVED&amp;member_id=<c:out value="${provisionalMember.id}" />">
@@ -74,6 +76,8 @@
         <div class="page row">
             <div class="col-md-4">
                 <h2>Members</h2>
+                <h3>Total amount of claims from members : <c:out value="${totalClaims}"/></h3>
+                <a href="/XYZDrivers/charge-members?amount=<c:out value="${totalClaims}"/>&amp;num_members=${fn:length(members)}">Charge all full members annual amount</a>
                 <c:forEach items="${members}" var="member">
                 <div class="panel panel-default">
                     <div class="panel-heading">
