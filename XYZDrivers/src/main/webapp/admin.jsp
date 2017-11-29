@@ -55,8 +55,8 @@
                         <p>ID : <c:out value="${provisionalMember.id}"/></p>
                         <p>Name : <c:out value="${provisionalMember.name}"/></p>
                         <p>Address : <c:out value="${provisionalMember.address}"/></p>
-                        <p>Date of Birth : <c:out value="${provisionalMember.dob}"/></p>
-                        <p>Date of Record : <c:out value="${provisionalMember.dor}"/></p>
+                        <p>Date of Birth : <fmt:formatDate value="${provisionalMember.dob.getTime()}" pattern="yyyy-MM-dd"/></p>
+                        <p>Date of Record : <fmt:formatDate value="${provisionalMember.dor.getTime()}" pattern="yyyy-MM-dd"/></p>
                         <p>Status : <c:out value="${provisionalMember.status}"/></p>
                         <p>
                             <a href="/XYZDrivers/membership-status?status=APPROVED&amp;member_id=<c:out value="${provisionalMember.id}" />">

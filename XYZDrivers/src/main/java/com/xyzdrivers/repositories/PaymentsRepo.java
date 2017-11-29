@@ -52,7 +52,7 @@ public class PaymentsRepo extends Repo<MembershipPayment, String> {
 
     @Override
     public MembershipPayment get(String id) throws RepositoryException {
-        List<MembershipPayment> members = getWhere("id", id);
+        List<MembershipPayment> members = getWhere("ID", id);
 
         return members.get(0);
     }
@@ -101,7 +101,7 @@ public class PaymentsRepo extends Repo<MembershipPayment, String> {
     @Override
     public void insert(MembershipPayment model) throws RepositoryException {
         try {
-            String columns = ("MEM_ID, TYPE_OF_PAYMENT, AMOUNT, DATE, TIME");
+            String columns = "(MEM_ID, TYPE_OF_PAYMENT, AMOUNT, DATE, TIME)";
             sqlService.insert("PAYMENTS", columns,  new Object[]{
                 model.getMemberID(),
                 model.getPaymentType(),

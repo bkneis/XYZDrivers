@@ -62,7 +62,7 @@ public class AdminController extends HttpServlet {
             }
         }
 
-        List<Member> outstandingBalance = membersRepo.getWhere("status", "OUTSTANDING");
+        List<Member> outstandingBalance = membersRepo.getWhere("STATUS", "OUTSTANDING");
         List<Claim> claims = claimsRepo.get();
         List<MembershipPayment> payments = paymentRepo.get();
         float totalTurnover = 0;
