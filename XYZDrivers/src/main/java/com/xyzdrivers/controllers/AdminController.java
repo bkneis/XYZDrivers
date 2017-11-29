@@ -90,6 +90,12 @@ public class AdminController extends HttpServlet {
             }
             eligibleClaims.add(port.eligibility(username, joinedDate, listOfClaimDates, listOfClaimStatuses));
         }
+        
+        List<Claim> approvedClaims = claimsRepo.getWhere("STATUS", "APPROVED");
+        double totalClaims = 0;
+        for (Claim claim : approvedClaims) {
+            totalClaims += claim.getAmount();
+        }
 
         //set attributes
         request.setAttribute("members", normalMembers);
@@ -97,6 +103,7 @@ public class AdminController extends HttpServlet {
         request.setAttribute("outstandingBalance", outstandingBalance);
         request.setAttribute("claims", claims);
         request.setAttribute("totalTurnover", totalTurnover);
+        request.setAttribute("totalClaims", totalClaims);
 
         request.setAttribute("eligibleClaims", eligibleClaims);
 

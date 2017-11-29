@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -75,6 +76,8 @@
         <div class="page row">
             <div class="col-md-4">
                 <h2>Members</h2>
+                <h3>Total amount of claims from members : <c:out value="${totalClaims}"/></h3>
+                <a href="/XYZDrivers/charge-members?amount=<c:out value="${totalClaims}"/>&amp;num_members=${fn:length(members)}">Charge all full members annual amount</a>
                 <c:forEach items="${members}" var="member">
                 <div class="panel panel-default">
                     <div class="panel-heading">
