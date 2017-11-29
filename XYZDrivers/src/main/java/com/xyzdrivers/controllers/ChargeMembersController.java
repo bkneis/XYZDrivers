@@ -69,7 +69,7 @@ public class ChargeMembersController extends HttpServlet {
             return;
         }
         
-        ResponseService.success(request, response, "Success. All full members have been chared " + amount, "admin");
+        ResponseService.success(request, response, "Success. All full members have been charged " + amount, "admin");
         
     }
 
