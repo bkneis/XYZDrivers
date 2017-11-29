@@ -24,8 +24,8 @@ public class Member extends Model {
 
     private List<String> allowedStatuses;
 
-    public static final String TABLE_NAME = "members";
-    public static final String PRIMARY_KEY = "id";
+    public static final String TABLE_NAME = "MEMBERS";
+    public static final String PRIMARY_KEY = "ID";
 
     public Member(String id, String name, String address, Calendar dob, Calendar dor, String status, double balance) {
         this.id = id;

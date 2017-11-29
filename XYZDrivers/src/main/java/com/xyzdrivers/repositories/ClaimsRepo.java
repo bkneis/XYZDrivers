@@ -60,7 +60,7 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
         List<Claim> claims = new ArrayList<>();
 
         try {
-            results = sqlService.retrieve("claims");
+            results = sqlService.retrieve("CLAIMS");
             for (Object[] result : results) {
                 Calendar date = Calendar.getInstance();
                 String tempDateTime = df.format(result[2]);
@@ -93,7 +93,7 @@ public class ClaimsRepo extends Repo<Claim, Integer> {
         };
 
         try {
-            this.sqlService.executeUpdateStatement("UPDATE claims SET \"date\"=?, \"amount\"=?, \"rationale\"=?, \"status\"=? WHERE \"id\"=?", parameters);
+            this.sqlService.executeUpdateStatement("UPDATE claims SET DATE=?, AMOUNT=?, RATIONALE=?, STATUS=? WHERE ID=?", parameters);
         } catch (SQLException ex) {
             throw new RepositoryException("Failed to retrieve data", ex);
         }

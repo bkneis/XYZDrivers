@@ -23,10 +23,23 @@ public class Claim extends Model {
 
     private List<String> allowedStatuses;
 
-    public static final String TABLE_NAME = "claims";
-    public static final String PRIMARY_KEY = "id";
+    public static final String TABLE_NAME = "CLAIMS";
+    public static final String PRIMARY_KEY = "ID";
 
     public Claim(String member_id, Calendar date, String reason, String status, double amount) {
+        this.member_id = member_id;
+        this.date = date;
+        this.reason = reason;
+        this.status = status;
+        this.amount = amount;
+        this.allowedStatuses = new ArrayList<>();
+        allowedStatuses.add("APPROVED");
+        allowedStatuses.add("REJECTED");
+        allowedStatuses.add("PENDING");
+    }
+    
+    public Claim(Integer id, String member_id, Calendar date, String reason, String status, double amount) {
+        this.id = id;
         this.member_id = member_id;
         this.date = date;
         this.reason = reason;

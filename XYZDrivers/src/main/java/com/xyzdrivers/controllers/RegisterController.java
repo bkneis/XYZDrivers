@@ -83,7 +83,7 @@ public class RegisterController extends HttpServlet {
         }
         
         // Create membership
-        Member member = new Member(username, name, address, dob, dor, "APPROVED", 0.00);
+        Member member = new Member(username, name, address, dob, dor, "APPROVED", 10.00);
         try {
             memberRepo.insert(member);
         } catch (RepositoryException ex) {

@@ -129,13 +129,13 @@ public class MembersRepo extends Repo<Member, String> {
         Object[] parameters = {
             membership.getName(),
             membership.getAddress(),
-            membership.getDob().toString(),
+            membership.getDob(),
             membership.getStatus(),
             membership.getBalance(),
             membership.getId()
         };
 
-        String updateQuery = "UPDATE members SET \"name\"=?, \"address\"=?, \"dob\"=?, \"status\"=?, \"balance\"=? WHERE \"id\"=?";
+        String updateQuery = "UPDATE members SET NAME=?, ADDRESS=?, DOB=?, STATUS=?, BALANCE=? WHERE ID=?";
 
         try {
             this.sqlService.executeUpdateStatement(updateQuery, parameters);
@@ -170,7 +170,7 @@ public class MembersRepo extends Repo<Member, String> {
     @Override
     public void insert(Member model) throws RepositoryException {
         try {
-            String columns = "(\"id\", \"name\", \"address\", \"dob\", \"dor\", \"status\", \"balance\")";
+            String columns = "(ID, NAME, ADDRESS, DOB, DOR, STATUS, BALANCE)";
             sqlService.insert(Member.TABLE_NAME, columns,  new Object[]{
                 model.getId(),
                 model.getName(),
