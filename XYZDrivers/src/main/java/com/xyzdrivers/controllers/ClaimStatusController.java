@@ -69,6 +69,8 @@ public class ClaimStatusController extends HttpServlet {
             claim = claimsRepo.update(claim);
         } catch (RepositoryException ex) {
             Logger.getLogger(ClaimStatusController.class.getName()).log(Level.SEVERE, null, ex);
+            ResponseService.fail(request, response, "Failure. Please submit a valid status", "admin");
+            return;
         }
         
         // Respond with success
