@@ -36,6 +36,7 @@ public class MembershipController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, RepositoryException {
+        
         //get user
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");

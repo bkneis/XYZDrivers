@@ -23,46 +23,65 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Your outstanding balances</h3>
-                        <a href="submitpayment.jsp">Submit Payment</a>
                     </div>
                     <div class="panel-body">
                         <c:if test="${member.status == \"OUTSTANDING\"}"> 
-                            <ul>
-                                <li>
-                                    <c:out value="${member.id}"/>
-                                </li>
-                                <li>
-                                    - name: <c:out value="${member.name}"/>
-                                </li>
-                                <li>
-                                    - status: <c:out value="${member.status}"/>
-                                </li>
-                                <li>
-                                    - balance: <c:out value="${member.balance}"/>
-                                </li>
-                            </ul>
+                            <table style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>NAME</th>
+                                    <th>STATUS</th>
+                                    <th>BALANCE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><c:out value="${member.id}"/></br></td>
+                                    <td><c:out value="${member.name}"/></td>
+                                    <td><c:out value="${member.status}"/></td>
+                                    <td><c:out value="${member.balance}"/></td>
+                                </tr>
+                            </tbody>
+                            </table>
                         </c:if>
+                    </div>
+                    <div class="panel-heading" style="text-align: right;">
+                        <a href="submitpayment.jsp">Submit Payment</a>
                     </div>
                 </div>
             </div>  <!-- col-md-6 -->
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Your claims</h3>
-                        <a href="submit-claim.jsp">Submit Claim</a>
+                        <h3 class="panel-title">Your existing claims</h3>
                     </div>
                     <div class="panel-body">
-                        <ul>
-                            <c:forEach items="${claims}" var="claim">
-                                <li>
-                                    <fmt:formatDate value="${claim.date.getTime()}" pattern="yyyy-MM-dd"/>
-                                    - Member: <c:out value="${claim.memberID}" />
-                                    - Reason: <c:out value="${claim.reason}" />
-                                    - Status <c:out value="${claim.status}" />
-                                    - Amount <c:out value="${claim.amount}" />
-                                </li>
-                            </c:forEach>
-                        </ul>
+                        <table style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>DATE</th>
+                                    <th>MEMBER</th>
+                                    <th>REASON</th>
+                                    <th>STATUS</th>
+                                    <th>AMOUNT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${claims}" var="claim">
+                                    <tr>
+                                        <td><fmt:formatDate value="${claim.date.getTime()}" pattern="yyyy-MM-dd"/></br></td>
+                                        <td><c:out value="${claim.memberID}" /></td>
+                                        <td><c:out value="${claim.reason}" /></td>
+                                        <td><c:out value="${claim.status}" /></td>
+                                        <td><c:out value="${claim.amount}" /></td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel-heading" style="text-align: right;">
+                        <a href="submit-claim.jsp">Submit New Claim</a>
                     </div>
                 </div>
             </div> <!-- col-md-6 -->
