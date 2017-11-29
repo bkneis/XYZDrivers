@@ -22,10 +22,10 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Your outstanding balances</h3>
+                        <h3 class="panel-title">Your outstanding balance</h3>
                     </div>
                     <div class="panel-body">
-                        <c:if test="${member.status == \"OUTSTANDING\"}"> 
+                        <c:if test="${member.balance > 0}"> 
                             <table style="width:100%">
                             <thead>
                                 <tr>
