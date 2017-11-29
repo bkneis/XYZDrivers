@@ -20,7 +20,7 @@
             <li><a href="admin">Dashboard</a></li>
             <li><a href="logout">Logout</a></li>
         </c:if>
-        <c:if test="${not empty sessionScope.user}">
+        <c:if test="${not empty sessionScope.user and not sessionScope.user.isAdministrator()}">
             <li><a href="member">Dashboard</a></li>
             <li><a href="logout">Logout</a></li>
         </c:if>

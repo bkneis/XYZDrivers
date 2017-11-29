@@ -13,8 +13,6 @@
     <body>
         <jsp:include page="nav.jsp"></jsp:include>
 
-        <span>Hello, ${sessionScope.username}!</span>
-        
         <div class="page row">
             <div class="col-md-4">
                 <h2>Total Turnover</h2>
