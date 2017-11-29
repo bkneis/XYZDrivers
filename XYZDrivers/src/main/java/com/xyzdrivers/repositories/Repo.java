@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.xyzdrivers.repositories;
 
 import com.xyzdrivers.services.SQLService;
@@ -10,25 +5,26 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- *
+ * Abstract repo for model specific repositories to inherit as an interface and include the sqlService for db operations
+ * 
  * @author arthur
  * @param <Model>
- * @param <PrimaryKey>
+ * @param <PrimaryKeyType>
  */
-public abstract class Repo<Model, PrimaryKey> {
+public abstract class Repo<Model, PrimaryKeyType> {
     
     @Inject
     protected SQLService sqlService;
-    
-    abstract Model get(PrimaryKey id) throws RepositoryException;
-    
+
+    abstract Model get(PrimaryKeyType id) throws RepositoryException;
+
     abstract List<Model> get() throws RepositoryException;
     
     abstract List<Model> getWhere(String keyColumn, Object keyValue) throws RepositoryException;
     
     abstract void insert(Model model) throws RepositoryException;
     
-    abstract void update(Model model) throws RepositoryException;
+    abstract Model update(Model model) throws RepositoryException;
     
     abstract void delete(Model model) throws RepositoryException;
     

@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
+        <servlet-name>ClaimsController</servlet-name>
+        <servlet-class>com.xyzdrivers.controllers.ClaimsController</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>AuthController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.AuthController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ClaimsController</servlet-name>
-        <servlet-class>com.xyzdrivers.controllers.ClaimsController</servlet-class>
+        <servlet-name>AdminController</servlet-name>
+        <servlet-class>com.xyzdrivers.controllers.AdminController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>MembershipController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.MembershipController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AdminController</servlet-name>
-        <servlet-class>com.xyzdrivers.controllers.AdminController</servlet-class>
+        <servlet-name>MembershipStatusController</servlet-name>
+        <servlet-class>com.xyzdrivers.controllers.MembershipStatusController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ClaimStatusController</servlet-name>
+        <servlet-class>com.xyzdrivers.controllers.ClaimStatusController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>PaymentController</servlet-name>
@@ -32,13 +40,17 @@
         <servlet-name>LogoutController</servlet-name>
         <servlet-class>com.xyzdrivers.controllers.LogoutController</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>AuthController</servlet-name>
-        <url-pattern>/auth</url-pattern>
-    </servlet-mapping>
+    <servlet>
+        <servlet-name>RegisterController</servlet-name>
+        <servlet-class>com.xyzdrivers.controllers.RegisterController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ClaimsController</servlet-name>
         <url-pattern>/claim</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AuthController</servlet-name>
+        <url-pattern>/auth</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MembershipController</servlet-name>
@@ -49,6 +61,14 @@
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>MembershipStatusController</servlet-name>
+        <url-pattern>/membership-status</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClaimStatusController</servlet-name>
+        <url-pattern>/claim-status</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>HomeController</servlet-name>
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
@@ -56,7 +76,6 @@
         <servlet-name>LogoutController</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
-
     <filter>
         <filter-name>AuthorisationFilter</filter-name>
         <filter-class>com.xyzdrivers.filters.AuthorisationFilter</filter-class>
@@ -72,32 +91,31 @@
     <filter-mapping>
         <filter-name>AuthorisationFilter</filter-name>
         <url-pattern>/member/*</url-pattern>
-    </filter-mapping> 
+    </filter-mapping>
     <filter-mapping>
         <filter-name>AuthorisationFilter</filter-name>
         <url-pattern>/upgrademember/*</url-pattern>
-    </filter-mapping> 
+    </filter-mapping>
     <filter-mapping>
         <filter-name>AuthorisationFilter</filter-name>
         <url-pattern>/payment/*</url-pattern>
-    </filter-mapping> 
+    </filter-mapping>
     <filter-mapping>
         <filter-name>AuthorisationFilter</filter-name>
         <url-pattern>/admin.jsp</url-pattern>
-    </filter-mapping> 
+    </filter-mapping>
     <filter-mapping>
         <filter-name>AuthorisationFilter</filter-name>
         <url-pattern>/member.jsp</url-pattern>
-    </filter-mapping> 
+    </filter-mapping>
     <filter-mapping>
         <filter-name>AuthorisationFilter</filter-name>
         <url-pattern>/submit-claim.jsp</url-pattern>
-    </filter-mapping> 
+    </filter-mapping>
     <filter-mapping>
         <filter-name>AuthorisationFilter</filter-name>
         <url-pattern>/submitpayment.jsp</url-pattern>
-    </filter-mapping> 
-    
+    </filter-mapping>
     <servlet-mapping>
         <servlet-name>UpgradeMemberController</servlet-name>
         <url-pattern>/upgrademember</url-pattern>
@@ -105,6 +123,10 @@
     <servlet-mapping>
         <servlet-name>PaymentController</servlet-name>
         <url-pattern>/payment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegisterController</servlet-name>
+        <url-pattern>/register</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

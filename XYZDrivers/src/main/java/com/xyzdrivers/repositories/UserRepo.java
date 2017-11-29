@@ -33,7 +33,7 @@ public class UserRepo extends Repo<User, String> {
 
         List<Object[]> users;
         try {
-            users = sqlService.retrieve("users");
+            users = sqlService.retrieve("USERS");
         } catch (SQLException ex) {
             throw new RepositoryException("Retrieval failed.", ex);
         }
@@ -86,7 +86,7 @@ public class UserRepo extends Repo<User, String> {
         
         List<Object[]> rawUsers;
         try {
-            rawUsers = sqlService.retrieve("users", "*", keyColumn, keyValue);
+            rawUsers = sqlService.retrieve("USERS", "*", keyColumn, keyValue);
         } catch (SQLException | IllegalArgumentException ex) {
             throw new RepositoryException("Unable to retrieve matching users. See inner exception for details.", ex);
         }
@@ -106,7 +106,7 @@ public class UserRepo extends Repo<User, String> {
         validateUser(user);
 
         try {
-            sqlService.insert("users", new Object[]{
+            sqlService.insert("USERS", new Object[]{
                 user.getId(),
                 user.getPassword(),
                 user.getStatus()
@@ -123,25 +123,27 @@ public class UserRepo extends Repo<User, String> {
         }
 
         try {
-            sqlService.remove("users", "id", user.getId());
+            sqlService.remove("USERS", "ID", user.getId());
         } catch (SQLException ex) {
             throw new RepositoryException("Delete failed.", ex);
         }
     }
 
     @Override
-    public void update(User user) throws RepositoryException {
+    public User update(User user) throws RepositoryException {
         validateUser(user);
 
         List<ColumnValuePair> columnValues = new ArrayList<>();
-        columnValues.add(new ColumnValuePair("password", user.getPassword()));
-        columnValues.add(new ColumnValuePair("status", user.getStatus()));
+        columnValues.add(new ColumnValuePair("PASSWORD", user.getPassword()));
+        columnValues.add(new ColumnValuePair("STATUS", user.getStatus()));
 
         try {
-            sqlService.update("users", "id", user.getId(), columnValues);
+            sqlService.update("USERS", "ID", user.getId(), columnValues);
         } catch (SQLException ex) {
             throw new RepositoryException("Update failed.", ex);
         }
+        
+        return user;
     }
 
     private void validateUser(User user) throws IllegalArgumentException {

@@ -1,13 +1,10 @@
 package com.xyzdrivers.controllers;
 
 import com.xyzdrivers.models.Claim;
-import com.xyzdrivers.models.Member;
 import com.xyzdrivers.repositories.ClaimsRepo;
-import com.xyzdrivers.repositories.MembersRepo;
 import com.xyzdrivers.repositories.RepositoryException;
-
+import com.xyzdrivers.services.ResponseService;
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -15,14 +12,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-public class MembershipController extends HttpServlet {
-
+/**
+ *
+ * @author arthur
+ */
+public class ClaimStatusController extends HttpServlet {
+    
     @Inject
-    private MembersRepo membersRepo;
-    @Inject
-    private ClaimsRepo claimsRepo;
+    ClaimsRepo claimsRepo;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,24 +30,50 @@ public class MembershipController extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     * @throws com.xyzdrivers.repositories.RepositoryException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, RepositoryException {
+            throws ServletException, IOException  {
         
-        //get user
-        HttpSession session = request.getSession();
-        String username = (String) session.getAttribute("username");
+        // Get the http request params
+        String status = request.getParameter("status");
+        Integer id = Integer.parseInt(request.getParameter("claim_id"));
         
+        // Sanity check to ensure required parameters were required, if not respond with failure
+        if (status == null || status.equals("")) {
+            ResponseService.fail(request, response, "Failure. Please submit a status and claim id", "admin");
+            return;
+        }
         
-        //get DB data
-        Member memberInfo = membersRepo.getWhere("ID", username).get(0);
-        List<Claim> memberClaims = claimsRepo.getWhere("MEM_ID", username);
-        //set attributes
-        request.setAttribute("member", memberInfo);
-        request.setAttribute("claims", memberClaims);
-        //fwd .jsp page
-        request.getRequestDispatcher("member.jsp").forward(request, response);
+        // Get the claim to be updated by id
+        Claim claim = null;
+        try {
+            claim = claimsRepo.get(id);
+        } catch (RepositoryException ex) {
+            Logger.getLogger(ClaimStatusController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // Check we found the claim by ID
+        if (claim == null) {
+            ResponseService.fail(request, response, "Failure. The claim could not be found by id", "admin");
+            return;
+        }
+        
+        // Set the status using model's setter to ensure status is valid, if not respond with failure
+        if (! claim.setStatus(status)) {
+            ResponseService.fail(request, response, "Failure. Please submit a valid status", "admin");
+            return;
+        }
+        
+        try {
+            // Update the model and persist to DB
+            claim = claimsRepo.update(claim);
+        } catch (RepositoryException ex) {
+            Logger.getLogger(ClaimStatusController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // Respond with success
+        ResponseService.success(request, response, "Success. The claim status has been updated to " + claim.getStatus(), "admin");
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -64,11 +88,7 @@ public class MembershipController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (RepositoryException ex) {
-            Logger.getLogger(MembershipController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -82,11 +102,7 @@ public class MembershipController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (RepositoryException ex) {
-            Logger.getLogger(MembershipController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -98,4 +114,5 @@ public class MembershipController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

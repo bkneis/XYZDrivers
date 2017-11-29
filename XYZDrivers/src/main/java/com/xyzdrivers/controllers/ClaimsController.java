@@ -48,9 +48,11 @@ public class ClaimsController extends HttpServlet {
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");
 
-        Claim claim = new Claim(username, date, reason, "SUBMITTED", Float.parseFloat(amount));
+        Claim claim = new Claim(4, username, date, reason, "SUBMITTED", Float.parseFloat(amount));
 
         claimsRepo.insert(claim);
+        
+        response.sendRedirect("member");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

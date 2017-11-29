@@ -28,19 +28,19 @@ public class PaymentsRepo extends Repo<MembershipPayment, String> {
 
         try {
             //get data
-            results = this.sqlService.retrieve("MEMBERS");
+            results = this.sqlService.retrieve("PAYMENTS");
             //parse members data
             for (Object[] memberData : results) {
                 Calendar date = Calendar.getInstance();
                 Calendar time = Calendar.getInstance();
-                date.setTime(dateFormat.parse(memberData[3].toString()));
-                time.setTime(timeFormat.parse(memberData[4].toString()));
+                date.setTime(dateFormat.parse(memberData[4].toString()));
+                //time.setTime(timeFormat.parse(memberData[4].toString()));
 
                 MembershipPayment payment = new MembershipPayment(memberData[0].toString(), // mem_id
                         memberData[1].toString(), // Type of payment
-                        (float) memberData[2],
+                        Float.parseFloat(memberData[3].toString()),
                         date, // date
-                        time); // time
+                        date); // time
                 payments.add(payment);
             }
         } catch (SQLException | ParseException ex) {
@@ -52,7 +52,7 @@ public class PaymentsRepo extends Repo<MembershipPayment, String> {
 
     @Override
     public MembershipPayment get(String id) throws RepositoryException {
-        List<MembershipPayment> members = getWhere("id", id);
+        List<MembershipPayment> members = getWhere("ID", id);
 
         return members.get(0);
     }
@@ -89,7 +89,7 @@ public class PaymentsRepo extends Repo<MembershipPayment, String> {
     }
 
     @Override
-    public void update(MembershipPayment model) {
+    public MembershipPayment update(MembershipPayment model) {
         throw new UnsupportedOperationException("This method is not required.");
     }
 
@@ -101,7 +101,8 @@ public class PaymentsRepo extends Repo<MembershipPayment, String> {
     @Override
     public void insert(MembershipPayment model) throws RepositoryException {
         try {
-            sqlService.insert("payments", new Object[]{
+            String columns = "(MEM_ID, TYPE_OF_PAYMENT, AMOUNT, DATE, TIME)";
+            sqlService.insert("PAYMENTS", columns,  new Object[]{
                 model.getMemberID(),
                 model.getPaymentType(),
                 model.getPaymentAmount(),
